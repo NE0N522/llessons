@@ -1,0 +1,45 @@
+.account-analytics-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-top:16px;align-items:start}
+.account-heat-legend{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 12px}
+.account-heat-legend span{display:inline-flex;align-items:center;gap:6px;padding:6px 9px;border:1px solid var(--account-line);border-radius:999px;background:var(--account-neutral-soft);color:var(--account-ink);font-size:.78rem}
+.account-heat-legend b{font-size:1rem}
+.account-heatmap-wrap{max-height:62vh;overflow:auto;overscroll-behavior:contain}
+.account-heatmap{width:max-content;min-width:100%;font-size:.78rem}
+.account-heatmap caption{padding:8px;text-align:left}
+.account-heatmap th,.account-heatmap td{min-width:78px;padding:7px 8px;text-align:center}
+.account-heatmap thead th{position:sticky;top:0;z-index:2;max-width:150px;background:var(--account-surface);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.account-heatmap th:first-child{position:sticky;left:0;z-index:3;width:190px;min-width:190px;max-width:190px;background:var(--account-surface);text-align:left}
+.account-heatmap thead th:first-child{z-index:4}
+.account-heatmap td{background:var(--account-surface)}
+.account-heat-cell{display:inline-grid;min-width:34px;min-height:34px;place-items:center;padding:3px 5px;border:1px solid var(--account-line);border-radius:8px;background:var(--account-neutral-soft);color:var(--account-ink);font-size:.85rem;font-weight:800}
+.account-heat-cell small{font-size:.67rem;line-height:1}
+.account-heat-cell[data-status=accepted]{border-color:var(--account-accent-border);background:var(--account-accent-soft);color:var(--account-accent-strong)}
+.account-heat-cell[data-status=submitted]{border-color:var(--account-warning-line);background:var(--account-warning-soft);color:var(--account-warning)}
+.account-heat-cell[data-status=returned]{border-color:var(--account-danger-border);background:var(--account-danger-soft);color:var(--account-danger)}
+.account-heat-cell[data-status=draft]{border-color:var(--account-accent-border);background:var(--account-neutral-soft);color:var(--account-accent-strong)}
+.account-heat-open{display:block;min-width:44px;min-height:36px;margin:4px auto 0;padding:5px 7px;border:1px solid var(--account-line);border-radius:7px;background:var(--account-surface);color:var(--account-accent-strong);font:inherit;font-size:.69rem;font-weight:750;cursor:pointer}
+.account-heat-open:hover{background:var(--account-accent-soft)}
+.account-analytics-filters{display:flex;flex-wrap:wrap;align-items:end;gap:10px;margin:10px 0 14px}
+.account-analytics-filters label,.account-report-period label{display:grid;gap:5px;color:var(--account-muted);font-size:.8rem;font-weight:700}
+.account-analytics-filters input,.account-report-period input{width:120px;min-height:42px;padding:8px 10px;border:1px solid var(--account-line);border-radius:9px;background:var(--account-surface);color:var(--account-ink);font:inherit}
+.account-risk-list{display:grid;gap:7px;margin:0;padding:0;list-style:none}
+.account-risk-list li{display:grid;grid-template-columns:minmax(110px,.65fr) minmax(0,1fr);gap:9px;align-items:center;padding:10px;border:1px solid var(--account-line);border-radius:9px;background:var(--account-neutral-soft);font-size:.82rem}
+.account-risk-list li>span{color:var(--account-muted);line-height:1.45}
+.account-error-list{display:grid;gap:9px}
+.account-error-list article{display:grid;gap:7px;padding:12px;border:1px solid var(--account-line);border-radius:10px;background:var(--account-neutral-soft)}
+.account-error-list p{margin:4px 0;color:var(--account-muted);font-size:.83rem;line-height:1.45}
+.account-error-list .account-actions{gap:6px}
+.account-year-backup{margin:12px 0;padding:12px;border:1px solid var(--account-accent-border);border-radius:10px;background:var(--account-accent-soft);line-height:1.5}
+.account-year-backup p{display:flex;flex-wrap:wrap;gap:8px;margin:9px 0}
+.account-year-backup a{color:var(--account-accent-strong);text-decoration:none}
+.account-year-student{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:10px;padding:9px;border-bottom:1px solid var(--account-line)}
+.account-year-student>label{display:flex;align-items:center;gap:9px;min-height:40px}
+.account-year-student input[type=checkbox]{width:20px;height:20px;accent-color:var(--account-accent)}
+.account-year-graduate{color:var(--account-muted);font-size:.8rem}
+.account-report-period{display:flex;flex-wrap:wrap;align-items:end;gap:10px}
+.account-archive-notice{margin:12px 0 18px}
+.account-dialog-inner:has([data-close-action]){max-height:86vh;overflow:auto;overscroll-behavior:contain}
+.account-dialog-inner:has([data-close-action]) .account-dialog-actions{position:sticky;bottom:-24px;z-index:3;margin:16px -24px -24px;padding:12px 24px max(12px,env(safe-area-inset-bottom));border-top:1px solid var(--account-line);background:var(--account-surface)}
+.account-teacher-mobile-tabs{grid-template-columns:repeat(4,minmax(0,1fr))}
+.account-teacher-mobile-tabs button{font-size:.72rem}
+@media(max-width:900px){.account-analytics-grid{grid-template-columns:1fr}.account-heatmap-wrap{max-height:58vh}.account-risk-list li{grid-template-columns:minmax(100px,.65fr) minmax(0,1fr)}}
+@media(max-width:768px){.account-app-body.account-teacher-workspace{padding-bottom:calc(168px + env(safe-area-inset-bottom))}.account-teacher-mobile-tabs{grid-template-columns:repeat(4,minmax(0,1fr));grid-auto-rows:minmax(44px,auto)}.account-teacher-mobile-tabs button{min-height:44px;font-size:.71rem}.account-heatmap th:first-child{width:145px;min-width:145px;max-width:145px}.account-heatmap th,.account-heatmap td{min-width:67px;padding:6px}.account-risk-list li{grid-template-columns:1fr}.account-analytics-filters{align-items:stretch}.account-analytics-filters label{flex:1;min-width:118px}.account-analytics-filters input{width:100%}.account-report-period{align-items:stretch;flex-direction:column}.account-report-period label,.account-report-period input,.account-report-period button{width:100%}.account-year-student{grid-template-columns:1fr;gap:2px}.account-year-graduate{margin-left:29px}}

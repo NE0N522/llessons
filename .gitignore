@@ -1,0 +1,13 @@
+node_modules/
+.env
+.env.*
+!.env.example
+data/
+backups/
+work/
+*.db
+*.db-shm
+*.db-wal
+/classroom-platform.zip
+/outputs/html-css-lessons.zip
+npm-debug.log*

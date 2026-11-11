@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f5f7fa">
+  <meta name="description" content="Простое объяснение данных, которые учебный сайт хранит об учениках и их работах.">
+  <title>Какие данные мы храним — Код по полочкам</title>
+  <script src="assets/app/theme.js"></script>
+  <link rel="stylesheet" href="assets/app/lesson-v3.css">
+  <link rel="stylesheet" href="assets/app/theme-v3.css">
+  <link rel="stylesheet" href="assets/app/privacy.css">
+  <script src="assets/app/privacy-contact.js" defer></script>
+</head>
+<body>
+  <a class="v3-skip-link" href="#privacy-main">Перейти к информации о данных</a>
+  <header class="v3-header"><div class="v3-header-inner">
+    <a class="v3-brand" href="index.html" aria-label="Код по полочкам — главная"><span class="v3-brand-mark" aria-hidden="true">&lt;/&gt;</span><span>код по полочкам</span></a>
+    <nav class="v3-header-nav" aria-label="Основная навигация"><a href="index.html#lessons">К программе курса</a><button class="theme-toggle" type="button" data-theme-toggle aria-label="Переключить тему" aria-pressed="false"><span class="theme-toggle-icon" data-theme-icon aria-hidden="true"></span><span data-theme-label>Тёмная тема</span></button></nav>
+  </div></header>
+  <main id="privacy-main" class="privacy-main">
+    <header class="privacy-hero"><span class="v3-block-label">ПОНЯТНО О ДАННЫХ</span><h1>Какие данные мы храним</h1><p>Эта страница объясняет простыми словами, какие данные нужны учебному кабинету и кто может их видеть.</p></header>
+    <section class="privacy-card"><h2>Что сохраняется</h2><ul><li><strong>Данные аккаунта:</strong> ФИО, логин, класс и парольный хэш. Сам пароль в открытом виде не сохраняется.</li><li><strong>Учебная работа:</strong> HTML/CSS-черновики и отправленные версии, задания, оценки, комментарии учителя и отметки о прогрессе.</li><li><strong>Заметки ученика:</strong> личные заметки к урокам и настройки редактора.</li><li><strong>События входа:</strong> время, успешность, IP-адрес и техническая информация браузера. Эти записи автоматически удаляются через 90 дней.</li><li><strong>Сессионная cookie:</strong> браузер хранит подписанный идентификатор входа, чтобы не вводить пароль при каждом переходе. Cookie защищена флагами HttpOnly и SameSite; на HTTPS добавляется Secure.</li></ul><p>Сайт не запрашивает email или телефон ученика. Вход закрыт: аккаунты создаёт учитель.</p></section>
+    <section class="privacy-card"><h2>Где хранятся данные и кто их видит</h2><p>При локальной работе база находится на компьютере учителя. При публикации сайт использует PostgreSQL, указанную владельцем в <code>DATABASE_URL</code> (например, в выбранном облачном регионе Neon). Render обслуживает приложение; постоянная база не хранится на файловом диске Render.</p><p>Ученик видит собственные работы, оценки и профиль. Учитель видит данные учеников своих классов. Владелец может скачать полную резервную копию, в которую входят персональные данные и код работ. Не отправляй эту копию в общий чат или публичное хранилище.</p></section>
+    <section class="privacy-card"><h2>Сроки хранения</h2><p>Журнал входов хранится до 90 дней, срок сессии ограничен. Учебные аккаунты, работы, оценки и резервные копии не удаляются автоматически по окончании учебного года: учитель устанавливает срок хранения и закрывает год архивом, переводом или выпуском.</p></section>
+    <section class="privacy-card"><h2>Как попросить удалить данные</h2><p>Обратись к учителю, который выдал доступ. Учитель может удалить аккаунт целиком либо при выпуске обезличить профиль, сохранив оценки и работы. Резервные копии могут содержать прежние данные, пока учитель не удалит соответствующую копию. При срочном запросе сначала сообщи учителю, чтобы он проверил и базу, и резервные файлы.</p></section>
+    <section class="privacy-card privacy-contact-card"><h2>Контакт учителя</h2><p data-teacher-contact role="status" aria-live="polite">Контакт пока не указан. Учителю нужно заполнить <code>PRIVACY_CONTACT</code> в настройках сервера перед публикацией.</p></section>
+    <aside class="privacy-notice"><strong>Важно:</strong> эта страница — шаблон, а не юридический документ. Перед работой с несовершеннолетними проверь требования закона своей страны о персональных данных, включая разрешённое место хранения, и согласуй сервис со школой.</aside>
+  </main>
+  <footer class="v3-footer"><div class="v3-container v3-footer-inner"><span>Политика данных · учебный сайт</span><a href="index.html">К программе курса ↑</a><a class="site-privacy-link" href="privacy.html" aria-current="page">Конфиденциальность</a></div></footer>
+</body>
+</html>

@@ -1,0 +1,293 @@
+{
+  "base": "local ephemeral PGlite + Chromium",
+  "pages": 40,
+  "screenshots": [
+    {
+      "page": "setup",
+      "width": 1280,
+      "theme": "light",
+      "title": "Первая настройка — Код по полочкам",
+      "file": "setup-1280-light.png"
+    },
+    {
+      "page": "setup",
+      "width": 1280,
+      "theme": "dark",
+      "title": "Первая настройка — Код по полочкам",
+      "file": "setup-1280-dark.png"
+    },
+    {
+      "page": "setup",
+      "width": 375,
+      "theme": "light",
+      "title": "Первая настройка — Код по полочкам",
+      "file": "setup-375-light.png"
+    },
+    {
+      "page": "setup",
+      "width": 375,
+      "theme": "dark",
+      "title": "Первая настройка — Код по полочкам",
+      "file": "setup-375-dark.png"
+    },
+    {
+      "page": "login",
+      "width": 1280,
+      "theme": "light",
+      "title": "Вход — Код по полочкам",
+      "file": "login-1280-light.png"
+    },
+    {
+      "page": "login",
+      "width": 1280,
+      "theme": "dark",
+      "title": "Вход — Код по полочкам",
+      "file": "login-1280-dark.png"
+    },
+    {
+      "page": "login",
+      "width": 375,
+      "theme": "light",
+      "title": "Вход — Код по полочкам",
+      "file": "login-375-light.png"
+    },
+    {
+      "page": "login",
+      "width": 375,
+      "theme": "dark",
+      "title": "Вход — Код по полочкам",
+      "file": "login-375-dark.png"
+    },
+    {
+      "page": "teacher",
+      "width": 1280,
+      "theme": "light",
+      "title": "Кабинет учителя — Код по полочкам",
+      "file": "teacher-1280-light.png"
+    },
+    {
+      "page": "teacher",
+      "width": 1280,
+      "theme": "dark",
+      "title": "Кабинет учителя — Код по полочкам",
+      "file": "teacher-1280-dark.png"
+    },
+    {
+      "page": "teacher",
+      "width": 375,
+      "theme": "light",
+      "title": "Кабинет учителя — Код по полочкам",
+      "file": "teacher-375-light.png"
+    },
+    {
+      "page": "teacher",
+      "width": 375,
+      "theme": "dark",
+      "title": "Кабинет учителя — Код по полочкам",
+      "file": "teacher-375-dark.png"
+    },
+    {
+      "page": "change-password",
+      "width": 1280,
+      "theme": "light",
+      "title": "Смена пароля — Код по полочкам",
+      "file": "change-password-1280-light.png"
+    },
+    {
+      "page": "change-password",
+      "width": 1280,
+      "theme": "dark",
+      "title": "Смена пароля — Код по полочкам",
+      "file": "change-password-1280-dark.png"
+    },
+    {
+      "page": "change-password",
+      "width": 375,
+      "theme": "light",
+      "title": "Смена пароля — Код по полочкам",
+      "file": "change-password-375-light.png"
+    },
+    {
+      "page": "change-password",
+      "width": 375,
+      "theme": "dark",
+      "title": "Смена пароля — Код по полочкам",
+      "file": "change-password-375-dark.png"
+    },
+    {
+      "page": "student-home",
+      "width": 1280,
+      "theme": "light",
+      "title": "Мои задания — Код по полочкам",
+      "file": "student-home-1280-light.png"
+    },
+    {
+      "page": "student-home",
+      "width": 1280,
+      "theme": "dark",
+      "title": "Мои задания — Код по полочкам",
+      "file": "student-home-1280-dark.png"
+    },
+    {
+      "page": "student-home",
+      "width": 375,
+      "theme": "light",
+      "title": "Мои задания — Код по полочкам",
+      "file": "student-home-375-light.png"
+    },
+    {
+      "page": "student-home",
+      "width": 375,
+      "theme": "dark",
+      "title": "Мои задания — Код по полочкам",
+      "file": "student-home-375-dark.png"
+    },
+    {
+      "page": "student-assignment",
+      "width": 1280,
+      "theme": "light",
+      "title": "Задание — Код по полочкам",
+      "file": "student-assignment-1280-light.png"
+    },
+    {
+      "page": "student-assignment",
+      "width": 1280,
+      "theme": "dark",
+      "title": "Задание — Код по полочкам",
+      "file": "student-assignment-1280-dark.png"
+    },
+    {
+      "page": "student-assignment",
+      "width": 375,
+      "theme": "light",
+      "title": "Задание — Код по полочкам",
+      "file": "student-assignment-375-light.png"
+    },
+    {
+      "page": "student-assignment",
+      "width": 375,
+      "theme": "dark",
+      "title": "Задание — Код по полочкам",
+      "file": "student-assignment-375-dark.png"
+    },
+    {
+      "page": "student-profile",
+      "width": 1280,
+      "theme": "light",
+      "title": "Мой профиль — Код по полочкам",
+      "file": "student-profile-1280-light.png"
+    },
+    {
+      "page": "student-profile",
+      "width": 1280,
+      "theme": "dark",
+      "title": "Мой профиль — Код по полочкам",
+      "file": "student-profile-1280-dark.png"
+    },
+    {
+      "page": "student-profile",
+      "width": 375,
+      "theme": "light",
+      "title": "Мой профиль — Код по полочкам",
+      "file": "student-profile-375-light.png"
+    },
+    {
+      "page": "student-profile",
+      "width": 375,
+      "theme": "dark",
+      "title": "Мой профиль — Код по полочкам",
+      "file": "student-profile-375-dark.png"
+    },
+    {
+      "page": "course-home",
+      "width": 1280,
+      "theme": "light",
+      "title": "Код по полочкам — курс HTML и CSS",
+      "file": "course-home-1280-light.png"
+    },
+    {
+      "page": "course-home",
+      "width": 1280,
+      "theme": "dark",
+      "title": "Код по полочкам — курс HTML и CSS",
+      "file": "course-home-1280-dark.png"
+    },
+    {
+      "page": "course-home",
+      "width": 375,
+      "theme": "light",
+      "title": "Код по полочкам — курс HTML и CSS",
+      "file": "course-home-375-light.png"
+    },
+    {
+      "page": "course-home",
+      "width": 375,
+      "theme": "dark",
+      "title": "Код по полочкам — курс HTML и CSS",
+      "file": "course-home-375-dark.png"
+    },
+    {
+      "page": "check",
+      "width": 1280,
+      "theme": "light",
+      "title": "Проверка структуры курса — Код по полочкам",
+      "file": "check-1280-light.png"
+    },
+    {
+      "page": "check",
+      "width": 1280,
+      "theme": "dark",
+      "title": "Проверка структуры курса — Код по полочкам",
+      "file": "check-1280-dark.png"
+    },
+    {
+      "page": "check",
+      "width": 375,
+      "theme": "light",
+      "title": "Проверка структуры курса — Код по полочкам",
+      "file": "check-375-light.png"
+    },
+    {
+      "page": "check",
+      "width": 375,
+      "theme": "dark",
+      "title": "Проверка структуры курса — Код по полочкам",
+      "file": "check-375-dark.png"
+    },
+    {
+      "page": "reference",
+      "width": 1280,
+      "theme": "light",
+      "title": "Справочник HTML и CSS — Код по полочкам",
+      "file": "reference-1280-light.png"
+    },
+    {
+      "page": "reference",
+      "width": 1280,
+      "theme": "dark",
+      "title": "Справочник HTML и CSS — Код по полочкам",
+      "file": "reference-1280-dark.png"
+    },
+    {
+      "page": "reference",
+      "width": 375,
+      "theme": "light",
+      "title": "Справочник HTML и CSS — Код по полочкам",
+      "file": "reference-375-light.png"
+    },
+    {
+      "page": "reference",
+      "width": 375,
+      "theme": "dark",
+      "title": "Справочник HTML и CSS — Код по полочкам",
+      "file": "reference-375-dark.png"
+    }
+  ],
+  "securityProbe": {
+    "iframeSandbox": "",
+    "scriptBlocked": true,
+    "externalImageBlocked": true,
+    "blockedViolationsExpected": true
+  },
+  "problems": []
+}

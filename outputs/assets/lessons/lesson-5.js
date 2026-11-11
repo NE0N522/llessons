@@ -1,0 +1,450 @@
+window.LESSONS = window.LESSONS || {};
+window.LESSONS[5] = {
+  "id": 5,
+  "learn": [
+    "Подключишь отдельный CSS-файл и выберешь элемент по тегу или классу.",
+    "Разберёшь каскад, модель коробки и распространённые единицы размеров.",
+    "Оформишь цвет, рамку, текст и изображение фона без лишних повторов."
+  ],
+  "teacher": {
+    "plan": [
+      {
+        "title": "Старт и цель: Правило и способ подключения CSS",
+        "minutes": 10,
+        "steps": [
+          1
+        ]
+      },
+      {
+        "title": "Разбор шагов 1–5: Правило и способ подключения CSS · Селекторы по тегу, классу и атрибуту · Каскад и специфичность · Ширина, padding и border · px, %, rem и em",
+        "minutes": 40,
+        "steps": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      {
+        "title": "Разбор шагов 6–9: HEX, RGB и HSL · Рамка и скругление · Системный стек и fallback · background-color и изображение",
+        "minutes": 35,
+        "steps": [
+          6,
+          7,
+          8,
+          9
+        ]
+      },
+      {
+        "title": "Практика и самостоятельная сборка",
+        "minutes": 25,
+        "steps": []
+      },
+      {
+        "title": "Повторение и вопросы",
+        "minutes": 10,
+        "steps": []
+      }
+    ],
+    "review": [
+      {
+        "q": "Какое правило нужно вспомнить для шага «Правило и способ подключения CSS»?",
+        "a": "Сначала селектор выбирает элементы, затем декларации в фигурных скобках задают их вид."
+      },
+      {
+        "q": "Какое правило нужно вспомнить для шага «Каскад и специфичность»?",
+        "a": "При равном весе выигрывает более позднее правило; при разном — более специфичный селектор."
+      },
+      {
+        "q": "Какое правило нужно вспомнить для шага «HEX, RGB и HSL»?",
+        "a": "HEX, rgb() и hsl() — разные записи цвета; выбирай модель, в которой удобно управлять нужным параметром."
+      },
+      {
+        "q": "Какое правило нужно вспомнить для шага «background-color и изображение»?",
+        "a": "Cover покрывает весь блок с возможной обрезкой; важное изображение лучше делать содержимым img."
+      }
+    ],
+    "tips": [
+      "Начни с вопроса о теме «Правило и способ подключения CSS»: пусть ученик назовёт роль элемента или свойства своими словами, затем покажи пример.",
+      "После шага «px, %, rem и em» предложи закрыть код и восстановить небольшой фрагмент по памяти, объясняя каждую строку.",
+      "Заверши занятиe практикой «Оформи карточку услуги»: сначала попроси спланировать структуру, затем сравните результат с образцом."
+    ],
+    "answers": "<p><strong>Образец для разбора:</strong> сравни с практикой урока. Ученик объясняет, какие части относятся к HTML, какие правила задают внешний вид и где элементы связываются между собой.</p><h4>Фрагмент HTML</h4><pre><code>&lt;!doctype html&gt;\n&lt;html lang=\"ru\"&gt;\n&lt;head&gt;\n  &lt;meta charset=\"utf-8\"&gt;\n  &lt;meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"&gt;\n  &lt;title&gt;Основы CSS: селекторы, каскад и модель блока — практика&lt;/title&gt;\n&lt;/head&gt;\n&lt;body&gt;\n  &lt;main class=\"page\"&gt;\n    &lt;header class=\"hero\"&gt;&lt;p class=\"eyebrow\"&gt;УЧЕБНЫЙ ПРОЕКТ&lt;/p&gt;&lt;h1&gt;Небольшую страницу по теме «Основы CSS: селекторы, каскад и модель блока»&lt;/h1&gt;&lt;p&gt;Небольшой макет, который можно улучшать по шагам.&lt;/p&gt;&lt;a class=\"action\" href=\"#details\"&gt;Посмотреть содержание&lt;/a&gt;&lt;/header&gt;\n    &lt;section class=\"cards\" id=\"details\"&gt;&lt;article class=\"card\"&gt;&lt;h2&gt;Основная часть&lt;/h2&gt;&lt;p&gt;Добавь полезное описание и подпись.&lt;/p&gt;&lt;/article&gt;&lt;article class=\"card\"&gt;&lt;h2&gt;Следующий шаг&lt;/h2&gt;&lt;p&gt;Проверь поведение при длинном тексте.&lt;/p&gt;&lt;/article&gt;&lt;/section&gt;\n  &lt;/main&gt;\n&lt;/body&gt;\n&lt;/html&gt;</code></pre><h4>Фрагмент CSS</h4><pre><code>*{box-sizing:border-box}\nbody{margin:0;padding:24px;background:#f2f5f2;color:#29372f;font:16px/1.6 Arial,sans-serif}\n.page{max-width:900px;margin:auto}\n.hero{padding:clamp(22px,5vw,48px);border-radius:22px;background:#e4efe7}\n.eyebrow{color:#52755d;font-size:.75rem;font-weight:700;letter-spacing:.12em}\nh1{max-width:18ch;font-size:clamp(2rem,6vw,3.6rem);line-height:1.1}\n.action{display:inline-block;padding:10px 14px;border-radius:8px;background:#326649;color:white;text-decoration:none}\n.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:14px;margin-top:18px}\n.card{padding:18px;border:1px solid #d7e0d9;border-radius:14px;background:white}\n@media(max-width:520px){body{padding:14px}}</code></pre>"
+  },
+  "steps": [
+    {
+      "id": "css-rule-connection",
+      "title": "Правило и способ подключения CSS",
+      "text": "<p><strong>CSS-правило состоит из селектора и деклараций.</strong> Селектор выбирает элемент, фигурные скобки содержат пары «свойство: значение», например <code>color: #315f47</code>. В примере отдельный файл подключён через <code>&lt;link rel=\"stylesheet\" href=\"style.css\"&gt;</code> внутри head; браузер сначала читает HTML, затем применяет найденные правила.</p><p>Посмотри на заголовок и кнопку после подключения таблицы стилей: CSS может влиять на цвет, размер, рамку и отступы. Если файл переименовать, href тоже нужно обновить. Не помещай селектор внутрь фигурных скобок и не забывай двоеточие между свойством и значением; если правило не сработало, сначала проверь синтаксис и путь подключения.</p>",
+      "try": {
+        "title": "1. Подключённое CSS-правило",
+        "html": "<link rel=\"stylesheet\" href=\"style.css\">\n\n<h1 class=\"page-title\">Каталог растений</h1>\n<p>Открой style.css, чтобы изменить цвет заголовка.</p>",
+        "css": ".page-title { color: #2f6548; font-size: 2rem; }\np { max-width: 42rem; line-height: 1.6; }",
+        "height": 275
+      },
+      "remember": "Сначала селектор выбирает элементы, затем декларации в фигурных скобках задают их вид.",
+      "examples": [
+        {
+          "title": "1. Подключённое CSS-правило",
+          "html": "<link rel=\"stylesheet\" href=\"style.css\">\n\n<h1 class=\"page-title\">Каталог растений</h1>\n<p>Открой style.css, чтобы изменить цвет заголовка.</p>",
+          "css": ".page-title { color: #2f6548; font-size: 2rem; }\np { max-width: 42rem; line-height: 1.6; }",
+          "height": 275
+        },
+        {
+          "title": "2. Три части CSS-правила",
+          "html": "<h2 class=\"notice\">Встреча перенесена</h2>",
+          "css": ".notice {\n  color: #354b7e;\n  background-color: #eef2ff;\n  padding: 1rem;\n}",
+          "height": 275
+        }
+      ],
+      "mistake": {
+        "bad": ".notice { color #315f47 }",
+        "good": ".notice { color: #315f47; }",
+        "why": "Без двоеточия между свойством и значением браузер пропустит декларацию."
+      }
+    },
+    {
+      "id": "css-selectors-tag-class-attribute",
+      "title": "Селекторы по тегу, классу и атрибуту",
+      "text": "<p><strong>Селектор описывает, какие HTML-элементы получат правило.</strong> Имя тега выбирает все такие элементы, точка перед именем класса — только элементы с соответствующим class, а квадратные скобки проверяют атрибут. В примерах тег задаёт базовый вид текста, класс оформляет конкретную карточку, а комбинация уточняет нужный элемент внутри блока.</p><p>Проверь область действия: правило <code>.note</code> может примениться к нескольким элементам, а <code>article.note</code> — только к article с этим классом. Если стилизуется не тот узел, посмотри на HTML-класс и селектор рядом. Не добавляй точку к имени тега и не забывай, что в HTML класс записан без точки.</p>",
+      "try": {
+        "title": "1. Тег, класс и атрибут",
+        "html": "<p>Обычный текст.</p>\n<p class=\"lead\">Короткое вступление.</p>\n<input type=\"email\" placeholder=\"Почта\">",
+        "css": "p { color: #576273; }\n.lead { font-size: 1.25rem; color: #263a61; }\ninput[type=\"email\"] { padding: .6rem; border: 1px solid #9ba9bc; }",
+        "height": 275
+      },
+      "remember": "В CSS точка обозначает класс, имя без знака — тег, квадратные скобки — атрибут.",
+      "examples": [
+        {
+          "title": "1. Тег, класс и атрибут",
+          "html": "<p>Обычный текст.</p>\n<p class=\"lead\">Короткое вступление.</p>\n<input type=\"email\" placeholder=\"Почта\">",
+          "css": "p { color: #576273; }\n.lead { font-size: 1.25rem; color: #263a61; }\ninput[type=\"email\"] { padding: .6rem; border: 1px solid #9ba9bc; }",
+          "height": 275
+        },
+        {
+          "title": "2. Комбинации селекторов",
+          "html": "<article class=\"card\">\n  <h2>Ближайший мастер-класс</h2>\n  <p>Занятие для новичков.</p>\n  <a href=\"#signup\">Записаться</a>\n</article>",
+          "css": ".card { padding: 1rem; border: 1px solid #d9e1eb; }\n.card h2 { margin-top: 0; }\n.card > a { color: #315f47; font-weight: 700; }",
+          "height": 275
+        }
+      ],
+      "mistake": {
+        "bad": "note { color: #315f47; }",
+        "good": ".note { color: #315f47; }",
+        "why": "Без точки CSS ищет элемент с именем тега note, а не класс class=\"note\"."
+      }
+    },
+    {
+      "id": "cascade-specificity",
+      "title": "Каскад и специфичность",
+      "text": "<p><strong>Каскад выбирает итоговое значение, когда к элементу подходит несколько правил.</strong> Если специфичность одинакова, обычно побеждает правило, расположенное ниже. Если один селектор точнее другого, его вес важнее простого порядка. В образцах сравнивается класс карточки с более точным селектором и две последовательные декларации одного свойства.</p><p>В предпросмотре измени цвет или переставь правила и наблюдай за текстом. DevTools позже покажет перечёркнутые декларации и вычисленное значение. Не пытайся исправлять каждый конфликт добавлением <code>!important</code>: это скрывает причину и делает следующие переопределения сложнее. Сначала сравни селекторы, затем порядок и только потом проверь наследование.</p>",
+      "try": {
+        "title": "1. Специфичность селектора",
+        "html": "<article class=\"notice\"><p class=\"lead\">Срок подачи заявки — пятница.</p></article>",
+        "css": "p { color: #667085; }\n.notice .lead { color: #315f47; font-weight: 700; }\n#important { color: #a33; }",
+        "height": 275
+      },
+      "remember": "При равном весе выигрывает более позднее правило; при разном — более специфичный селектор.",
+      "examples": [
+        {
+          "title": "1. Специфичность селектора",
+          "html": "<article class=\"notice\"><p class=\"lead\">Срок подачи заявки — пятница.</p></article>",
+          "css": "p { color: #667085; }\n.notice .lead { color: #315f47; font-weight: 700; }\n#important { color: #a33; }",
+          "height": 275
+        },
+        {
+          "title": "2. Порядок одинаковых правил",
+          "html": "<button class=\"action\">Открыть план</button>",
+          "css": ".action { background: #dce6ff; color: #24375f; }\n.action { background: #3f5ea8; color: white; }",
+          "height": 275
+        }
+      ],
+      "mistake": {
+        "bad": ".card h2 { color: #315f47; } .title { color: #a33; }",
+        "good": ".card h2 { color: #315f47; } .card .title { color: #a33; }",
+        "why": "В первом варианте второй селектор слабее, поэтому перестановка строк может не изменить итог."
+      }
+    },
+    {
+      "id": "box-model-border-box",
+      "title": "Ширина, padding и border",
+      "text": "<p><strong>Каждый элемент занимает прямоугольную область.</strong> Внутри находятся содержимое, padding и border; margin расположен снаружи. В примере ширина карточки кажется больше заданной, потому что padding и рамка прибавляются к content-box. Правило <code>box-sizing: border-box</code> включает внутренние отступы и границу в указанную ширину.</p><p>Измени padding и посмотри, как меняется свободное место внутри карточки, не двигая соседний элемент. Margin отвечает за расстояние между коробками, поэтому он может влиять на промежуток снаружи. Не пытайся исправить слишком широкую карточку случайным отрицательным margin: проверь её расчёт и добавь глобальный border-box сброс.</p>",
+      "try": {
+        "title": "1. Ширина с padding и border",
+        "html": "<div class=\"box\">\n  Карточка шириной до 320 px вместе с рамкой.\n</div>",
+        "css": "* { box-sizing: border-box; }\n.box { width: 320px; max-width: 100%; padding: 24px; border: 3px solid #49725a; background: #edf4ef; }",
+        "height": 275
+      },
+      "remember": "С border-box заданная ширина включает padding и border, а margin остаётся снаружи.",
+      "examples": [
+        {
+          "title": "1. Ширина с padding и border",
+          "html": "<div class=\"box\">\n  Карточка шириной до 320 px вместе с рамкой.\n</div>",
+          "css": "* { box-sizing: border-box; }\n.box { width: 320px; max-width: 100%; padding: 24px; border: 3px solid #49725a; background: #edf4ef; }",
+          "height": 275
+        },
+        {
+          "title": "2. Внешний и внутренний отступ",
+          "html": "<section class=\"card\">\n  <h2>Зелёный маршрут</h2>\n  <p>Тропа проходит вдоль ручья.</p>\n</section>",
+          "css": ".card { margin: 24px auto; padding: 20px; max-width: 26rem; border: 1px solid #d6e1d8; border-radius: 12px; }\nh2 { margin-top: 0; }",
+          "height": 275
+        }
+      ],
+      "mistake": {
+        "bad": ".card { width: 300px; padding: 24px; border: 2px solid; }",
+        "good": ".card { box-sizing: border-box; width: 300px; padding: 24px; border: 2px solid; }",
+        "why": "Без border-box к ширине 300px прибавляются внутренние отступы и рамка."
+      }
+    },
+    {
+      "id": "css-length-units",
+      "title": "px, %, rem и em",
+      "text": "<p><strong>Единица измерения определяет, от чего зависит размер.</strong> px задаёт фиксированный шаг, rem опирается на размер шрифта корня, em — на размер шрифта текущего элемента, а проценты часто считаются от размера родителя. Примеры показывают одну карточку с фиксированным размером и контейнер, ограниченный шириной экрана.</p><p>Проверь страницу при увеличенном тексте и на узком окне: max-width не даёт блоку расти бесконечно, а относительные значения помогают ему подстраиваться. Для расстояний интерфейса обычно удобно начинать с rem; px пригоден для тонкой рамки. Не ставь жёсткую ширину шире родителя — элемент создаст горизонтальную прокрутку.</p>",
+      "try": {
+        "title": "1. Размер в разных единицах",
+        "html": "<main class=\"page\">\n  <h1>Наблюдай за природой</h1>\n  <p>Выбери один небольшой объект и запиши, что изменяется вокруг него.</p>\n</main>",
+        "css": "html { font-size: 16px; }\n.page { width: min(90%, 68rem); margin: 2rem auto; }\nh1 { font-size: 2rem; }\np { max-width: 55ch; }",
+        "height": 275
+      },
+      "remember": "Выбирай единицу по зависимости: px фиксирует, rem связан с корнем, % — с контейнером.",
+      "examples": [
+        {
+          "title": "1. Размер в разных единицах",
+          "html": "<main class=\"page\">\n  <h1>Наблюдай за природой</h1>\n  <p>Выбери один небольшой объект и запиши, что изменяется вокруг него.</p>\n</main>",
+          "css": "html { font-size: 16px; }\n.page { width: min(90%, 68rem); margin: 2rem auto; }\nh1 { font-size: 2rem; }\np { max-width: 55ch; }",
+          "height": 275
+        },
+        {
+          "title": "2. Ширина, ограниченная контейнером",
+          "html": "<article class=\"card\">\n  <h2>Вопрос дня</h2>\n  <p>Почему после дождя пахнет сильнее?</p>\n</article>",
+          "css": ".card { width: 100%; max-width: 30rem; padding: 1.25rem; border: 1px solid #dbe2ec; }\np { font-size: 1.1rem; }",
+          "height": 275
+        }
+      ],
+      "mistake": {
+        "bad": ".page { width: 900px; }",
+        "good": ".page { width: min(100% - 2rem, 56rem); }",
+        "why": "Постоянная ширина может оказаться шире мобильного окна; оставь блоку гибкую ширину и предел."
+      }
+    },
+    {
+      "id": "color-models-hex-rgb-hsl",
+      "title": "HEX, RGB и HSL",
+      "text": "<p><strong>HEX, RGB и HSL описывают один и тот же цвет разными способами.</strong> Шестнадцатеричная запись компактна, rgb() задаёт красный, зелёный и синий каналы, а hsl() разделяет тон, насыщенность и светлоту. В палитре карточек можно сопоставить лесной и водный оттенки; у кнопки HSL помогает оставить тот же тон, сделав состояние ссылки темнее.</p><p>Сравни контраст белого текста на выбранном фоне, а не только то, нравятся ли оттенки. Если второе объявление HSL отличается лишь светлотой, цветовая система остаётся визуально связанной. Не меняй несколько каналов наугад; подбирай одну характеристику и проверь читаемость текста и фокуса клавиатуры.</p>",
+      "try": {
+        "title": "1. Цвет в HEX и RGB",
+        "html": "<div class=\"swatches\"><span>Лес</span><span>Вода</span></div>",
+        "css": ".swatches { display: flex; gap: 1rem; }\n.swatches span { padding: 1rem; border-radius: 10px; color: white; }\n.swatches span:first-child { background: #316b4a; }\n.swatches span:last-child { background: rgb(49 104 150); }",
+        "height": 275
+      },
+      "remember": "HEX, rgb() и hsl() — разные записи цвета; выбирай модель, в которой удобно управлять нужным параметром.",
+      "examples": [
+        {
+          "title": "1. Цвет в HEX и RGB",
+          "html": "<div class=\"swatches\"><span>Лес</span><span>Вода</span></div>",
+          "css": ".swatches { display: flex; gap: 1rem; }\n.swatches span { padding: 1rem; border-radius: 10px; color: white; }\n.swatches span:first-child { background: #316b4a; }\n.swatches span:last-child { background: rgb(49 104 150); }",
+          "height": 275
+        },
+        {
+          "title": "2. HSL и цветовая пара",
+          "html": "<button class=\"primary\">Зарегистрироваться</button>\n<a href=\"#details\">Условия участия</a>",
+          "css": ".primary { padding: .75rem 1rem; border: 0; border-radius: 8px; color: white; background: hsl(145 42% 34%); }\na { margin-left: .8rem; color: hsl(145 42% 28%); }",
+          "height": 275
+        }
+      ],
+      "mistake": {
+        "bad": ".button { color: #aaa; background: #bbb; }",
+        "good": ".button { color: #fff; background: hsl(145 42% 34%); }",
+        "why": "Близкие по светлоте цвета дают слабый контраст, поэтому текст трудно читать."
+      }
+    },
+    {
+      "id": "border-radius-shape",
+      "title": "Рамка и скругление",
+      "text": "<p><strong>border рисует границу коробки, а border-radius скругляет её углы.</strong> У блока notice толщина, тип и цвет border задаются вместе; padding отделяет текст от края, а радиус делает углы мягче. Для круглого аватара нужен квадратный размер и border-radius: 50%; у кнопки большой радиус превращает прямоугольник в пилюлю.</p><p>Проверь форму при изменении ширины и высоты: круг получится только при одинаковых сторонах. Значение радиуса не влияет на смысл содержимого и не заменяет видимый фокус кнопки. Частая ошибка — убрать границу с интерактивного элемента, не добавив другого различимого состояния.</p>",
+      "try": {
+        "title": "1. Рамка описывает границу элемента",
+        "html": "<article class=\"notice\"><h2>Новая выставка</h2><p>Открытие в эту субботу.</p></article>",
+        "css": ".notice { padding: 1rem; border: 2px solid #67856d; border-radius: 14px; }\n.notice h2 { margin-top: 0; }",
+        "height": 275
+      },
+      "remember": "Граница настраивается через border, форма углов — через border-radius.",
+      "examples": [
+        {
+          "title": "1. Рамка описывает границу элемента",
+          "html": "<article class=\"notice\"><h2>Новая выставка</h2><p>Открытие в эту субботу.</p></article>",
+          "css": ".notice { padding: 1rem; border: 2px solid #67856d; border-radius: 14px; }\n.notice h2 { margin-top: 0; }",
+          "height": 275
+        },
+        {
+          "title": "2. Скругление меняет форму углов",
+          "html": "<button class=\"ticket\">Получить билет</button>\n<div class=\"avatar\" aria-label=\"Круглая заглушка для фото\"></div>",
+          "css": ".ticket { padding: .7rem 1rem; border: 1px solid #315f47; border-radius: 999px; background: white; }\n.avatar { width: 4rem; aspect-ratio: 1; margin-top: 1rem; border-radius: 50%; background: #dce9dc; }",
+          "height": 275
+        }
+      ],
+      "mistake": {
+        "bad": ".avatar { width: 4rem; height: 2rem; border-radius: 50%; }",
+        "good": ".avatar { width: 4rem; aspect-ratio: 1; border-radius: 50%; }",
+        "why": "Овальная коробка даёт овал; для круглого аватара ширина и высота должны совпасть."
+      }
+    },
+    {
+      "id": "font-family-fallback",
+      "title": "Системный стек и fallback",
+      "text": "<p><strong>font-family задаёт список гарнитур с запасными вариантами.</strong> Браузер пробует шрифты по порядку: если первый не установлен, берёт следующий. Системный стек с sans-serif работает без скачивания файлов, а разные роли можно разделить: например, заголовкам дать выразительную гарнитуру, тексту — нейтральную.</p><p>Проверь страницу на другом устройстве и прочитай длинный абзац. Если редкий шрифт отсутствует, fallback всё равно должен оставаться подходящим по ширине и форме. Названия с пробелами заключай в кавычки. Не указывай только одну экзотическую гарнитуру без запасного семейства — текст может неожиданно перейти на системный шрифт браузера.</p>",
+      "try": {
+        "title": "1. Системный стек и запасной шрифт",
+        "html": "<h1>Лесная лаборатория</h1><p>Текст останется читаемым, даже если выбранный шрифт недоступен.</p>",
+        "css": "body { font-family: Inter, \"Segoe UI\", Arial, sans-serif; }\nh1 { font-weight: 700; }\np { line-height: 1.6; }",
+        "height": 275
+      },
+      "remember": "Указывай цепочку font-family и заверши её общим семейством вроде sans-serif.",
+      "examples": [
+        {
+          "title": "1. Системный стек и запасной шрифт",
+          "html": "<h1>Лесная лаборатория</h1><p>Текст останется читаемым, даже если выбранный шрифт недоступен.</p>",
+          "css": "body { font-family: Inter, \"Segoe UI\", Arial, sans-serif; }\nh1 { font-weight: 700; }\np { line-height: 1.6; }",
+          "height": 275
+        },
+        {
+          "title": "2. Разные шрифты по роли",
+          "html": "<h2>Журнал наблюдений</h2><p>Запись № 14 · 8 мая</p>",
+          "css": "h2 { font-family: Georgia, \"Times New Roman\", serif; }\np { font-family: system-ui, sans-serif; color: #5d6878; }",
+          "height": 275
+        }
+      ],
+      "mistake": {
+        "bad": "body { font-family: \"Museum Sans\"; }",
+        "good": "body { font-family: \"Museum Sans\", Arial, sans-serif; }",
+        "why": "Fallback помогает сохранить подходящий текст, если основная гарнитура недоступна."
+      }
+    },
+    {
+      "id": "background-image-cover-position",
+      "title": "background-color и изображение",
+      "text": "<p><strong>Фон может состоять из цвета, изображения и градиентного слоя.</strong> В первом примере линейный затемняющий градиент лежит перед горной иллюстрацией, помогая тексту оставаться контрастным. background-position выбирает видимую область, а cover увеличивает изображение так, чтобы закрыть всю коробку, даже если часть кадра обрежется.</p><p>Поменяй размер окна и проверь, не исчезла ли главная часть пейзажа. Для критически важного изображения используй img с alt, а не декоративный background. Не рассчитывай, что один цвет фона заменит текстовую альтернативу содержательной фотографии. Сначала проверь реальный кроп на узком и широком контейнере.</p>",
+      "try": {
+        "title": "1. Цвет и изображение фона",
+        "html": "<section class=\"hero\">\n  <p>ПУТЕВОДИТЕЛЬ ПО ТРОПАМ</p>\n  <h1>Выходной начинается рядом</h1>\n</section>",
+        "css": ".hero { padding: 3rem; color: white; background-color: #345448; background-image: linear-gradient(90deg, #14251edb, transparent), url(\"assets/mountains.svg\"); background-position: center; background-size: cover; }",
+        "height": 275
+      },
+      "remember": "Cover покрывает весь блок с возможной обрезкой; важное изображение лучше делать содержимым img.",
+      "examples": [
+        {
+          "title": "1. Цвет и изображение фона",
+          "html": "<section class=\"hero\">\n  <p>ПУТЕВОДИТЕЛЬ ПО ТРОПАМ</p>\n  <h1>Выходной начинается рядом</h1>\n</section>",
+          "css": ".hero { padding: 3rem; color: white; background-color: #345448; background-image: linear-gradient(90deg, #14251edb, transparent), url(\"assets/mountains.svg\"); background-position: center; background-size: cover; }",
+          "height": 275
+        },
+        {
+          "title": "2. Градиент под текстом",
+          "html": "<div class=\"event-card\">\n  <span>СУББОТА · 12:00</span>\n  <h2>Пикник у озера</h2>\n</div>",
+          "css": ".event-card { min-height: 220px; display: flex; flex-direction: column; justify-content: end; padding: 1.4rem; border-radius: 16px; color: #fff; background: linear-gradient(0deg, #17251fe8, transparent 80%), #6a9475; }\n.event-card h2 { margin-bottom: 0; }",
+          "height": 275
+        }
+      ],
+      "mistake": {
+        "bad": "background-size: 100% 100%;",
+        "good": "background-size: cover; background-position: center;",
+        "why": "Растяжение до 100% может исказить пропорции фото."
+      }
+    }
+  ],
+  "cheatsheet": {
+    "lang": "css",
+    "code": "* { box-sizing: border-box; }\nbody { font-family: Arial, sans-serif; color: #243126; }\n.card {\n  width: min(100%, 420px);\n  padding: 24px;\n  border: 1px solid #d8e0d9;\n  border-radius: 16px;\n  background-color: #fff;\n}\n.card h2 { font-size: 1.5rem; }"
+  },
+  "practice": {
+    "intro": "Оформи карточку услуги: выбери классы, задай размеры и отступы, настрой цвет, рамку, фон и читаемость текста.",
+    "stages": [
+      {
+        "title": "Подготовь основу · Правило и способ подключения CSS",
+        "task": "Для проекта «карточку услуги небольшой студии с понятными стилями» выполни шаг «Правило и способ подключения CSS»: Сначала селектор выбирает элементы, затем декларации в фигурных скобках задают их вид. Примени правило к реальному элементу страницы и покажи результат в браузерном предпросмотре.",
+        "check": "Контрольная точка: ученик находит в коде «.notice { color: #315f47; }», отличает его от ошибки «.notice { color #315f47 }» и объясняет: Без двоеточия между свойством и значением браузер пропустит декларацию."
+      },
+      {
+        "title": "Добавь ключевой приём · Каскад и специфичность",
+        "task": "Для проекта «карточку услуги небольшой студии с понятными стилями» выполни шаг «Каскад и специфичность»: При равном весе выигрывает более позднее правило; при разном — более специфичный селектор. Примени правило к реальному элементу страницы и покажи результат в браузерном предпросмотре.",
+        "check": "Контрольная точка: ученик находит в коде «.card h2 { color: #315f47; } .card .title { color: #a33; }», отличает его от ошибки «.card h2 { color: #315f47; } .title { color: #a33; }» и объясняет: В первом варианте второй селектор слабее, поэтому перестановка строк может не изменить итог."
+      },
+      {
+        "title": "Собери рабочий фрагмент · px, %, rem и em",
+        "task": "Для проекта «карточку услуги небольшой студии с понятными стилями» выполни шаг «px, %, rem и em»: Выбирай единицу по зависимости: px фиксирует, rem связан с корнем, % — с контейнером. Примени правило к реальному элементу страницы и покажи результат в браузерном предпросмотре.",
+        "check": "Контрольная точка: ученик находит в коде «.page { width: min(100% - 2rem, 56rem); }», отличает его от ошибки «.page { width: 900px; }» и объясняет: Постоянная ширина может оказаться шире мобильного окна; оставь блоку гибкую ширину и предел."
+      },
+      {
+        "title": "Проверь и объясни · Почему победило конкретное правило",
+        "task": "Для проекта «карточку услуги небольшой студии с понятными стилями» выполни шаг «Почему победило конкретное правило»: Сравнивай специфичность по группам ID, классов и тегов; не суммируй их в одно число. Примени правило к реальному элементу страницы и покажи результат в браузерном предпросмотре.",
+        "check": "Контрольная точка: ученик находит в коде «.card-title { color: #a33; }», отличает его от ошибки «#page .card h2 { color: #a33; }» и объясняет: Слишком тяжёлый селектор связывает стиль со структурой и затрудняет дальнейшие состояния."
+      }
+    ],
+    "hints": [
+      "Если застрял на «Правило и способ подключения CSS», проверь правило: Сначала селектор выбирает элементы, затем декларации в фигурных скобках задают их вид. Частая ошибка: .notice { color #315f47 } — Без двоеточия между свойством и значением браузер пропустит декларацию.",
+      "Если застрял на «Каскад и специфичность», проверь правило: При равном весе выигрывает более позднее правило; при разном — более специфичный селектор. Частая ошибка: .card h2 { color: #315f47; } .title { color: #a33; } — В первом варианте второй селектор слабее, поэтому перестановка строк может не изменить итог.",
+      "Если застрял на «px, %, rem и em», проверь правило: Выбирай единицу по зависимости: px фиксирует, rem связан с корнем, % — с контейнером. Частая ошибка: .page { width: 900px; } — Постоянная ширина может оказаться шире мобильного окна; оставь блоку гибкую ширину и предел."
+    ],
+    "solution": {
+      "html": "<!doctype html>\n<html lang=\"ru\">\n<head>\n  <meta charset=\"utf-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n  <title>Основы CSS: селекторы, каскад и модель блока — практика</title>\n</head>\n<body>\n  <main class=\"page\">\n    <header class=\"hero\"><p class=\"eyebrow\">УЧЕБНЫЙ ПРОЕКТ</p><h1>Небольшую страницу по теме «Основы CSS: селекторы, каскад и модель блока»</h1><p>Небольшой макет, который можно улучшать по шагам.</p><a class=\"action\" href=\"#details\">Посмотреть содержание</a></header>\n    <section class=\"cards\" id=\"details\"><article class=\"card\"><h2>Основная часть</h2><p>Добавь полезное описание и подпись.</p></article><article class=\"card\"><h2>Следующий шаг</h2><p>Проверь поведение при длинном тексте.</p></article></section>\n  </main>\n</body>\n</html>",
+      "css": "*{box-sizing:border-box}\nbody{margin:0;padding:24px;background:#f2f5f2;color:#29372f;font:16px/1.6 Arial,sans-serif}\n.page{max-width:900px;margin:auto}\n.hero{padding:clamp(22px,5vw,48px);border-radius:22px;background:#e4efe7}\n.eyebrow{color:#52755d;font-size:.75rem;font-weight:700;letter-spacing:.12em}\nh1{max-width:18ch;font-size:clamp(2rem,6vw,3.6rem);line-height:1.1}\n.action{display:inline-block;padding:10px 14px;border-radius:8px;background:#326649;color:white;text-decoration:none}\n.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:14px;margin-top:18px}\n.card{padding:18px;border:1px solid #d7e0d9;border-radius:14px;background:white}\n@media(max-width:520px){body{padding:14px}}"
+    },
+    "findError": {
+      "code": ".page { width: 1000px; }\n.action { outline: none; }\nimg { width: 400px; }",
+      "solution": "<p>Фиксированная ширина переполняет мобильный экран; ограничь контейнер через max-width и оставь width:100%. Не убирай клавиатурный контур без заметной замены. Изображению задай max-width:100% и подходящее соотношение сторон.</p>"
+    }
+  },
+  "can": [
+    "Подключить style.css через link.",
+    "Различить селектор тега и класса.",
+    "Объяснить, откуда берутся ширина и отступы элемента.",
+    "Настроить цвет, размер текста, рамку и фон."
+  ],
+  "projects": [
+    {
+      "title": "Меню небольшого кафе",
+      "about": "Кафе готовит страницу со списком блюд, ценами и заметным предложением дня.",
+      "steps": [
+        "Создай HTML с разделами меню и классами для повторяющихся карточек блюд.",
+        "Оформи фон, типографику, отступы и границы через отдельный CSS.",
+        "Проверь каскад: добавь общее правило для текста и более конкретное для цены."
+      ],
+      "done": [
+        "Селекторы совпадают с class/id в HTML.",
+        "Блоки имеют предсказуемые размеры при border-box.",
+        "Правила не дублируют и не переопределяют друг друга случайно."
+      ],
+      "stretch": "Добавь CSS-переменные для основных цветов и используй их в нескольких правилах.",
+      "example": {
+        "title": "Меню небольшого кафе",
+        "description": "Образец готовой страницы для проекта «Меню небольшого кафе». Сезонные блюда, понятные ингредиенты и короткое меню для спокойного обеда.",
+        "html": "<!doctype html>\n<html lang=\"ru\">\n<head>\n  <meta charset=\"utf-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n  <title>Меню кафе «Листья»</title>\n  <link rel=\"stylesheet\" href=\"./style.css\">\n  \n</head>\n<body>\n  <div class=\"demo demo--cards\" id=\"top\" style=\"--accent:#4c6573;--soft:#eaf0f7\">\n    <header class=\"demo-header\"><a class=\"demo-brand\" href=\"#top\">ПРИМЕР ПРОЕКТА</a><nav class=\"demo-nav\" aria-label=\"Навигация по странице\"><a href=\"#top\">О проекте</a><a href=\"#details\">Подробности</a></nav></header>\n    <main>\n      <section class=\"demo-hero\" aria-labelledby=\"project-title\"><span class=\"demo-kicker\">ГОТОВИМ КАЖДЫЙ ДЕНЬ</span><h1 id=\"project-title\">Меню кафе «Листья»</h1><p class=\"demo-lead\">Сезонные блюда, понятные ингредиенты и короткое меню для спокойного обеда.</p></section>\n      <section class=\"demo-section\" id=\"details\"><h2>Что важно знать</h2><div class=\"demo-grid \"><article class=\"demo-card\"><small>420 сом</small><h3>Суп из чечевицы</h3><p>Томат, красная чечевица, зелень и ломтик хлеба на закваске.</p></article><article class=\"demo-card\"><small>510 сом</small><h3>Тёплый салат</h3><p>Запечённая тыква, шпинат, семечки и йогуртовая заправка.</p></article><article class=\"demo-card\"><small>590 сом</small><h3>Паста с грибами</h3><p>Вешенки, сливочный соус и немного тёртого сыра.</p></article></div><div class=\"demo-note\">Спросите команду о блюдах без молочных продуктов или орехов.</div></section>\n    </main>\n    <footer class=\"demo-footer\">Учебный пример HTML и CSS · макет для обсуждения на занятии</footer>\n  </div>\n</body>\n</html>",
+        "css": ":root { color-scheme: light; }\n* { box-sizing: border-box; }\nbody { margin: 0; color: #202635; background: #f4f6f8; font: 15px/1.55 Arial, sans-serif; }\na { color: inherit; }\n.demo { --accent: #365c8d; --soft: #eaf0f7; --ink: #202635; max-width: 1100px; min-height: 100vh; margin: 0 auto; padding: 0 26px 46px; background: #fff; }\n.demo-header { display: flex; align-items: center; justify-content: space-between; gap: 20px; min-height: 66px; border-bottom: 1px solid #e8ebef; }\n.demo-brand { color: var(--accent); font-size: 13px; font-weight: 800; letter-spacing: .08em; text-decoration: none; text-transform: uppercase; }\n.demo-nav { display: flex; flex-wrap: wrap; gap: 16px; color: #626b79; font-size: 12px; }\n.demo-nav a { display: flex; align-items: center; min-height: 44px; text-decoration: none; }\n.demo-nav a:hover, .demo-nav a:focus-visible { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }\n.demo-hero { position: relative; overflow: hidden; margin: 22px 0; padding: clamp(24px,5vw,56px); border-radius: 20px; background: linear-gradient(120deg,var(--soft),#fff 72%); }\n.demo-hero::after { position: absolute; right: -54px; bottom: -120px; width: 280px; height: 280px; border: 1px solid #d8e0eb; border-radius: 50%; content: ''; }\n.demo-kicker { color: var(--accent); font-size: 10px; font-weight: 800; letter-spacing: .14em; }\n.demo h1 { max-width: 760px; margin: 11px 0 10px; font-size: clamp(30px,5vw,48px); line-height: 1.08; letter-spacing: -.045em; }\n.demo-lead { max-width: 670px; margin: 0; color: #5e6877; font-size: 16px; }\n.demo-section { margin: 30px 0; }\n.demo-section h2 { margin: 0 0 13px; font-size: 21px; letter-spacing: -.025em; }\n.demo-section > p { max-width: 720px; color: #5e6877; }\n.demo-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 13px; }\n.demo-card { min-width: 0; padding: 19px; border: 1px solid #e7eaf0; border-radius: 14px; background: #fff; }\n.demo-card small { color: var(--accent); font-size: 10px; font-weight: 800; letter-spacing: .09em; text-transform: uppercase; }\n.demo-card h3 { margin: 9px 0 6px; font-size: 17px; }\n.demo-card p { margin: 0; color: #647080; font-size: 13px; }\n.demo-note { margin: 18px 0; padding: 14px 16px; border-left: 3px solid var(--accent); border-radius: 0 10px 10px 0; background: var(--soft); color: #424d5d; font-size: 13px; }\n.demo-list { display: grid; gap: 8px; margin: 0; padding-left: 21px; color: #465264; }\n.demo-cta { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; margin-top: 12px; padding: 10px 16px; border-radius: 9px; color: #fff; background: var(--accent); font-size: 13px; font-weight: 700; text-decoration: none; transition: filter .16s ease,transform .16s ease; }\n.demo-cta:hover, .demo-cta:focus-visible { filter: brightness(.9); outline: 3px solid #d6deea; outline-offset: 2px; }\n.demo-footer { margin-top: 40px; padding-top: 16px; border-top: 1px solid #e8ebef; color: #77808e; font-size: 11px; }\n.demo-footer-columns { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 18px; }\n.demo-footer-columns h2 { margin: 0 0 6px; color: #344050; font-size: 12px; }\n.demo-footer-columns p { margin: 0; }\n.demo-footer-columns a { color: var(--accent); }\n.demo-table-wrap { overflow-x: auto; border: 1px solid #e3e7ed; border-radius: 12px; }\n.demo-table { width: 100%; border-collapse: collapse; text-align: left; }\n.demo-table caption { padding: 13px; color: #5b6574; font-size: 12px; text-align: left; }\n.demo-table th, .demo-table td { padding: 12px 14px; border-top: 1px solid #e8ebef; }\n.demo-table thead th { color: var(--accent); background: var(--soft); font-size: 11px; }\n.demo-table tbody th { font-size: 12px; }\n.demo-table tbody td { color: #596473; font-size: 12px; }\n.demo-figure { margin: 0; }\n.demo-figure img { display: block; width: 100%; max-height: 300px; object-fit: cover; border-radius: 14px; }\n.demo-figure figcaption { margin-top: 6px; color: #707a88; font-size: 11px; }\n.demo-gallery { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 9px; }\n.demo-gallery figure { margin: 0; }\n.demo-gallery img { display: block; width: 100%; height: 130px; object-fit: cover; border-radius: 10px; }\n.demo-gallery figcaption { margin-top: 5px; color: #677180; font-size: 10px; }\n.demo-link-list { display: flex; flex-wrap: wrap; align-items: center; gap: 9px; margin: 17px 0; }\n.demo-link-list b { flex-basis: 100%; font-size: 13px; }\n.demo-link-list a { padding: 8px 10px; border: 1px solid #e3e8ef; border-radius: 8px; color: var(--accent); font-size: 11px; font-weight: 700; text-decoration: none; }\n.demo-link-list a:hover,.demo-link-list a:focus-visible { text-decoration: underline; text-underline-offset: 3px; }\n.demo-inline-book { display: inline-block; vertical-align: top; width: 30%; min-height: 270px; margin: 0 1.4% 12px 0; padding: 13px; border: 1px solid #e7eaf0; border-radius: 12px; background: linear-gradient(145deg,#fff,var(--soft)); }\n.demo-inline-book small { color: var(--accent); font-size: 10px; font-weight: 800; }\n.demo-inline-book b { display: block; margin: 22px 0 5px; font-size: 15px; }\n.demo-inline-book span { color: #677180; font-size: 11px; }\n.demo-book-cover { min-height: 100px; display: grid; place-items: end start; padding: 11px; border-radius: 6px; color: #fff; background: linear-gradient(145deg,var(--cover),#1d2f3e); box-shadow: 2px 3px 6px #20263525; font-size: 13px; font-weight: 700; }\n.demo-inline-book p { margin: 7px 0 0; color: #657181; font-size: 10px; }\n.demo-profile-list { display: flex; flex-wrap: wrap; gap: 12px; }\n.demo-profile { display: inline-block; vertical-align: top; width: calc(50% - 6px); overflow: hidden; border: 1px solid #e6eaf0; border-radius: 12px; background: #fff; }\n.demo-profile > img { display: block; width: 100%; height: 110px; object-fit: cover; }\n.demo-profile-copy { padding: 14px; }\n.demo-profile-copy small { color: var(--accent); font-size: 9px; font-weight: 800; }\n.demo-profile-copy h3 { margin: 6px 0 2px; font-size: 16px; }\n.demo-profile-copy > b { color: #5c6877; font-size: 11px; }\n.demo-profile-copy p { min-height: 38px; color: #647080; font-size: 11px; }\n.demo-profile-copy a { color: var(--accent); font-size: 11px; font-weight: 700; }\n.demo-flex-grid { display: flex; flex-wrap: wrap; align-items: stretch; gap: 13px; }\n.demo-flex-grid .demo-card { flex: 1 1 220px; }\n.demo-circle-row { display: flex; flex-wrap: wrap; gap: 18px; }\n.demo-circle { width: 150px; text-align: center; }\n.demo-circle-art { width: 112px; height: 112px; display: grid; place-items: center; margin: 0 auto 11px; border-radius: 50%; color: #fff; background: var(--bubble); box-shadow: inset -10px -12px 25px #0002; font-size: 13px; font-weight: 700; }\n.demo-circle b, .demo-circle span { display: block; }\n.demo-circle span { color: #697382; font-size: 11px; }\n.demo-stage { position: relative; min-height: 310px; overflow: hidden; border: 1px solid #e5e8ee; border-radius: 16px; background: repeating-linear-gradient(0deg,#fff,#fff 39px,#edf0f4 40px),repeating-linear-gradient(90deg,transparent,transparent 39px,#edf0f4 40px); }\n.scene-block { position: absolute; display: grid; place-items: center; border: 1px solid var(--accent); border-radius: 10px; color: var(--accent); background: var(--soft); font-size: 12px; font-weight: 700; }\n.scene-wide { inset: 11% 20% auto; height: 45px; }\n.scene-platform { left: 24%; right: 24%; bottom: 14%; height: 68px; color: #fff; background: var(--accent); }\n.scene-panel { left: 8%; top: 38%; width: 28%; height: 68px; }\n.scene-panel-alt { left: auto; right: 8%; }\n.scene-route { left: 45%; top: 34%; width: 10%; height: 40px; border-style: dashed; background: #fff; }\n.demo-poster { position: relative; overflow: hidden; min-height: 280px; padding: 30px; border-radius: 18px; color: #fff; background: linear-gradient(135deg,#1c354d,var(--accent)); }\n.demo-poster h2 { max-width: 530px; margin: 24px 0 8px; font-size: clamp(26px,4vw,40px); }\n.demo-poster p { color: #e5ebf4; }\n.demo-date { position: absolute; top: 18px; right: 18px; display: grid; place-items: center; width: 78px; height: 78px; border-radius: 50%; color: #27344a; background: #f5d887; font-size: 12px; font-weight: 800; text-align: center; }\n.demo-fixed-cta { position: fixed; right: 18px; bottom: 18px; z-index: 10; margin: 0; box-shadow: 0 8px 24px #12223855; }\n.demo-map { position: relative; min-height: 250px; overflow: hidden; border: 1px solid #d9e1e9; border-radius: 16px; background: linear-gradient(165deg,#edf3e8 0 44%,#c9e4ec 44% 58%,#eff1e5 58%); }\n.demo-map::before { position: absolute; left: 12%; top: 62%; width: 77%; border-top: 4px dashed #bd754b; transform: rotate(-16deg); content: \"\"; }\n.demo-map-marker { position: absolute; left: var(--x); top: var(--y); z-index: 2; display: grid; place-items: center; width: 32px; height: 32px; border: 3px solid #fff; border-radius: 50%; color: #fff; background: var(--accent); box-shadow: 0 3px 9px #1d304033; font-size: 10px; font-weight: 800; transform: translate(-50%,-50%); }\n.demo-stop-list { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 9px; margin-top: 12px; counter-reset: stop; }\n.demo-stop { position: relative; padding: 16px 13px; border: 1px solid #e6eaf0; border-radius: 12px; }\n.demo-stop b { display: block; color: var(--accent); font-size: 11px; }\n.demo-stop span { display: block; margin: 8px 0 3px; font-size: 13px; font-weight: 700; }\n.demo-stop small { color: #748090; }\n.demo-chess { position: relative; display: grid; grid-template-columns: repeat(8,1fr); width: min(100%,400px); aspect-ratio: 1; overflow: hidden; border: 5px solid #273345; border-radius: 6px; }\n.demo-square:nth-child(16n+1), .demo-square:nth-child(16n+3), .demo-square:nth-child(16n+5), .demo-square:nth-child(16n+7), .demo-square:nth-child(16n+10), .demo-square:nth-child(16n+12), .demo-square:nth-child(16n+14), .demo-square:nth-child(16n+16) { background: #dbe4d6; }\n.demo-square { background: #738a72; }\n.demo-piece { position: absolute; left: calc((var(--x) + .5) * 12.5%); top: calc((var(--y) + .5) * 12.5%); z-index: 2; width: 12.5%; height: 12.5%; transform: translate(-50%,-50%); color: #202635; font: 34px/1 Georgia,serif; text-align: center; text-shadow: 0 1px 2px #fff; }\n.demo-seat-grid { display: grid; grid-template-columns: repeat(6,minmax(22px,1fr)); gap: 7px; max-width: 500px; }\n.demo-seat { display: grid; place-items: center; aspect-ratio: 1.2; border: 1px solid #aab4c2; border-radius: 5px 5px 2px 2px; color: #596474; background: #edf0f4; font-size: 10px; }\n.demo-seat.is-taken { border-color: #4b806c; color: #fff; background: #4b806c; }\n.demo-legend { display: flex; flex-wrap: wrap; gap: 14px; margin: 14px 0; color: #5c6674; font-size: 11px; }\n.demo-legend span { display: inline-flex; align-items: center; gap: 6px; }\n.demo-legend i { width: 12px; height: 12px; border: 1px solid #aab4c2; border-radius: 3px; background: #edf0f4; }\n.demo-legend .taken { border-color: #4b806c; background: #4b806c; }\n.demo-kanban { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }\n.demo-column { padding: 13px; border-radius: 12px; background: #f3f5f8; }\n.demo-column h3 { margin: 0 0 10px; font-size: 13px; }\n.demo-task { margin-top: 8px; padding: 12px; border: 1px solid #e5e9ef; border-radius: 9px; background: #fff; font-size: 12px; }\n.demo-filter-label { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 14px; }\n.demo-filter-label span { padding: 6px 10px; border: 1px solid #e6eaf0; border-radius: 999px; color: #5d6877; font-size: 10px; }\n.demo-menu-list { display: flex; gap: 5px; padding: 0; margin: 0 0 24px; list-style: none; }\n.demo-menu-group { position: relative; }\n.demo-menu-group > a { display: flex; align-items: center; min-height: 44px; padding: 10px 12px; border-radius: 8px; color: #3c4858; font-size: 13px; text-decoration: none; }\n.demo-submenu { position: absolute; top: 100%; left: 0; z-index: 5; display: none; min-width: 205px; padding: 7px; border: 1px solid #e5e8ef; border-radius: 10px; background: #fff; box-shadow: 0 14px 34px #20263520; }\n.demo-submenu a { display: flex; align-items: center; min-height: 44px; padding: 9px; border-radius: 6px; font-size: 12px; text-decoration: none; }\n.demo-submenu a:hover, .demo-submenu a:focus-visible { color: var(--accent); background: var(--soft); }\n.demo-menu-group:hover .demo-submenu, .demo-menu-group:focus-within .demo-submenu { display: block; }\n.demo-hint { margin: 8px 0; padding: 12px; border: 1px solid #e5e8ef; border-radius: 9px; }\n.demo-hint summary { cursor: pointer; color: var(--accent); font-size: 13px; font-weight: 700; }\n.demo-hint p { margin: 9px 0 0; color: #5e6877; font-size: 12px; }\n.demo-product { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; align-items: center; padding: 22px; border: 1px solid #e6eaf0; border-radius: 16px; }\n.demo-product-art { min-height: 210px; display: grid; place-items: center; border-radius: 12px; color: var(--accent); background: linear-gradient(145deg,var(--soft),#fff); font-size: 56px; }\n.demo-product:hover { box-shadow: 0 15px 36px #20263518; transform: translateY(-2px); transition: transform .2s ease,box-shadow .2s ease; }\n.demo-product:focus-within { outline: 3px solid #d6deea; outline-offset: 3px; }\n.demo-facts { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 8px; margin: 16px 0; }\n.demo-fact { padding: 12px; border-radius: 10px; background: var(--soft); }\n.demo-fact b, .demo-fact span { display: block; }\n.demo-fact span { margin-top: 4px; color: #626d7c; font-size: 11px; }\n.demo-form { display: grid; gap: 14px; max-width: 650px; padding: 21px; border: 1px solid #e4e8ef; border-radius: 14px; }\n.demo-form fieldset { display: grid; gap: 9px; margin: 0; padding: 13px; border: 1px solid #e4e8ef; border-radius: 10px; }\n.demo-form legend { padding: 0 5px; font-weight: 700; }\n.demo-field { display: grid; gap: 5px; color: #485465; font-size: 12px; font-weight: 700; }\n.demo-field input, .demo-field select, .demo-field textarea { width: 100%; min-height: 43px; padding: 10px; border: 1px solid #cfd6df; border-radius: 7px; color: var(--ink); background: #fff; font: inherit; font-weight: 400; }\n.demo-field textarea { min-height: 100px; resize: vertical; }\n.demo-form > input, .demo-form > select, .demo-form > textarea { width: 100%; min-height: 43px; padding: 10px; border: 1px solid #cfd6df; border-radius: 7px; color: var(--ink); background: #fff; font: inherit; }\n.demo-form input:focus-visible, .demo-form select:focus-visible, .demo-form textarea:focus-visible { outline: 3px solid #d6deea; outline-offset: 1px; }\n.demo-radio { display: flex; align-items: center; gap: 8px; font-size: 12px; }\n.help-search { display: flex; gap: 8px; margin: 18px 0; }\n.help-search__label--visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; clip-path: inset(50%); }\n.help-search__input { min-width: 0; flex: 1; padding: 10px; border: 1px solid #cfd6df; border-radius: 8px; }\n.help-search__button { min-height: 44px; padding: 9px 15px; border: 0; border-radius: 8px; color: #fff; background: var(--accent); font-weight: 700; }\n.help-topic-list { margin-top: 14px; }\n.help-topic { min-height: 150px; padding: 17px; border: 1px solid #e6eaf0; border-radius: 12px; }\n.help-topic__count { color: var(--accent); font-size: 10px; font-weight: 800; }\n.help-topic__title { margin: 9px 0 5px; }\n.help-topic__description { color: #647080; font-size: 12px; }\n.demo-event-link { display: block; color: inherit; text-decoration: none; transition: transform .18s ease,box-shadow .18s ease; }\n.demo-event-link:hover,.demo-event-link:focus-visible { transform: translateY(-3px); box-shadow: 0 12px 26px #20263516; outline: 2px solid #b7c4d7; outline-offset: 2px; }\n.demo-event-link span { color: var(--accent); font-size: 11px; font-weight: 700; }\n.demo-event-link::before { display: block; width: 38px; margin-bottom: 11px; border-top: 3px solid var(--accent); content: \"\"; transform-origin: left; transition: transform .2s ease; }\n.demo-event-link:hover::before,.demo-event-link:focus-visible::before { transform: scaleX(1.5); }\n.demo-news-index { display: grid; gap: 8px; }\n.demo-news-index a { padding: 12px 14px; border-left: 3px solid var(--accent); border-radius: 0 8px 8px 0; color: #33445d; background: var(--soft); font-size: 12px; font-weight: 700; text-decoration: none; }\n.demo-news-index a:hover,.demo-news-index a:focus-visible { text-decoration: underline; text-underline-offset: 3px; }\n.demo-news-article { margin-top: 22px; padding: 18px; border: 1px solid #e6eaf0; border-radius: 12px; }\n.demo-news-article > small { color: var(--accent); font-weight: 800; }\n.demo-news-article h3 { margin: 7px 0; }\n.demo-news-article p { color: #5e6877; }\n.demo-news-card { margin: 10px 0; }\n.demo-optional-panel--hidden { display: none; }\n.demo--landing-hotel .demo-hero { color: #fff; background: linear-gradient(90deg,#152d42dc,#152d4270),url('../assets/mountains.svg') center/cover; }\n.demo--landing-hotel .demo-hero .demo-kicker,.demo--landing-hotel .demo-hero .demo-lead { color: #fff; }\n.demo--landing-hotel .demo-hero::after { border-color: #ffffff55; }\n.demo--landing-tour .demo-hero { background: linear-gradient(110deg,#18334dce,#18334d38),url('../assets/mountains.svg') center/cover; color: #fff; }\n.demo--landing-tour .demo-hero .demo-kicker,.demo--landing-tour .demo-hero .demo-lead { color: #fff; }\n.demo--landing-app .demo-app-image img { max-height: 230px; }\n.demo--bootstrap-anime .demo-header,.demo--bootstrap-events .demo-header { display: none; }\n.demo-status { display: inline-block; padding: 4px 7px; border-radius: 999px; font-size: 9px; font-weight: 800; }\n.demo-status--upcoming { color: #8c5612; background: #fff1d8; }\n.demo-status--confirmed { color: #28624b; background: #e4f4eb; }\n.demo-status--done { color: #586171; background: #eceff3; }\n.demo-skills { display: flex; flex-wrap: wrap; gap: 8px; padding: 0; list-style: none; }\n.demo-skills li { padding: 7px 10px; border-radius: 999px; color: var(--accent); background: var(--soft); font-size: 11px; font-weight: 700; }\n.demo-bootstrap-hero { padding: 32px; border-radius: 14px; color: white; background: #263958; }\n.demo-bootstrap-hero h2 { font-size: 29px; }\n.demo-bootstrap-card { height: 100%; padding: 18px; border: 1px solid #e1e5ea; border-radius: 10px; background: white; }\n@media (max-width: 700px) { .demo { padding: 0 16px 32px; } .demo-header { align-items: flex-start; flex-direction: column; justify-content: center; padding: 13px 0; } .demo-nav { gap: 11px; } .demo-grid,.demo-kanban { grid-template-columns: 1fr; } .demo-stop-list { grid-template-columns: repeat(2,minmax(0,1fr)); } .demo-inline-book { width: 47%; } .demo-product { grid-template-columns: 1fr; } .demo-circle { width: 125px; } .demo-circle-art { width: 96px; height: 96px; } .demo-fixed-cta { position: static !important; margin-top: 12px; } .demo-gallery { grid-template-columns: 1fr; } .demo-gallery img { height: 190px; } .demo-footer-columns { grid-template-columns: 1fr; } }\n@media (max-width: 430px) { .demo h1 { font-size: 30px; } .demo-seat-grid { gap: 4px; } .demo-seat { font-size: 8px; } .demo-stop-list { grid-template-columns: 1fr 1fr; } .demo-menu-list { flex-wrap: wrap; } .demo-profile { width: 100%; } .demo-inline-book { width: 100%; } }\n@media (prefers-reduced-motion: reduce) { *,*::before,*::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; } .demo-product:hover { transform: none; } }\n.demo { --accent: #4c6573; --soft: #eaf0f7; }\n.demo-card { box-shadow: 0 8px 24px #2026350b; }"
+      }
+    },
+    {
+      "title": "Карточка специалиста",
+      "about": "На странице команды показывается профиль специалиста с описанием, навыками и кнопкой связи.",
+      "steps": [
+        "Собери карточку с фото, именем, ролью, абзацем и списком навыков.",
+        "Задай размеры через max-width, padding, border и margin.",
+        "Используй классы и селектор потомка для разного оформления заголовка и текста."
+      ],
+      "done": [
+        "Картинка не растягивается за пределы карточки.",
+        "Размер карточки можно объяснить через модель блока.",
+        "Изменение общего цвета не требует правки каждого дочернего элемента."
+      ],
+      "stretch": "Создай второй вариант карточки и оформи его модификатором класса.",
+      "example": {
+        "title": "Карточка специалиста",
+        "description": "Образец готовой страницы для проекта «Карточка специалиста». Дизайнер интерфейсов помогает команде превращать сложные идеи в удобные страницы.",
+        "html": "<!doctype html>\n<html lang=\"ru\">\n<head>\n  <meta charset=\"utf-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n  <title>Знакомьтесь: Айдана</title>\n  <link rel=\"stylesheet\" href=\"./style.css\">\n  \n</head>\n<body>\n  <div class=\"demo demo--cards\" id=\"top\" style=\"--accent:#4c6573;--soft:#eaf0f7\">\n    <header class=\"demo-header\"><a class=\"demo-brand\" href=\"#top\">ПРИМЕР ПРОЕКТА</a><nav class=\"demo-nav\" aria-label=\"Навигация по странице\"><a href=\"#top\">О проекте</a><a href=\"#details\">Подробности</a></nav></header>\n    <main>\n      <section class=\"demo-hero\" aria-labelledby=\"project-title\"><span class=\"demo-kicker\">КОМАНДА · ДИЗАЙН</span><h1 id=\"project-title\">Знакомьтесь: Айдана</h1><p class=\"demo-lead\">Дизайнер интерфейсов помогает команде превращать сложные идеи в удобные страницы.</p></section>\n      <section class=\"demo-section\" id=\"details\"><h2>Что важно знать</h2><div class=\"demo-grid \"><article class=\"demo-card\"><small>ДИЗАЙНЕР</small><h3>Роль</h3><p>Проектирует структуру интерфейсов и проверяет, легко ли ими пользоваться.</p></article><article class=\"demo-card\"><small>ЧТО ВАЖНО</small><h3>Фокус</h3><p>Доступность, простая навигация и понятные формы.</p></article><article class=\"demo-card\"><small>В РАБОТЕ</small><h3>Сейчас изучает</h3><p>Создание дизайн-систем для небольших образовательных проектов.</p></article></div><section class=\"demo-section\"><h2>Полезные навыки</h2><ul class=\"demo-list\"><li>Figma</li><li>HTML и CSS</li><li>Исследование пользователей</li></ul></section><div class=\"demo-note\">Напиши Айдане, если хочешь обсудить дизайн учебного проекта.</div></section>\n    </main>\n    <footer class=\"demo-footer\">Учебный пример HTML и CSS · макет для обсуждения на занятии</footer>\n  </div>\n</body>\n</html>",
+        "css": ":root { color-scheme: light; }\n* { box-sizing: border-box; }\nbody { margin: 0; color: #202635; background: #f4f6f8; font: 15px/1.55 Arial, sans-serif; }\na { color: inherit; }\n.demo { --accent: #365c8d; --soft: #eaf0f7; --ink: #202635; max-width: 1100px; min-height: 100vh; margin: 0 auto; padding: 0 26px 46px; background: #fff; }\n.demo-header { display: flex; align-items: center; justify-content: space-between; gap: 20px; min-height: 66px; border-bottom: 1px solid #e8ebef; }\n.demo-brand { color: var(--accent); font-size: 13px; font-weight: 800; letter-spacing: .08em; text-decoration: none; text-transform: uppercase; }\n.demo-nav { display: flex; flex-wrap: wrap; gap: 16px; color: #626b79; font-size: 12px; }\n.demo-nav a { display: flex; align-items: center; min-height: 44px; text-decoration: none; }\n.demo-nav a:hover, .demo-nav a:focus-visible { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }\n.demo-hero { position: relative; overflow: hidden; margin: 22px 0; padding: clamp(24px,5vw,56px); border-radius: 20px; background: linear-gradient(120deg,var(--soft),#fff 72%); }\n.demo-hero::after { position: absolute; right: -54px; bottom: -120px; width: 280px; height: 280px; border: 1px solid #d8e0eb; border-radius: 50%; content: ''; }\n.demo-kicker { color: var(--accent); font-size: 10px; font-weight: 800; letter-spacing: .14em; }\n.demo h1 { max-width: 760px; margin: 11px 0 10px; font-size: clamp(30px,5vw,48px); line-height: 1.08; letter-spacing: -.045em; }\n.demo-lead { max-width: 670px; margin: 0; color: #5e6877; font-size: 16px; }\n.demo-section { margin: 30px 0; }\n.demo-section h2 { margin: 0 0 13px; font-size: 21px; letter-spacing: -.025em; }\n.demo-section > p { max-width: 720px; color: #5e6877; }\n.demo-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 13px; }\n.demo-card { min-width: 0; padding: 19px; border: 1px solid #e7eaf0; border-radius: 14px; background: #fff; }\n.demo-card small { color: var(--accent); font-size: 10px; font-weight: 800; letter-spacing: .09em; text-transform: uppercase; }\n.demo-card h3 { margin: 9px 0 6px; font-size: 17px; }\n.demo-card p { margin: 0; color: #647080; font-size: 13px; }\n.demo-note { margin: 18px 0; padding: 14px 16px; border-left: 3px solid var(--accent); border-radius: 0 10px 10px 0; background: var(--soft); color: #424d5d; font-size: 13px; }\n.demo-list { display: grid; gap: 8px; margin: 0; padding-left: 21px; color: #465264; }\n.demo-cta { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; margin-top: 12px; padding: 10px 16px; border-radius: 9px; color: #fff; background: var(--accent); font-size: 13px; font-weight: 700; text-decoration: none; transition: filter .16s ease,transform .16s ease; }\n.demo-cta:hover, .demo-cta:focus-visible { filter: brightness(.9); outline: 3px solid #d6deea; outline-offset: 2px; }\n.demo-footer { margin-top: 40px; padding-top: 16px; border-top: 1px solid #e8ebef; color: #77808e; font-size: 11px; }\n.demo-footer-columns { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 18px; }\n.demo-footer-columns h2 { margin: 0 0 6px; color: #344050; font-size: 12px; }\n.demo-footer-columns p { margin: 0; }\n.demo-footer-columns a { color: var(--accent); }\n.demo-table-wrap { overflow-x: auto; border: 1px solid #e3e7ed; border-radius: 12px; }\n.demo-table { width: 100%; border-collapse: collapse; text-align: left; }\n.demo-table caption { padding: 13px; color: #5b6574; font-size: 12px; text-align: left; }\n.demo-table th, .demo-table td { padding: 12px 14px; border-top: 1px solid #e8ebef; }\n.demo-table thead th { color: var(--accent); background: var(--soft); font-size: 11px; }\n.demo-table tbody th { font-size: 12px; }\n.demo-table tbody td { color: #596473; font-size: 12px; }\n.demo-figure { margin: 0; }\n.demo-figure img { display: block; width: 100%; max-height: 300px; object-fit: cover; border-radius: 14px; }\n.demo-figure figcaption { margin-top: 6px; color: #707a88; font-size: 11px; }\n.demo-gallery { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 9px; }\n.demo-gallery figure { margin: 0; }\n.demo-gallery img { display: block; width: 100%; height: 130px; object-fit: cover; border-radius: 10px; }\n.demo-gallery figcaption { margin-top: 5px; color: #677180; font-size: 10px; }\n.demo-link-list { display: flex; flex-wrap: wrap; align-items: center; gap: 9px; margin: 17px 0; }\n.demo-link-list b { flex-basis: 100%; font-size: 13px; }\n.demo-link-list a { padding: 8px 10px; border: 1px solid #e3e8ef; border-radius: 8px; color: var(--accent); font-size: 11px; font-weight: 700; text-decoration: none; }\n.demo-link-list a:hover,.demo-link-list a:focus-visible { text-decoration: underline; text-underline-offset: 3px; }\n.demo-inline-book { display: inline-block; vertical-align: top; width: 30%; min-height: 270px; margin: 0 1.4% 12px 0; padding: 13px; border: 1px solid #e7eaf0; border-radius: 12px; background: linear-gradient(145deg,#fff,var(--soft)); }\n.demo-inline-book small { color: var(--accent); font-size: 10px; font-weight: 800; }\n.demo-inline-book b { display: block; margin: 22px 0 5px; font-size: 15px; }\n.demo-inline-book span { color: #677180; font-size: 11px; }\n.demo-book-cover { min-height: 100px; display: grid; place-items: end start; padding: 11px; border-radius: 6px; color: #fff; background: linear-gradient(145deg,var(--cover),#1d2f3e); box-shadow: 2px 3px 6px #20263525; font-size: 13px; font-weight: 700; }\n.demo-inline-book p { margin: 7px 0 0; color: #657181; font-size: 10px; }\n.demo-profile-list { display: flex; flex-wrap: wrap; gap: 12px; }\n.demo-profile { display: inline-block; vertical-align: top; width: calc(50% - 6px); overflow: hidden; border: 1px solid #e6eaf0; border-radius: 12px; background: #fff; }\n.demo-profile > img { display: block; width: 100%; height: 110px; object-fit: cover; }\n.demo-profile-copy { padding: 14px; }\n.demo-profile-copy small { color: var(--accent); font-size: 9px; font-weight: 800; }\n.demo-profile-copy h3 { margin: 6px 0 2px; font-size: 16px; }\n.demo-profile-copy > b { color: #5c6877; font-size: 11px; }\n.demo-profile-copy p { min-height: 38px; color: #647080; font-size: 11px; }\n.demo-profile-copy a { color: var(--accent); font-size: 11px; font-weight: 700; }\n.demo-flex-grid { display: flex; flex-wrap: wrap; align-items: stretch; gap: 13px; }\n.demo-flex-grid .demo-card { flex: 1 1 220px; }\n.demo-circle-row { display: flex; flex-wrap: wrap; gap: 18px; }\n.demo-circle { width: 150px; text-align: center; }\n.demo-circle-art { width: 112px; height: 112px; display: grid; place-items: center; margin: 0 auto 11px; border-radius: 50%; color: #fff; background: var(--bubble); box-shadow: inset -10px -12px 25px #0002; font-size: 13px; font-weight: 700; }\n.demo-circle b, .demo-circle span { display: block; }\n.demo-circle span { color: #697382; font-size: 11px; }\n.demo-stage { position: relative; min-height: 310px; overflow: hidden; border: 1px solid #e5e8ee; border-radius: 16px; background: repeating-linear-gradient(0deg,#fff,#fff 39px,#edf0f4 40px),repeating-linear-gradient(90deg,transparent,transparent 39px,#edf0f4 40px); }\n.scene-block { position: absolute; display: grid; place-items: center; border: 1px solid var(--accent); border-radius: 10px; color: var(--accent); background: var(--soft); font-size: 12px; font-weight: 700; }\n.scene-wide { inset: 11% 20% auto; height: 45px; }\n.scene-platform { left: 24%; right: 24%; bottom: 14%; height: 68px; color: #fff; background: var(--accent); }\n.scene-panel { left: 8%; top: 38%; width: 28%; height: 68px; }\n.scene-panel-alt { left: auto; right: 8%; }\n.scene-route { left: 45%; top: 34%; width: 10%; height: 40px; border-style: dashed; background: #fff; }\n.demo-poster { position: relative; overflow: hidden; min-height: 280px; padding: 30px; border-radius: 18px; color: #fff; background: linear-gradient(135deg,#1c354d,var(--accent)); }\n.demo-poster h2 { max-width: 530px; margin: 24px 0 8px; font-size: clamp(26px,4vw,40px); }\n.demo-poster p { color: #e5ebf4; }\n.demo-date { position: absolute; top: 18px; right: 18px; display: grid; place-items: center; width: 78px; height: 78px; border-radius: 50%; color: #27344a; background: #f5d887; font-size: 12px; font-weight: 800; text-align: center; }\n.demo-fixed-cta { position: fixed; right: 18px; bottom: 18px; z-index: 10; margin: 0; box-shadow: 0 8px 24px #12223855; }\n.demo-map { position: relative; min-height: 250px; overflow: hidden; border: 1px solid #d9e1e9; border-radius: 16px; background: linear-gradient(165deg,#edf3e8 0 44%,#c9e4ec 44% 58%,#eff1e5 58%); }\n.demo-map::before { position: absolute; left: 12%; top: 62%; width: 77%; border-top: 4px dashed #bd754b; transform: rotate(-16deg); content: \"\"; }\n.demo-map-marker { position: absolute; left: var(--x); top: var(--y); z-index: 2; display: grid; place-items: center; width: 32px; height: 32px; border: 3px solid #fff; border-radius: 50%; color: #fff; background: var(--accent); box-shadow: 0 3px 9px #1d304033; font-size: 10px; font-weight: 800; transform: translate(-50%,-50%); }\n.demo-stop-list { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 9px; margin-top: 12px; counter-reset: stop; }\n.demo-stop { position: relative; padding: 16px 13px; border: 1px solid #e6eaf0; border-radius: 12px; }\n.demo-stop b { display: block; color: var(--accent); font-size: 11px; }\n.demo-stop span { display: block; margin: 8px 0 3px; font-size: 13px; font-weight: 700; }\n.demo-stop small { color: #748090; }\n.demo-chess { position: relative; display: grid; grid-template-columns: repeat(8,1fr); width: min(100%,400px); aspect-ratio: 1; overflow: hidden; border: 5px solid #273345; border-radius: 6px; }\n.demo-square:nth-child(16n+1), .demo-square:nth-child(16n+3), .demo-square:nth-child(16n+5), .demo-square:nth-child(16n+7), .demo-square:nth-child(16n+10), .demo-square:nth-child(16n+12), .demo-square:nth-child(16n+14), .demo-square:nth-child(16n+16) { background: #dbe4d6; }\n.demo-square { background: #738a72; }\n.demo-piece { position: absolute; left: calc((var(--x) + .5) * 12.5%); top: calc((var(--y) + .5) * 12.5%); z-index: 2; width: 12.5%; height: 12.5%; transform: translate(-50%,-50%); color: #202635; font: 34px/1 Georgia,serif; text-align: center; text-shadow: 0 1px 2px #fff; }\n.demo-seat-grid { display: grid; grid-template-columns: repeat(6,minmax(22px,1fr)); gap: 7px; max-width: 500px; }\n.demo-seat { display: grid; place-items: center; aspect-ratio: 1.2; border: 1px solid #aab4c2; border-radius: 5px 5px 2px 2px; color: #596474; background: #edf0f4; font-size: 10px; }\n.demo-seat.is-taken { border-color: #4b806c; color: #fff; background: #4b806c; }\n.demo-legend { display: flex; flex-wrap: wrap; gap: 14px; margin: 14px 0; color: #5c6674; font-size: 11px; }\n.demo-legend span { display: inline-flex; align-items: center; gap: 6px; }\n.demo-legend i { width: 12px; height: 12px; border: 1px solid #aab4c2; border-radius: 3px; background: #edf0f4; }\n.demo-legend .taken { border-color: #4b806c; background: #4b806c; }\n.demo-kanban { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }\n.demo-column { padding: 13px; border-radius: 12px; background: #f3f5f8; }\n.demo-column h3 { margin: 0 0 10px; font-size: 13px; }\n.demo-task { margin-top: 8px; padding: 12px; border: 1px solid #e5e9ef; border-radius: 9px; background: #fff; font-size: 12px; }\n.demo-filter-label { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 14px; }\n.demo-filter-label span { padding: 6px 10px; border: 1px solid #e6eaf0; border-radius: 999px; color: #5d6877; font-size: 10px; }\n.demo-menu-list { display: flex; gap: 5px; padding: 0; margin: 0 0 24px; list-style: none; }\n.demo-menu-group { position: relative; }\n.demo-menu-group > a { display: flex; align-items: center; min-height: 44px; padding: 10px 12px; border-radius: 8px; color: #3c4858; font-size: 13px; text-decoration: none; }\n.demo-submenu { position: absolute; top: 100%; left: 0; z-index: 5; display: none; min-width: 205px; padding: 7px; border: 1px solid #e5e8ef; border-radius: 10px; background: #fff; box-shadow: 0 14px 34px #20263520; }\n.demo-submenu a { display: flex; align-items: center; min-height: 44px; padding: 9px; border-radius: 6px; font-size: 12px; text-decoration: none; }\n.demo-submenu a:hover, .demo-submenu a:focus-visible { color: var(--accent); background: var(--soft); }\n.demo-menu-group:hover .demo-submenu, .demo-menu-group:focus-within .demo-submenu { display: block; }\n.demo-hint { margin: 8px 0; padding: 12px; border: 1px solid #e5e8ef; border-radius: 9px; }\n.demo-hint summary { cursor: pointer; color: var(--accent); font-size: 13px; font-weight: 700; }\n.demo-hint p { margin: 9px 0 0; color: #5e6877; font-size: 12px; }\n.demo-product { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; align-items: center; padding: 22px; border: 1px solid #e6eaf0; border-radius: 16px; }\n.demo-product-art { min-height: 210px; display: grid; place-items: center; border-radius: 12px; color: var(--accent); background: linear-gradient(145deg,var(--soft),#fff); font-size: 56px; }\n.demo-product:hover { box-shadow: 0 15px 36px #20263518; transform: translateY(-2px); transition: transform .2s ease,box-shadow .2s ease; }\n.demo-product:focus-within { outline: 3px solid #d6deea; outline-offset: 3px; }\n.demo-facts { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 8px; margin: 16px 0; }\n.demo-fact { padding: 12px; border-radius: 10px; background: var(--soft); }\n.demo-fact b, .demo-fact span { display: block; }\n.demo-fact span { margin-top: 4px; color: #626d7c; font-size: 11px; }\n.demo-form { display: grid; gap: 14px; max-width: 650px; padding: 21px; border: 1px solid #e4e8ef; border-radius: 14px; }\n.demo-form fieldset { display: grid; gap: 9px; margin: 0; padding: 13px; border: 1px solid #e4e8ef; border-radius: 10px; }\n.demo-form legend { padding: 0 5px; font-weight: 700; }\n.demo-field { display: grid; gap: 5px; color: #485465; font-size: 12px; font-weight: 700; }\n.demo-field input, .demo-field select, .demo-field textarea { width: 100%; min-height: 43px; padding: 10px; border: 1px solid #cfd6df; border-radius: 7px; color: var(--ink); background: #fff; font: inherit; font-weight: 400; }\n.demo-field textarea { min-height: 100px; resize: vertical; }\n.demo-form > input, .demo-form > select, .demo-form > textarea { width: 100%; min-height: 43px; padding: 10px; border: 1px solid #cfd6df; border-radius: 7px; color: var(--ink); background: #fff; font: inherit; }\n.demo-form input:focus-visible, .demo-form select:focus-visible, .demo-form textarea:focus-visible { outline: 3px solid #d6deea; outline-offset: 1px; }\n.demo-radio { display: flex; align-items: center; gap: 8px; font-size: 12px; }\n.help-search { display: flex; gap: 8px; margin: 18px 0; }\n.help-search__label--visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; clip-path: inset(50%); }\n.help-search__input { min-width: 0; flex: 1; padding: 10px; border: 1px solid #cfd6df; border-radius: 8px; }\n.help-search__button { min-height: 44px; padding: 9px 15px; border: 0; border-radius: 8px; color: #fff; background: var(--accent); font-weight: 700; }\n.help-topic-list { margin-top: 14px; }\n.help-topic { min-height: 150px; padding: 17px; border: 1px solid #e6eaf0; border-radius: 12px; }\n.help-topic__count { color: var(--accent); font-size: 10px; font-weight: 800; }\n.help-topic__title { margin: 9px 0 5px; }\n.help-topic__description { color: #647080; font-size: 12px; }\n.demo-event-link { display: block; color: inherit; text-decoration: none; transition: transform .18s ease,box-shadow .18s ease; }\n.demo-event-link:hover,.demo-event-link:focus-visible { transform: translateY(-3px); box-shadow: 0 12px 26px #20263516; outline: 2px solid #b7c4d7; outline-offset: 2px; }\n.demo-event-link span { color: var(--accent); font-size: 11px; font-weight: 700; }\n.demo-event-link::before { display: block; width: 38px; margin-bottom: 11px; border-top: 3px solid var(--accent); content: \"\"; transform-origin: left; transition: transform .2s ease; }\n.demo-event-link:hover::before,.demo-event-link:focus-visible::before { transform: scaleX(1.5); }\n.demo-news-index { display: grid; gap: 8px; }\n.demo-news-index a { padding: 12px 14px; border-left: 3px solid var(--accent); border-radius: 0 8px 8px 0; color: #33445d; background: var(--soft); font-size: 12px; font-weight: 700; text-decoration: none; }\n.demo-news-index a:hover,.demo-news-index a:focus-visible { text-decoration: underline; text-underline-offset: 3px; }\n.demo-news-article { margin-top: 22px; padding: 18px; border: 1px solid #e6eaf0; border-radius: 12px; }\n.demo-news-article > small { color: var(--accent); font-weight: 800; }\n.demo-news-article h3 { margin: 7px 0; }\n.demo-news-article p { color: #5e6877; }\n.demo-news-card { margin: 10px 0; }\n.demo-optional-panel--hidden { display: none; }\n.demo--landing-hotel .demo-hero { color: #fff; background: linear-gradient(90deg,#152d42dc,#152d4270),url('../assets/mountains.svg') center/cover; }\n.demo--landing-hotel .demo-hero .demo-kicker,.demo--landing-hotel .demo-hero .demo-lead { color: #fff; }\n.demo--landing-hotel .demo-hero::after { border-color: #ffffff55; }\n.demo--landing-tour .demo-hero { background: linear-gradient(110deg,#18334dce,#18334d38),url('../assets/mountains.svg') center/cover; color: #fff; }\n.demo--landing-tour .demo-hero .demo-kicker,.demo--landing-tour .demo-hero .demo-lead { color: #fff; }\n.demo--landing-app .demo-app-image img { max-height: 230px; }\n.demo--bootstrap-anime .demo-header,.demo--bootstrap-events .demo-header { display: none; }\n.demo-status { display: inline-block; padding: 4px 7px; border-radius: 999px; font-size: 9px; font-weight: 800; }\n.demo-status--upcoming { color: #8c5612; background: #fff1d8; }\n.demo-status--confirmed { color: #28624b; background: #e4f4eb; }\n.demo-status--done { color: #586171; background: #eceff3; }\n.demo-skills { display: flex; flex-wrap: wrap; gap: 8px; padding: 0; list-style: none; }\n.demo-skills li { padding: 7px 10px; border-radius: 999px; color: var(--accent); background: var(--soft); font-size: 11px; font-weight: 700; }\n.demo-bootstrap-hero { padding: 32px; border-radius: 14px; color: white; background: #263958; }\n.demo-bootstrap-hero h2 { font-size: 29px; }\n.demo-bootstrap-card { height: 100%; padding: 18px; border: 1px solid #e1e5ea; border-radius: 10px; background: white; }\n@media (max-width: 700px) { .demo { padding: 0 16px 32px; } .demo-header { align-items: flex-start; flex-direction: column; justify-content: center; padding: 13px 0; } .demo-nav { gap: 11px; } .demo-grid,.demo-kanban { grid-template-columns: 1fr; } .demo-stop-list { grid-template-columns: repeat(2,minmax(0,1fr)); } .demo-inline-book { width: 47%; } .demo-product { grid-template-columns: 1fr; } .demo-circle { width: 125px; } .demo-circle-art { width: 96px; height: 96px; } .demo-fixed-cta { position: static !important; margin-top: 12px; } .demo-gallery { grid-template-columns: 1fr; } .demo-gallery img { height: 190px; } .demo-footer-columns { grid-template-columns: 1fr; } }\n@media (max-width: 430px) { .demo h1 { font-size: 30px; } .demo-seat-grid { gap: 4px; } .demo-seat { font-size: 8px; } .demo-stop-list { grid-template-columns: 1fr 1fr; } .demo-menu-list { flex-wrap: wrap; } .demo-profile { width: 100%; } .demo-inline-book { width: 100%; } }\n@media (prefers-reduced-motion: reduce) { *,*::before,*::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; } .demo-product:hover { transform: none; } }\n.demo { --accent: #4c6573; --soft: #eaf0f7; }\n.demo-card { box-shadow: 0 8px 24px #2026350b; }"
+      }
+    }
+  ],
+  "title": "CSS: селекторы, размеры и оформление",
+  "goal": "Подключай CSS и оформляй элементы с помощью селекторов, размеров, цвета, текста и фона."
+};

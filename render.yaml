@@ -1,0 +1,25 @@
+services:
+  - type: web
+    name: kod-po-polochkam-classroom
+    runtime: node
+    plan: free
+    buildCommand: npm ci
+    startCommand: node server/index.js
+    healthCheckPath: /healthz
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: TRUST_PROXY
+        value: "1"
+      - key: SESSION_SECRET
+        generateValue: true
+      - key: SETUP_TOKEN
+        generateValue: true
+      - key: DATABASE_URL
+        sync: false
+      - key: MIGRATIONS_DATABASE_URL
+        sync: false
+      - key: ALLOWED_ORIGINS
+        sync: false
+      - key: PRIVACY_CONTACT
+        sync: false

@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" role="img" aria-labelledby="title desc">
+  <title id="title">Уборка берега озера</title>
+  <desc id="desc">Два волонтёра собирают мусор у чистой горной реки.</desc>
+  <defs><linearGradient id="sky" x2="0" y2="1"><stop stop-color="#c6e5eb"/><stop offset="1" stop-color="#f3efd9"/></linearGradient></defs>
+  <rect width="640" height="360" fill="url(#sky)"/><path d="m0 200 125-132 92 105L337 55l126 144 83-91 94 87v165H0z" fill="#738b8b"/><path d="m337 55 74 84-56-23-33 28-49-41z" fill="#f4f2e9"/><path d="M0 230q150-28 315 8t325-11v133H0z" fill="#56899a"/><path d="M0 257q130-17 285 11t355-9v101H0z" fill="#407384"/><path d="M0 260q90-36 190-12l42 112H0zm640 11q-110-45-215-10l-44 99h259z" fill="#536f4c"/>
+  <g fill="#263e35"><circle cx="119" cy="178" r="13"/><path d="M108 194h23l14 54h-15l-8-31-9 31H98l14-54zM110 205l-22 27-8-8 23-32zm18 2 21 23-8 8-19-17z"/><circle cx="509" cy="186" r="13"/><path d="M498 202h23l14 54h-15l-8-31-9 31h-15l14-54zm2 11-24 21-7-9 23-26zm18 0 22 20-8 9-19-17z"/></g>
+  <path d="M80 260h28l-4 38H84zm420 2h27l-4 36h-22z" fill="#e7be76"/><path d="M88 302h24m-28 5h31m386-8h24m-28 5h31" stroke="#f5eee0" stroke-width="4" stroke-linecap="round"/>
+</svg>

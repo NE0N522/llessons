@@ -1,0 +1,441 @@
+{
+  "base": "local ephemeral PGlite + Chromium",
+  "pages": 56,
+  "screenshots": [
+    {
+      "page": "setup",
+      "width": 1280,
+      "theme": "light",
+      "title": "Первая настройка — Код по полочкам",
+      "file": "setup-1280-light.png"
+    },
+    {
+      "page": "setup",
+      "width": 1280,
+      "theme": "dark",
+      "title": "Первая настройка — Код по полочкам",
+      "file": "setup-1280-dark.png"
+    },
+    {
+      "page": "setup",
+      "width": 375,
+      "theme": "light",
+      "title": "Первая настройка — Код по полочкам",
+      "file": "setup-375-light.png"
+    },
+    {
+      "page": "setup",
+      "width": 375,
+      "theme": "dark",
+      "title": "Первая настройка — Код по полочкам",
+      "file": "setup-375-dark.png"
+    },
+    {
+      "page": "login",
+      "width": 1280,
+      "theme": "light",
+      "title": "Вход — Код по полочкам",
+      "file": "login-1280-light.png"
+    },
+    {
+      "page": "login",
+      "width": 1280,
+      "theme": "dark",
+      "title": "Вход — Код по полочкам",
+      "file": "login-1280-dark.png"
+    },
+    {
+      "page": "login",
+      "width": 375,
+      "theme": "light",
+      "title": "Вход — Код по полочкам",
+      "file": "login-375-light.png"
+    },
+    {
+      "page": "login",
+      "width": 375,
+      "theme": "dark",
+      "title": "Вход — Код по полочкам",
+      "file": "login-375-dark.png"
+    },
+    {
+      "page": "teacher-classes",
+      "width": 1280,
+      "theme": "light",
+      "title": "Кабинет учителя — Код по полочкам",
+      "file": "teacher-classes-1280-light.png"
+    },
+    {
+      "page": "teacher-classes",
+      "width": 1280,
+      "theme": "dark",
+      "title": "Кабинет учителя — Код по полочкам",
+      "file": "teacher-classes-1280-dark.png"
+    },
+    {
+      "page": "teacher-classes",
+      "width": 375,
+      "theme": "light",
+      "title": "Кабинет учителя — Код по полочкам",
+      "file": "teacher-classes-375-light.png"
+    },
+    {
+      "page": "teacher-classes",
+      "width": 375,
+      "theme": "dark",
+      "title": "Кабинет учителя — Код по полочкам",
+      "file": "teacher-classes-375-dark.png"
+    },
+    {
+      "page": "change-password",
+      "width": 1280,
+      "theme": "light",
+      "title": "Смена пароля — Код по полочкам",
+      "file": "change-password-1280-light.png"
+    },
+    {
+      "page": "change-password",
+      "width": 1280,
+      "theme": "dark",
+      "title": "Смена пароля — Код по полочкам",
+      "file": "change-password-1280-dark.png"
+    },
+    {
+      "page": "change-password",
+      "width": 375,
+      "theme": "light",
+      "title": "Смена пароля — Код по полочкам",
+      "file": "change-password-375-light.png"
+    },
+    {
+      "page": "change-password",
+      "width": 375,
+      "theme": "dark",
+      "title": "Смена пароля — Код по полочкам",
+      "file": "change-password-375-dark.png"
+    },
+    {
+      "page": "teacher-overview",
+      "width": 1280,
+      "theme": "light",
+      "title": "Кабинет учителя — Код по полочкам",
+      "file": "teacher-overview-1280-light.png"
+    },
+    {
+      "page": "teacher-overview",
+      "width": 1280,
+      "theme": "dark",
+      "title": "Кабинет учителя — Код по полочкам",
+      "file": "teacher-overview-1280-dark.png"
+    },
+    {
+      "page": "teacher-overview",
+      "width": 375,
+      "theme": "light",
+      "title": "Кабинет учителя — Код по полочкам",
+      "file": "teacher-overview-375-light.png"
+    },
+    {
+      "page": "teacher-overview",
+      "width": 375,
+      "theme": "dark",
+      "title": "Кабинет учителя — Код по полочкам",
+      "file": "teacher-overview-375-dark.png"
+    },
+    {
+      "page": "teacher-students",
+      "width": 1280,
+      "theme": "light",
+      "title": "Кабинет учителя — Код по полочкам",
+      "file": "teacher-students-1280-light.png"
+    },
+    {
+      "page": "teacher-students",
+      "width": 1280,
+      "theme": "dark",
+      "title": "Кабинет учителя — Код по полочкам",
+      "file": "teacher-students-1280-dark.png"
+    },
+    {
+      "page": "teacher-students",
+      "width": 375,
+      "theme": "light",
+      "title": "Кабинет учителя — Код по полочкам",
+      "file": "teacher-students-375-light.png"
+    },
+    {
+      "page": "teacher-students",
+      "width": 375,
+      "theme": "dark",
+      "title": "Кабинет учителя — Код по полочкам",
+      "file": "teacher-students-375-dark.png"
+    },
+    {
+      "page": "teacher-assignments",
+      "width": 1280,
+      "theme": "light",
+      "title": "Кабинет учителя — Код по полочкам",
+      "file": "teacher-assignments-1280-light.png"
+    },
+    {
+      "page": "teacher-assignments",
+      "width": 1280,
+      "theme": "dark",
+      "title": "Кабинет учителя — Код по полочкам",
+      "file": "teacher-assignments-1280-dark.png"
+    },
+    {
+      "page": "teacher-assignments",
+      "width": 375,
+      "theme": "light",
+      "title": "Кабинет учителя — Код по полочкам",
+      "file": "teacher-assignments-375-light.png"
+    },
+    {
+      "page": "teacher-assignments",
+      "width": 375,
+      "theme": "dark",
+      "title": "Кабинет учителя — Код по полочкам",
+      "file": "teacher-assignments-375-dark.png"
+    },
+    {
+      "page": "teacher-submissions",
+      "width": 1280,
+      "theme": "light",
+      "title": "Кабинет учителя — Код по полочкам",
+      "file": "teacher-submissions-1280-light.png"
+    },
+    {
+      "page": "teacher-submissions",
+      "width": 1280,
+      "theme": "dark",
+      "title": "Кабинет учителя — Код по полочкам",
+      "file": "teacher-submissions-1280-dark.png"
+    },
+    {
+      "page": "teacher-submissions",
+      "width": 375,
+      "theme": "light",
+      "title": "Кабинет учителя — Код по полочкам",
+      "file": "teacher-submissions-375-light.png"
+    },
+    {
+      "page": "teacher-submissions",
+      "width": 375,
+      "theme": "dark",
+      "title": "Кабинет учителя — Код по полочкам",
+      "file": "teacher-submissions-375-dark.png"
+    },
+    {
+      "page": "teacher-gradebook",
+      "width": 1280,
+      "theme": "light",
+      "title": "Кабинет учителя — Код по полочкам",
+      "file": "teacher-gradebook-1280-light.png"
+    },
+    {
+      "page": "teacher-gradebook",
+      "width": 1280,
+      "theme": "dark",
+      "title": "Кабинет учителя — Код по полочкам",
+      "file": "teacher-gradebook-1280-dark.png"
+    },
+    {
+      "page": "teacher-gradebook",
+      "width": 375,
+      "theme": "light",
+      "title": "Кабинет учителя — Код по полочкам",
+      "file": "teacher-gradebook-375-light.png"
+    },
+    {
+      "page": "teacher-gradebook",
+      "width": 375,
+      "theme": "dark",
+      "title": "Кабинет учителя — Код по полочкам",
+      "file": "teacher-gradebook-375-dark.png"
+    },
+    {
+      "page": "login-student",
+      "width": 1280,
+      "theme": "light",
+      "title": "Вход — Код по полочкам",
+      "file": "login-student-1280-light.png"
+    },
+    {
+      "page": "login-student",
+      "width": 1280,
+      "theme": "dark",
+      "title": "Вход — Код по полочкам",
+      "file": "login-student-1280-dark.png"
+    },
+    {
+      "page": "login-student",
+      "width": 375,
+      "theme": "light",
+      "title": "Вход — Код по полочкам",
+      "file": "login-student-375-light.png"
+    },
+    {
+      "page": "login-student",
+      "width": 375,
+      "theme": "dark",
+      "title": "Вход — Код по полочкам",
+      "file": "login-student-375-dark.png"
+    },
+    {
+      "page": "student-home",
+      "width": 1280,
+      "theme": "light",
+      "title": "Мои задания — Код по полочкам",
+      "file": "student-home-1280-light.png"
+    },
+    {
+      "page": "student-home",
+      "width": 1280,
+      "theme": "dark",
+      "title": "Мои задания — Код по полочкам",
+      "file": "student-home-1280-dark.png"
+    },
+    {
+      "page": "student-home",
+      "width": 375,
+      "theme": "light",
+      "title": "Мои задания — Код по полочкам",
+      "file": "student-home-375-light.png"
+    },
+    {
+      "page": "student-home",
+      "width": 375,
+      "theme": "dark",
+      "title": "Мои задания — Код по полочкам",
+      "file": "student-home-375-dark.png"
+    },
+    {
+      "page": "student-assignment",
+      "width": 1280,
+      "theme": "light",
+      "title": "Задание — Код по полочкам",
+      "file": "student-assignment-1280-light.png"
+    },
+    {
+      "page": "student-assignment",
+      "width": 1280,
+      "theme": "dark",
+      "title": "Задание — Код по полочкам",
+      "file": "student-assignment-1280-dark.png"
+    },
+    {
+      "page": "student-assignment",
+      "width": 375,
+      "theme": "light",
+      "title": "Задание — Код по полочкам",
+      "file": "student-assignment-375-light.png"
+    },
+    {
+      "page": "student-assignment",
+      "width": 375,
+      "theme": "dark",
+      "title": "Задание — Код по полочкам",
+      "file": "student-assignment-375-dark.png"
+    },
+    {
+      "page": "student-profile",
+      "width": 1280,
+      "theme": "light",
+      "title": "Мой профиль — Код по полочкам",
+      "file": "student-profile-1280-light.png"
+    },
+    {
+      "page": "student-profile",
+      "width": 1280,
+      "theme": "dark",
+      "title": "Мой профиль — Код по полочкам",
+      "file": "student-profile-1280-dark.png"
+    },
+    {
+      "page": "student-profile",
+      "width": 375,
+      "theme": "light",
+      "title": "Мой профиль — Код по полочкам",
+      "file": "student-profile-375-light.png"
+    },
+    {
+      "page": "student-profile",
+      "width": 375,
+      "theme": "dark",
+      "title": "Мой профиль — Код по полочкам",
+      "file": "student-profile-375-dark.png"
+    },
+    {
+      "page": "ui-kit",
+      "width": 1280,
+      "theme": "light",
+      "title": "UI kit кабинетов — Код по полочкам",
+      "file": "ui-kit-1280-light.png"
+    },
+    {
+      "page": "ui-kit",
+      "width": 1280,
+      "theme": "dark",
+      "title": "UI kit кабинетов — Код по полочкам",
+      "file": "ui-kit-1280-dark.png"
+    },
+    {
+      "page": "ui-kit",
+      "width": 375,
+      "theme": "light",
+      "title": "UI kit кабинетов — Код по полочкам",
+      "file": "ui-kit-375-light.png"
+    },
+    {
+      "page": "ui-kit",
+      "width": 375,
+      "theme": "dark",
+      "title": "UI kit кабинетов — Код по полочкам",
+      "file": "ui-kit-375-dark.png"
+    }
+  ],
+  "accessibility": [
+    {
+      "page": "setup",
+      "violations": []
+    },
+    {
+      "page": "login",
+      "violations": []
+    },
+    {
+      "page": "teacher-classes",
+      "violations": []
+    },
+    {
+      "page": "teacher-overview",
+      "violations": []
+    },
+    {
+      "page": "teacher-students",
+      "violations": []
+    },
+    {
+      "page": "student-home",
+      "violations": []
+    },
+    {
+      "page": "student-assignment",
+      "violations": []
+    },
+    {
+      "page": "student-profile",
+      "violations": []
+    },
+    {
+      "page": "ui-kit",
+      "violations": []
+    },
+    {
+      "page": "ui-kit-confirm-dialog",
+      "violations": []
+    }
+  ],
+  "problems": []
+}

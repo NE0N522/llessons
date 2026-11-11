@@ -1,0 +1,310 @@
+const { test, before, after } = require('node:test');
+const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const os = require('node:os');
+const path = require('node:path');
+const { createApp } = require('../server/app');
+const { openDatabase } = require('../server/db');
+const { hashPassword } = require('../server/auth');
+const { createBackup, restoreBackup, TABLES } = require('../server/backup');
+const { getConfig } = require('../server/config');
+
+let app, server, base, teacherCookie, classId, studentId, secondStudentId, studentCookie;
+const teacherLogin = 'teacher.integration', teacherPassword = 'TeacherSecure#42';
+const studentPassword = 'StudentSecure#42';
+
+async function requestAt(root, route, { method = 'GET', body, cookie, origin = root } = {}) {
+  const headers = {};
+  if (origin) headers.origin = origin;
+  if (body !== undefined) headers['content-type'] = 'application/json';
+  if (cookie) headers.cookie = cookie;
+  const response = await fetch(`${root}${route}`, { method, headers, body: body === undefined ? undefined : JSON.stringify(body) });
+  const type = response.headers.get('content-type') || '';
+  const data = type.includes('application/json') ? await response.json() : await response.text();
+  return { response, data, cookie: response.headers.get('set-cookie')?.split(';')[0] };
+}
+const request = (route, options) => requestAt(base, route, options);
+
+before(async () => {
+  app = await createApp({ pgliteDir: ':memory:', sessionSecret: 'classroom-integration-session-secret' });
+  const db = app.locals.db, timestamp = new Date().toISOString();
+  const teacherHash = await hashPassword(teacherPassword), otherHash = await hashPassword('OtherTeacherSecure#42');
+  const teacher = (await db.query("INSERT INTO users(role,login,password_hash,full_name,is_owner,created_at) VALUES('teacher',$1,$2,$3,1,$4) RETURNING id", [teacherLogin, teacherHash, 'Учитель интеграции', timestamp])).rows[0].id;
+  const other = (await db.query("INSERT INTO users(role,login,password_hash,full_name,created_at) VALUES('teacher','other.integration',$1,'Другой учитель',$2) RETURNING id", [otherHash, timestamp])).rows[0].id;
+  await db.query('INSERT INTO classes(teacher_id,name,created_at) VALUES($1,$2,$3)', [other, 'Чужой класс', timestamp]);
+  server = app.listen(0, '127.0.0.1');
+  await new Promise((resolve) => server.once('listening', resolve));
+  base = `http://127.0.0.1:${server.address().port}`;
+  const login = await request('/api/auth/login', { method: 'POST', body: { login: teacherLogin, password: teacherPassword } });
+  assert.equal(login.response.status, 200);
+  teacherCookie = login.cookie;
+});
+
+after(async () => {
+  if (server) await new Promise((resolve) => server.close(resolve));
+  await app?.locals.db.close();
+});
+
+test('Stages 1–4: teacher, student, assignments, review and learning activity use PostgreSQL routes', async () => {
+  const createdClass = await request('/api/teacher/classes', { method: 'POST', cookie: teacherCookie, body: { name: '8А', school_year: '2026–2027' } });
+  assert.equal(createdClass.response.status, 201);
+  classId = createdClass.data.class.id;
+  const classes = await request('/api/teacher/classes', { cookie: teacherCookie });
+  assert.equal(classes.data.classes.length, 1);
+  assert.equal(classes.data.classes[0].name, '8А');
+  const added = await request(`/api/teacher/classes/${classId}/students`, { method: 'POST', cookie: teacherCookie, body: { full_name: 'Алия Нурланова', password: studentPassword } });
+  assert.equal(added.response.status, 201, JSON.stringify(added.data));
+  studentId = added.data.credential.id;
+  const bulk = await request(`/api/teacher/classes/${classId}/students/bulk`, { method: 'POST', cookie: teacherCookie, body: { names: ['Тимур Исаев', 'Мира Садыкова'] } });
+  assert.equal(bulk.response.status, 201, JSON.stringify(bulk.data));
+  secondStudentId = bulk.data.credentials[0].id;
+  const studentLogin = await request('/api/auth/login', { method: 'POST', body: { login: added.data.credential.login, password: studentPassword } });
+  assert.equal(studentLogin.response.status, 200);
+  studentCookie = studentLogin.cookie;
+  const anotherDevice = await request('/api/auth/login', { method: 'POST', body: { login: added.data.credential.login, password: studentPassword } });
+  assert.equal(anotherDevice.response.status, 200);
+  const needsPassword = await request('/api/student/assignments', { cookie: studentCookie });
+  assert.equal(needsPassword.response.status, 403);
+  assert.equal(needsPassword.data.code, 'PASSWORD_CHANGE_REQUIRED');
+  const changed = await request('/api/auth/password', { method: 'POST', cookie: studentCookie, body: { current_password: studentPassword, new_password: 'StudentChanged#44' } });
+  assert.equal(changed.response.status, 200);
+  const revokedDevice = await request('/api/auth/me', { cookie: anotherDevice.cookie });
+  assert.equal(revokedDevice.response.status, 401);
+
+  const assignment = await request(`/api/teacher/classes/${classId}/assignments`, { method: 'POST', cookie: teacherCookie, body: { title: 'Карточка книги', description: 'Сделай карточку с заголовком и описанием.', lesson_id: 1, max_score: 10, allow_resubmit: true, no_hints: true, starter_html: '<main>\n  <h1>Моя книга</h1>\n</main>', starter_css: 'main { padding: 1rem; }', student_ids: [studentId], publish: true } });
+  assert.equal(assignment.response.status, 201, JSON.stringify(assignment.data));
+  const assignmentId = assignment.data.assignment_id;
+  const ownTasks = await request('/api/student/assignments', { cookie: studentCookie });
+  assert.equal(ownTasks.response.status, 200);
+  assert.equal(ownTasks.data.assignments.length, 1);
+  assert.equal(Number(ownTasks.data.assignments[0].no_hints), 1);
+  const defaultEditorSettings = await request('/api/student/settings/editor', { cookie: studentCookie });
+  assert.deepEqual(defaultEditorSettings.data, { font_size: 15 });
+  const savedEditorSettings = await request('/api/student/settings/editor', { method: 'PUT', cookie: studentCookie, body: { font_size: 19 } });
+  assert.equal(savedEditorSettings.response.status, 200);
+  assert.equal((await request('/api/student/settings/editor', { cookie: studentCookie })).data.font_size, 19);
+  assert.equal((await request('/api/student/settings/editor', { method: 'PUT', cookie: studentCookie, body: { font_size: 25 } })).response.status, 400);
+  assert.equal((await request('/api/student/settings/editor', { cookie: teacherCookie })).response.status, 403);
+  const secondStudentRow = (await app.locals.db.query('SELECT login FROM users WHERE id=$1', [secondStudentId])).rows[0];
+  const secondLogin = await request('/api/auth/login', { method: 'POST', body: { login: secondStudentRow.login, password: bulk.data.credentials[0].password } });
+  assert.equal(secondLogin.response.status, 200);
+  const secondPassword = await request('/api/auth/password', { method: 'POST', cookie: secondLogin.cookie, body: { current_password: bulk.data.credentials[0].password, new_password: 'SecondStudent#44' } });
+  assert.equal(secondPassword.response.status, 200);
+  const privateTask = await request('/api/student/assignments', { cookie: secondLogin.cookie });
+  assert.equal(privateTask.response.status, 200);
+  assert.equal(privateTask.data.assignments.length, 0);
+  const crossRole = await request(`/api/teacher/classes/${classId}/students`, { cookie: secondLogin.cookie });
+  assert.equal(crossRole.response.status, 403);
+  const draft = await request(`/api/student/assignments/${assignmentId}/draft`, { method: 'PUT', cookie: studentCookie, body: { html: '<main><h1>Моя книга</h1><p>Приключения</p></main>', css: 'body { color: #123; }' } });
+  assert.equal(draft.response.status, 200, JSON.stringify(draft.data));
+  assert.equal(Number((await app.locals.db.query('SELECT COUNT(*) AS n FROM submission_versions')).rows[0].n), 1);
+  const beacon = await request(`/api/student/assignments/${assignmentId}/draft/beacon`, { method: 'POST', cookie: studentCookie, body: { html: '<main><h1>Сохранение при выходе</h1></main>', css: '' } });
+  assert.equal(beacon.response.status, 204);
+  assert.match((await app.locals.db.query('SELECT html FROM submission_versions')).rows[0].html, /Сохранение при выходе/);
+  const savedBackup = await request(`/api/student/assignments/${assignmentId}/draft/backup`, { method: 'POST', cookie: studentCookie, body: { html: '<main><h1>Версия перед сбросом</h1></main>', css: 'main { color: navy; }' } });
+  assert.equal(savedBackup.response.status, 201);
+  const versionHistory = await request(`/api/student/assignments/${assignmentId}`, { cookie: studentCookie });
+  assert.ok(versionHistory.data.versions.some((version) => version.kind === 'backup' && /Версия перед сбросом/.test(version.html)));
+  const tooLarge = await request(`/api/student/assignments/${assignmentId}/draft`, { method: 'PUT', cookie: studentCookie, body: { html: 'x'.repeat(200 * 1024 + 1), css: '' } });
+  assert.equal(tooLarge.response.status, 413);
+  const submitted = await request(`/api/student/assignments/${assignmentId}/submit`, { method: 'POST', cookie: studentCookie, body: { html: '<main><h1>Моя книга</h1><p>Приключения</p></main>', css: 'body { color: #123; }' } });
+  assert.equal(submitted.response.status, 200, JSON.stringify(submitted.data));
+  const teacherQueue = await request(`/api/teacher/classes/${classId}/submissions?status=submitted`, { cookie: teacherCookie });
+  assert.equal(teacherQueue.data.submissions.length, 1);
+  const submissionId = teacherQueue.data.submissions[0].id;
+  const submittedCode = await request(`/api/teacher/submissions/${submissionId}`, { cookie: teacherCookie });
+  assert.equal(submittedCode.response.status, 200);
+  assert.match(submittedCode.data.versions[0].html, /Моя книга/);
+  const foreignSubmission = await request(`/api/student/submissions/${submissionId}`, { cookie: secondLogin.cookie });
+  assert.equal(foreignSubmission.response.status, 404);
+  const reviewed = await request(`/api/teacher/submissions/${submissionId}/review`, { method: 'POST', cookie: teacherCookie, body: { status: 'accepted', score: 9, comment: 'Хорошая структура и аккуратный код.' } });
+  assert.equal(reviewed.response.status, 200, JSON.stringify(reviewed.data));
+  const profile = await request('/api/student/profile', { cookie: studentCookie });
+  assert.equal(profile.response.status, 200);
+  assert.equal(profile.data.grades[0].score, 9);
+  assert.ok(profile.data.history.some((event) => event.kind === 'review'));
+  assert.ok(profile.data.login_events.some((event) => event.success));
+  const progress = await request('/api/student/progress', { method: 'PUT', cookie: studentCookie, body: { lesson_id: 1, step_id: 'lesson-complete', done: true } });
+  assert.equal(progress.response.status, 200);
+  const savedProgress = await request('/api/student/progress', { cookie: studentCookie });
+  assert.equal(savedProgress.data.progress[0].lesson_id, 1);
+  const defaultLearning = await request('/api/student/settings/learning', { cookie: studentCookie });
+  assert.equal(defaultLearning.data.weekly_goal, 3);
+  assert.equal((await request('/api/student/settings/learning', { method: 'PUT', cookie: studentCookie, body: { weekly_goal: 5 } })).response.status, 200);
+  assert.equal((await request('/api/student/settings/learning', { method: 'PUT', cookie: studentCookie, body: { weekly_goal: 11 } })).response.status, 400);
+  const savedJourney = await request('/api/student/journey', { method: 'PUT', cookie: studentCookie, body: { kind: 'lesson', lesson_id: 1, step_id: 'lesson-complete' } });
+  assert.equal(savedJourney.response.status, 200);
+  assert.match(savedJourney.data.last_course_location, /lesson=1#lesson-complete/);
+  assert.equal((await request('/api/student/journey', { cookie: studentCookie })).data.last_course_location, savedJourney.data.last_course_location);
+  assert.equal((await request('/api/student/journey', { method: 'PUT', cookie: secondLogin.cookie, body: { kind: 'assignment', assignment_id: assignmentId } })).response.status, 404, 'a learner cannot resume another learner’s assignment');
+  assert.equal((await request('/api/student/journey', { cookie: teacherCookie })).response.status, 403);
+  const privateNote = await request('/api/student/lessons/1/notes', { method: 'PUT', cookie: studentCookie, body: { note: 'Повторить структуру HTML.' } });
+  assert.equal(privateNote.response.status, 200);
+  assert.equal((await request('/api/student/lessons/1/notes', { cookie: studentCookie })).data.note, 'Повторить структуру HTML.');
+  assert.equal((await request('/api/student/lessons/1/notes', { cookie: secondLogin.cookie })).data.note, '', 'lesson notes are isolated per learner');
+  assert.equal((await request('/api/student/lessons/1/notes', { cookie: teacherCookie })).response.status, 403);
+  assert.equal((await request('/api/student/lessons/1/notes', { method: 'PUT', cookie: studentCookie, body: { note: 'x'.repeat(10001) } })).response.status, 400);
+  assert.ok(profile.data.active_days.length > 0);
+  assert.ok(profile.data.profile.stats.current_streak >= 1);
+  const teacherProfile = await request(`/api/teacher/students/${studentId}/profile`, { cookie: teacherCookie });
+  assert.equal(teacherProfile.response.status, 200);
+  assert.equal(teacherProfile.data.stats.weekly_goal, 5);
+  assert.ok(teacherProfile.data.badges.some((badge) => badge.id === 'first-work'));
+  assert.equal((await request(`/api/teacher/students/${studentId}/profile`, { cookie: secondLogin.cookie })).response.status, 403);
+  const imported = await request(`/api/teacher/classes/${classId}/students/import`, { method: 'POST', cookie: teacherCookie, body: { students: [{ full_name: 'Тест Импорт' }, { full_name: 'Тест Импорт 2' }] } });
+  assert.equal(imported.response.status, 201, JSON.stringify(imported.data));
+  assert.equal(imported.data.credentials.length, 2);
+  assert.ok(imported.data.credentials.every(item => item.password.length >= 12 && item.login));
+  assert.notEqual(imported.data.credentials[0].login, imported.data.credentials[1].login);
+  const importedHash = (await app.locals.db.query('SELECT password_hash FROM users WHERE id=$1', [imported.data.credentials[0].id])).rows[0].password_hash;
+  const duplicateImport = await request(`/api/teacher/classes/${classId}/students/import`, { method: 'POST', cookie: teacherCookie, body: { students: [{ full_name: 'Один Ученик' }, { full_name: 'Один   Ученик' }] } });
+  assert.equal(duplicateImport.response.status, 400);
+  const reset = await request('/api/teacher/students/bulk-actions', { method: 'POST', cookie: teacherCookie, body: { student_ids: [imported.data.credentials[0].id], action: 'reset_password' } });
+  assert.equal(reset.response.status, 200);
+  assert.equal(reset.data.credentials.length, 1);
+  assert.equal(reset.data.credentials[0].id, imported.data.credentials[0].id);
+  assert.notEqual(reset.data.credentials[0].password, imported.data.credentials[0].password);
+  const resetHash = (await app.locals.db.query('SELECT password_hash FROM users WHERE id=$1', [imported.data.credentials[0].id])).rows[0].password_hash;
+  assert.notEqual(resetHash, importedHash);
+  assert.equal((await request('/api/auth/login', { method: 'POST', body: { login: imported.data.credentials[0].login, password: imported.data.credentials[0].password } })).response.status, 401);
+  const newPasswordLogin = await request('/api/auth/login', { method: 'POST', body: { login: imported.data.credentials[0].login, password: reset.data.credentials[0].password } });
+  assert.equal(newPasswordLogin.response.status, 200);
+  const destination = await request('/api/teacher/classes', { method: 'POST', cookie: teacherCookie, body: { name: '8Б', school_year: '2026–2027' } });
+  assert.equal(destination.response.status, 201);
+  const moved = await request('/api/teacher/students/bulk-actions', { method: 'POST', cookie: teacherCookie, body: { student_ids: [imported.data.credentials[0].id], action: 'move', class_id: destination.data.class.id } });
+  assert.equal(moved.response.status, 200);
+  assert.equal((await app.locals.db.query('SELECT class_id FROM users WHERE id=$1', [imported.data.credentials[0].id])).rows[0].class_id, destination.data.class.id);
+  assert.equal((await request('/api/auth/me', { cookie: newPasswordLogin.cookie })).response.status, 401, 'moving a learner ends existing sessions');
+  const archived = await request('/api/teacher/students/bulk-actions', { method: 'POST', cookie: teacherCookie, body: { student_ids: [imported.data.credentials[1].id], action: 'archive' } });
+  assert.equal(archived.response.status, 200);
+  const archivedStudents = await request(`/api/teacher/classes/${classId}/students`, { cookie: teacherCookie });
+  assert.equal(Number(archivedStudents.data.students.find(item => item.id === imported.data.credentials[1].id).active), 0);
+  const deletedWithoutWord = await request(`/api/teacher/students/${imported.data.credentials[1].id}`, { method: 'DELETE', cookie: teacherCookie, body: { confirm_name: 'удалить навсегда' } });
+  assert.equal(deletedWithoutWord.response.status, 400);
+  const deleted = await request(`/api/teacher/students/${imported.data.credentials[1].id}`, { method: 'DELETE', cookie: teacherCookie, body: { confirm_name: 'удалить' } });
+  assert.equal(deleted.response.status, 200);
+  assert.equal((await app.locals.db.query('SELECT 1 FROM users WHERE id=$1', [imported.data.credentials[1].id])).rows.length, 0);
+  const exportCsv = await request(`/api/teacher/classes/${classId}/export?format=csv`, { cookie: teacherCookie });
+  assert.equal(exportCsv.response.status, 200);
+  assert.match(exportCsv.data, /Алия Нурланова/);
+  const ownerBackup = await request('/api/teacher/backup', { cookie: teacherCookie });
+  assert.equal(ownerBackup.response.status, 200);
+  assert.equal(ownerBackup.data.format, 'kod-po-polochkam-postgres-backup');
+  const logoutAll = await request('/api/auth/logout-all', { method: 'POST', cookie: studentCookie, body: {} });
+  assert.equal(logoutAll.response.status, 200);
+  assert.equal((await request('/api/auth/me', { cookie: studentCookie })).response.status, 401);
+  const otherClassId = (await app.locals.db.query('SELECT id FROM classes WHERE teacher_id<>(SELECT id FROM users WHERE login=$1)', [teacherLogin])).rows[0].id;
+  assert.equal((await request(`/api/teacher/classes/${otherClassId}/students`, { cookie: teacherCookie })).response.status, 404);
+});
+
+test('Stage 1: persistent login blocking survives closing and reopening the app', async () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'kod-pglite-lockout-'));
+  const secret = 'restart-lockout-test-secret-at-least-32';
+  let localApp = await createApp({ pgliteDir: dir, sessionSecret: secret });
+  let localServer = localApp.listen(0, '127.0.0.1');
+  await new Promise((resolve) => localServer.once('listening', resolve));
+  let localBase = `http://127.0.0.1:${localServer.address().port}`;
+  const timestamp = new Date().toISOString();
+  await localApp.locals.db.query("INSERT INTO users(role,login,password_hash,full_name,is_owner,created_at) VALUES('teacher',$1,$2,$3,1,$4)", ['restart.teacher', await hashPassword('RestartSecure#42'), 'Учитель перезапуска', timestamp]);
+  for (let i = 0; i < 5; i += 1) assert.equal((await requestAt(localBase, '/api/auth/login', { method: 'POST', body: { login: 'restart.teacher', password: 'wrong-password' } })).response.status, 401);
+  await new Promise((resolve) => localServer.close(resolve));
+  await localApp.locals.db.close();
+  localApp = await createApp({ pgliteDir: dir, sessionSecret: secret });
+  localServer = localApp.listen(0, '127.0.0.1');
+  await new Promise((resolve) => localServer.once('listening', resolve));
+  localBase = `http://127.0.0.1:${localServer.address().port}`;
+  const blocked = await requestAt(localBase, '/api/auth/login', { method: 'POST', body: { login: 'restart.teacher', password: 'RestartSecure#42' } });
+  assert.equal(blocked.response.status, 401);
+  await new Promise((resolve) => localServer.close(resolve));
+  await localApp.locals.db.close();
+});
+
+test('Stage 1: first-owner setup needs a production token, works once and then returns 404', async () => {
+  const db = await openDatabase({ pgliteDir: ':memory:' });
+  const secret = 'production-setup-test-session-secret-32';
+  const securedApp = await createApp({ db, nodeEnv: 'production', databaseUrl: 'postgres://unused-pooler', migrationsDatabaseUrl: 'postgres://unused-direct', sessionSecret: secret, setupToken: 'teacher-only-setup-key' });
+  const securedServer = securedApp.listen(0, '127.0.0.1');
+  await new Promise((resolve) => securedServer.once('listening', resolve));
+  const securedBase = `http://127.0.0.1:${securedServer.address().port}`;
+  try {
+    assert.equal((await requestAt(securedBase, '/setup')).response.status, 200);
+    const missingToken = await requestAt(securedBase, '/api/auth/setup', { method: 'POST', body: { full_name: 'Учитель Владелец', login: 'owner.teacher', password: 'OwnerStrong#2026' } });
+    assert.equal(missingToken.response.status, 403);
+    const created = await requestAt(securedBase, '/api/auth/setup', { method: 'POST', body: { full_name: 'Учитель Владелец', login: 'owner.teacher', password: 'OwnerStrong#2026', setup_token: 'teacher-only-setup-key' } });
+    assert.equal(created.response.status, 201, JSON.stringify(created.data));
+    assert.equal((await requestAt(securedBase, '/setup')).response.status, 404);
+  } finally { await new Promise((resolve) => securedServer.close(resolve)); await db.close(); }
+  assert.throws(() => getConfig({ nodeEnv: 'production', sessionSecret: 'too-short', databaseUrl: '' }), /SESSION_SECRET/);
+});
+
+test('Stage 1: logical backup restores the same rows into an empty PostgreSQL-compatible database', async () => {
+  const source = await openDatabase({ pgliteDir: ':memory:' });
+  const teacherId = Number((await source.query("INSERT INTO users(role,login,password_hash,full_name,is_owner,created_at) VALUES('teacher','backup.teacher','scrypt-placeholder','Учитель копии',1,now()) RETURNING id")).rows[0].id);
+  const studentId = Number((await source.query("INSERT INTO users(role,login,password_hash,full_name,created_at) VALUES('student','backup.student','scrypt-placeholder','Ученик копии',now()) RETURNING id")).rows[0].id);
+  const secondStudentId = Number((await source.query("INSERT INTO users(role,login,password_hash,full_name,created_at) VALUES('student','backup.student2','scrypt-placeholder','Второй ученик',now()) RETURNING id")).rows[0].id);
+  const oldClassId = Number((await source.query("INSERT INTO classes(teacher_id,name,school_year,created_at) VALUES($1,'Класс копии','2025–2026',now()) RETURNING id", [teacherId])).rows[0].id);
+  const nextClassId = Number((await source.query("INSERT INTO classes(teacher_id,name,school_year,created_at) VALUES($1,'Новый класс','2026–2027',now()) RETURNING id", [teacherId])).rows[0].id);
+  await source.query('UPDATE classes SET rollover_class_id=$1,close_action=$2 WHERE id=$3', [nextClassId, 'rollover', oldClassId]);
+  await source.query('UPDATE users SET class_id=$1 WHERE id IN ($2,$3)', [oldClassId, studentId, secondStudentId]);
+  await source.query('INSERT INTO user_settings(user_id,font_size,weekly_goal,updated_at) VALUES($1,17,4,now())', [studentId]);
+  await source.query("INSERT INTO lesson_notes(user_id,lesson_id,note,updated_at) VALUES($1,1,'Моя заметка',now())", [studentId]);
+  await source.query('INSERT INTO student_activity_days(user_id,active_on) VALUES($1,CURRENT_DATE)', [studentId]);
+  const assignmentId = Number((await source.query("INSERT INTO assignments(class_id,title,created_at,updated_at) VALUES($1,'Задание копии',now(),now()) RETURNING id", [oldClassId])).rows[0].id);
+  await source.query('INSERT INTO assignment_targets(assignment_id,student_id) VALUES($1,$2)', [assignmentId, studentId]);
+  const submissionId = Number((await source.query("INSERT INTO submissions(assignment_id,student_id,status,created_at,updated_at) VALUES($1,$2,'submitted',now(),now()) RETURNING id", [assignmentId, studentId])).rows[0].id);
+  const secondSubmissionId = Number((await source.query("INSERT INTO submissions(assignment_id,student_id,status,created_at,updated_at) VALUES($1,$2,'submitted',now(),now()) RETURNING id", [assignmentId, secondStudentId])).rows[0].id);
+  const versionId = Number((await source.query("INSERT INTO submission_versions(submission_id,html,css,kind,created_at) VALUES($1,'<h1>Решение</h1>','h1 { color: navy; }','submitted',now()) RETURNING id", [submissionId])).rows[0].id);
+  await source.query('INSERT INTO assignment_hint_opens(assignment_id,student_id,hint_index,opened_at) VALUES($1,$2,0,now())', [assignmentId, studentId]);
+  await source.query('INSERT INTO assignment_due_extensions(assignment_id,student_id,due_at,updated_at) VALUES($1,$2,now(),now())', [assignmentId, studentId]);
+  await source.query("INSERT INTO assignment_line_comments(version_id,teacher_id,language,line_number,excerpt,comment,created_at) VALUES($1,$2,'html',1,'<h1>','Хороший заголовок',now())", [versionId, teacherId]);
+  await source.query("INSERT INTO teacher_comment_templates(teacher_id,title,body,created_at,updated_at) VALUES($1,'Похвала','Отличная работа',now(),now())", [teacherId]);
+  await source.query("INSERT INTO class_announcements(class_id,teacher_id,title,body,pinned,created_at) VALUES($1,$2,'Объявление','Текст',1,now())", [oldClassId, teacherId]);
+  await source.query("INSERT INTO assignment_questions(assignment_id,student_id,question,teacher_reply,reply_public,created_at) VALUES($1,$2,'Вопрос?','Ответ',1,now())", [assignmentId, studentId]);
+  await source.query('INSERT INTO assignment_similarity(assignment_id,submission_id,other_submission_id,score,created_at) VALUES($1,$2,$3,82,now())', [assignmentId, submissionId, secondSubmissionId]);
+  await source.query("INSERT INTO activity_events(user_id,kind,title,details,assignment_id,submission_id,created_at) VALUES($1,'review','Проверка','Комментарий',$2,$3,now())", [studentId, assignmentId, submissionId]);
+  const backup = await createBackup(source);
+  assert.deepEqual(Object.keys(backup.data).sort(), [...TABLES].sort(), 'backup includes every current database table');
+  assert.equal(backup.data.assignment_line_comments.length, 1);
+  assert.equal(backup.data.assignment_questions.length, 1);
+  assert.equal(backup.data.class_announcements.length, 1);
+  const target = await openDatabase({ pgliteDir: ':memory:' });
+  const legacyTarget = await openDatabase({ pgliteDir: ':memory:' });
+  try {
+    const restored = await restoreBackup(target, backup);
+    assert.equal(restored.restored_rows, Object.values(backup.data).reduce((sum, rows) => sum + rows.length, 0));
+    const rows = await target.query('SELECT u.login,c.name,c2.name AS next_class FROM users u JOIN classes c ON c.teacher_id=u.id LEFT JOIN classes c2 ON c2.id=c.rollover_class_id WHERE c.id=$1', [oldClassId]);
+    assert.deepEqual(rows.rows, [{ login: 'backup.teacher', name: 'Класс копии', next_class: 'Новый класс' }]);
+    assert.equal(Number((await target.query('SELECT class_id FROM users WHERE id=$1', [studentId])).rows[0].class_id), oldClassId);
+    for (const table of ['assignment_hint_opens','assignment_due_extensions','assignment_line_comments','teacher_comment_templates','class_announcements','assignment_questions','assignment_similarity']) {
+      assert.equal(Number((await target.query(`SELECT COUNT(*) AS n FROM ${table}`)).rows[0].n), 1, `${table} data is restored`);
+    }
+    const nextTemplate = await target.query("INSERT INTO teacher_comment_templates(teacher_id,title,body,created_at,updated_at) VALUES($1,'Ещё','',now(),now()) RETURNING id", [teacherId]);
+    assert.ok(Number(nextTemplate.rows[0].id) > Number(backup.data.teacher_comment_templates[0].id), 'identity sequences are reset for restored tables');
+    await assert.rejects(restoreBackup(target, backup), /База не пустая/);
+    const legacy = structuredClone(backup);
+    for (const table of ['user_settings','lesson_notes','student_activity_days','assignment_hint_opens','assignment_due_extensions','assignment_line_comments','teacher_comment_templates','class_announcements','assignment_questions','assignment_similarity']) delete legacy.data[table];
+    const legacyResult = await restoreBackup(legacyTarget, legacy);
+    assert.equal(legacy.data.assignment_questions.length, 0, 'missing tables in an older version-1 backup default to empty');
+    assert.ok(legacyResult.restored_rows < restored.restored_rows);
+  } finally { await source.close(); await target.close(); await legacyTarget.close(); }
+});
+
+test('Every table declared by a database migration is included in the backup manifest', () => {
+  const migrationsDir = path.join(__dirname, '..', 'server', 'db', 'migrations');
+  const migrationTables = fs.readdirSync(migrationsDir)
+    .filter((filename) => filename.endsWith('.sql'))
+    .flatMap((filename) => [...fs.readFileSync(path.join(migrationsDir, filename), 'utf8').matchAll(/CREATE\s+TABLE\s+IF\s+NOT\s+EXISTS\s+([a-z_][a-z0-9_]*)/gi)].map((match) => match[1].toLowerCase()))
+    .sort();
+  assert.deepEqual([...TABLES].sort(), migrationTables, 'new schema tables must be added to backup and restore');
+});
+
+test('Stage 3: student code preview blocks scripts and external requests', async () => {
+  const response = await fetch(`${base}/assets/app/accounts/common.js`);
+  assert.equal(response.status, 200);
+  const source = await response.text();
+  assert.match(source, /script-src 'none'/);
+  assert.match(source, /connect-src 'none'/);
+  assert.match(source, /img-src data:/);
+  assert.match(source, /media-src 'none'/);
+  assert.match(source, /setAttribute\('sandbox',''\)/);
+});

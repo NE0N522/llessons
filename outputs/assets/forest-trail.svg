@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" role="img" aria-labelledby="title desc">
+  <title id="title">Тропа среди сосен</title>
+  <desc id="desc">Светлая лесная тропинка ведёт между соснами к далёким горам.</desc>
+  <defs><linearGradient id="forest-sky" x2="0" y2="1"><stop stop-color="#c7e2d9"/><stop offset="1" stop-color="#f1e7c8"/></linearGradient></defs>
+  <rect width="640" height="360" fill="url(#forest-sky)"/><path d="m0 195 110-81 84 74 125-119 123 113 95-79 103 77v180H0z" fill="#71877c"/><path d="M0 210q135-50 265 5t375-9v154H0z" fill="#617c53"/><path d="M260 360q30-80 61-119 31 40 61 119z" fill="#c6ad80"/><g fill="#30513c"><path d="m28 201 48-117 49 117zm18-43h60v127H46zM131 222l42-105 44 105zm16-40h54v107h-54zM470 209l50-125 51 125zm19-48h62v128h-62zM555 234l35-91 36 91zm13-34h45v100h-45z"/></g><g fill="#416a48"><path d="m76 206 30-75 31 75zm11-27h39v93H87zM386 214l34-84 34 84zm13-33h42v103h-42z"/></g><path d="M290 360q27-67 31-119 11-27 22 0 5 52 31 119z" fill="#dfc99f"/>
+</svg>

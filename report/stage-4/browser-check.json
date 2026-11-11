@@ -1,0 +1,28 @@
+{
+  "result": "passed",
+  "imports": [
+    "CSV",
+    "XLSX"
+  ],
+  "qr": {
+    "decoded": true,
+    "includesLogin": true,
+    "includesPassword": false
+  },
+  "print": {
+    "pagesForNineStudents": 2,
+    "cards": 9,
+    "paper": "A4"
+  },
+  "viewports": [
+    1280,
+    375
+  ],
+  "colorSchemes": [
+    "light",
+    "dark"
+  ],
+  "accessibility": "No serious or critical WCAG 2.1 A/AA violations in tested views.",
+  "lessonNotes": "Saved through the student session and restored after reload.",
+  "browserErrors": []
+}

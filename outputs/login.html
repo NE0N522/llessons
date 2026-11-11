@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="">
+  <title>Вход — Код по полочкам</title>
+  <script src="assets/app/theme.js"></script>
+  <link rel="stylesheet" href="assets/app/lesson-v3.css">
+  <link rel="stylesheet" href="assets/app/theme-v3.css">
+  <link rel="stylesheet" href="assets/app/accounts/theme.css">
+  <link rel="stylesheet" href="assets/app/accounts/accounts.css">
+  <script src="assets/app/accounts/ui-utils.js" defer></script>
+  <script src="assets/app/accounts/ui-strings.js" defer></script>
+  <script src="assets/app/accounts/common.js" defer></script>
+  <script src="assets/app/accounts/login.js" defer></script>
+  <link rel="stylesheet" href="assets/app/privacy.css">
+</head>
+<body class="account-body">
+  <main class="account-login-wrap">
+    <a class="v3-brand account-brand" href="index.html"><span class="v3-brand-mark" aria-hidden="true">&lt;/&gt;</span><span>код по полочкам</span></a>
+    <section class="account-card account-login-card" aria-labelledby="login-heading">
+      <div class="account-eyebrow">КАБИНЕТ УЧИТЕЛЯ И УЧЕНИКА</div>
+      <h1 id="login-heading">Вход</h1>
+      <p class="account-muted">Введи логин и пароль, которые выдал учитель.</p>
+      <p class="account-banner account-warning" data-server-message hidden>Для входа запусти сайт через сервер. При открытии файлов двойным кликом кабинет недоступен.</p>
+      <form class="account-form" data-login-form>
+        <label>Логин<input name="login" autocomplete="username" required maxlength="40" autofocus></label>
+        <label>Пароль<span class="account-password-field"><input name="password" type="password" autocomplete="current-password" required maxlength="200"><button type="button" data-password-toggle aria-label="Показать пароль">Показать</button></span></label>
+        <label class="account-check"><input name="remember" type="checkbox"><span>Запомнить меня на этом устройстве</span></label>
+        <button class="v3-button account-submit" type="submit">Войти <span aria-hidden="true">→</span></button>
+        <p class="account-message" data-login-message role="status" aria-live="polite"></p>
+      </form>
+      <p class="account-help">Забыли пароль? Обратитесь к учителю.</p>
+    </section>
+    <a class="account-back-link" href="index.html">← Вернуться к открытому курсу</a>
+  </main>
+<footer class="site-privacy-footer"><a class="site-privacy-link" href="privacy.html">Конфиденциальность</a></footer></body>
+</html>

@@ -1,0 +1,386 @@
+window.LESSONS = window.LESSONS || {};
+window.LESSONS[3] = {
+  "id": 3,
+  "learn": [
+    "Научишься выбирать header, nav, main, section и footer по роли содержимого.",
+    "Соберёшь строки таблицы, подпись и заголовки столбцов.",
+    "Проверишь связь таблиц и изображений с их понятными текстовыми описаниями."
+  ],
+  "teacher": {
+    "plan": [
+      {
+        "title": "Старт и цель: Тег подсказывает роль содержимого",
+        "minutes": 10,
+        "steps": [
+          1
+        ]
+      },
+      {
+        "title": "Разбор шагов 1–4: Тег подсказывает роль содержимого · Подпись к изображению и текстовое описание · Строки и ячейки · Заголовки, подпись и группы строк",
+        "minutes": 40,
+        "steps": [
+          1,
+          2,
+          3,
+          4
+        ]
+      },
+      {
+        "title": "Разбор шагов 5–7: Связь заголовка со столбцом · Как проверить семантическую страницу · Настройки head помогают браузеру и ссылкам",
+        "minutes": 35,
+        "steps": [
+          5,
+          6,
+          7
+        ]
+      },
+      {
+        "title": "Практика и самостоятельная сборка",
+        "minutes": 25,
+        "steps": []
+      },
+      {
+        "title": "Повторение и вопросы",
+        "minutes": 10,
+        "steps": []
+      }
+    ],
+    "review": [
+      {
+        "q": "Какое правило нужно вспомнить для шага «Тег подсказывает роль содержимого»?",
+        "a": "Смысловой тег выбирают по роли содержимого, а не по его внешнему виду."
+      },
+      {
+        "q": "Какое правило нужно вспомнить для шага «Строки и ячейки»?",
+        "a": "Строки таблицы состоят из ячеек th или td; подпись caption описывает набор данных."
+      },
+      {
+        "q": "Какое правило нужно вспомнить для шага «Связь заголовка со столбцом»?",
+        "a": "Укажи scope по направлению связи: col для столбца, row для строки."
+      },
+      {
+        "q": "Какое правило нужно вспомнить для шага «Настройки head помогают браузеру и ссылкам»?",
+        "a": "head хранит метаданные и подключения, а видимые элементы страницы размещаются в body."
+      }
+    ],
+    "tips": [
+      "Начни с вопроса о теме «Тег подсказывает роль содержимого»: пусть ученик назовёт роль элемента или свойства своими словами, затем покажи пример.",
+      "После шага «Заголовки, подпись и группы строк» предложи закрыть код и восстановить небольшой фрагмент по памяти, объясняя каждую строку.",
+      "Заверши занятиe практикой «Собери заметку о событии с автором, иллюстрацией и таблицей расписания. Проверь, что заголовки объясняют разделы и ячейки таблицы.»: сначала попроси спланировать структуру, затем сравните результат с образцом."
+    ],
+    "answers": "<p><strong>Образец для разбора:</strong> сравни с практикой урока. Ученик объясняет, какие части относятся к HTML, какие правила задают внешний вид и где элементы связываются между собой.</p><h4>Фрагмент HTML</h4><pre><code>&lt;!doctype html&gt;\n&lt;html lang=\"ru\"&gt;\n&lt;head&gt;\n  &lt;meta charset=\"utf-8\"&gt;\n  &lt;meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"&gt;\n  &lt;title&gt;Семантический HTML и head — практика&lt;/title&gt;\n&lt;/head&gt;\n&lt;body&gt;\n  &lt;main class=\"page\"&gt;\n    &lt;header class=\"hero\"&gt;&lt;p class=\"eyebrow\"&gt;УЧЕБНЫЙ ПРОЕКТ&lt;/p&gt;&lt;h1&gt;Небольшую страницу по теме «Семантический HTML и head»&lt;/h1&gt;&lt;p&gt;Небольшой макет, который можно улучшать по шагам.&lt;/p&gt;&lt;a class=\"action\" href=\"#details\"&gt;Посмотреть содержание&lt;/a&gt;&lt;/header&gt;\n    &lt;section class=\"cards\" id=\"details\"&gt;&lt;article class=\"card\"&gt;&lt;h2&gt;Основная часть&lt;/h2&gt;&lt;p&gt;Добавь полезное описание и подпись.&lt;/p&gt;&lt;/article&gt;&lt;article class=\"card\"&gt;&lt;h2&gt;Следующий шаг&lt;/h2&gt;&lt;p&gt;Проверь поведение при длинном тексте.&lt;/p&gt;&lt;/article&gt;&lt;/section&gt;\n  &lt;/main&gt;\n&lt;/body&gt;\n&lt;/html&gt;</code></pre><h4>Фрагмент CSS</h4><pre><code>*{box-sizing:border-box}\nbody{margin:0;padding:24px;background:#f2f5f2;color:#29372f;font:16px/1.6 Arial,sans-serif}\n.page{max-width:900px;margin:auto}\n.hero{padding:clamp(22px,5vw,48px);border-radius:22px;background:#e4efe7}\n.eyebrow{color:#52755d;font-size:.75rem;font-weight:700;letter-spacing:.12em}\nh1{max-width:18ch;font-size:clamp(2rem,6vw,3.6rem);line-height:1.1}\n.action{display:inline-block;padding:10px 14px;border-radius:8px;background:#326649;color:white;text-decoration:none}\n.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:14px;margin-top:18px}\n.card{padding:18px;border:1px solid #d7e0d9;border-radius:14px;background:white}\n@media(max-width:520px){body{padding:14px}}</code></pre>"
+  },
+  "steps": [
+    {
+      "id": "semantic-landmarks",
+      "title": "Тег подсказывает роль содержимого",
+      "text": "<p><strong>Семантический тег называет роль части страницы.</strong> В журнале header содержит название, nav — главные переходы, main — основное содержание, section — раздел новостей, а footer — контактную часть. Это помогает браузерным средствам доступности создавать ориентиры, по которым можно перейти без последовательного чтения всего документа.</p><p>Во втором примере article подходит событию, которое можно прочитать отдельно, а aside содержит дополнительную заметку. Сравни названия элементов с содержимым: они описывают смысл, а не цвет или положение. Не используй section как универсальную коробку без темы; если подходящего смыслового элемента нет, обычный div честнее, чем неверная семантика.</p>",
+      "try": {
+        "title": "1. Каркас сайта",
+        "html": "<header><a href=\"#home\">Городской журнал</a></header>\n<nav aria-label=\"Главные разделы\"><a href=\"#news\">Новости</a></nav>\n<main id=\"home\"><section id=\"news\"><h1>Новости города</h1><p>Новая велодорожка открылась утром.</p></section></main>\n<footer>Контакты редакции</footer>",
+        "css": "header, footer { padding: 1rem; background: #eef2ed; }\nmain { max-width: 48rem; margin: 2rem auto; }",
+        "height": 275
+      },
+      "remember": "Смысловой тег выбирают по роли содержимого, а не по его внешнему виду.",
+      "examples": [
+        {
+          "title": "1. Каркас сайта",
+          "html": "<header><a href=\"#home\">Городской журнал</a></header>\n<nav aria-label=\"Главные разделы\"><a href=\"#news\">Новости</a></nav>\n<main id=\"home\"><section id=\"news\"><h1>Новости города</h1><p>Новая велодорожка открылась утром.</p></section></main>\n<footer>Контакты редакции</footer>",
+          "css": "header, footer { padding: 1rem; background: #eef2ed; }\nmain { max-width: 48rem; margin: 2rem auto; }",
+          "height": 275
+        },
+        {
+          "title": "2. Страница события",
+          "html": "<main>\n  <article>\n    <h1>Фестиваль науки</h1>\n    <p>Самостоятельное событие с датой и описанием.</p>\n  </article>\n  <aside aria-label=\"Полезные сведения\">Вход свободный</aside>\n</main>",
+          "css": "main { display: grid; grid-template-columns: 1fr 14rem; gap: 1.5rem; }\naside { padding: 1rem; background: #f4f0df; }",
+          "height": 275
+        }
+      ],
+      "mistake": {
+        "bad": "<nav><p>Новости города</p></nav>",
+        "good": "<main><h1>Новости города</h1></main>",
+        "why": "Текст без навигационных ссылок не является меню; nav оставь для групп переходов."
+      }
+    },
+    {
+      "id": "figure-caption-description",
+      "title": "Подпись к изображению и текстовое описание",
+      "text": "<p><strong>figure объединяет самостоятельную иллюстрацию с подписью.</strong> В первом примере река получает краткое описание в alt, а figcaption добавляет видимое пояснение о весеннем паводке. Эти тексты решают разные задачи: alt заменяет изображение для тех, кто его не видит, подпись даёт дополнительный контекст всем читателям.</p><p>Во втором варианте схема круговорота воды собрана из символов и имеет aria-label, описывающий последовательность этапов. CSS меняет фон и размер знаков, но смысл остаётся в подписи. Не оставляй схему только как цепочку значков без текстового объяснения и не повторяй дословно figcaption в alt, если это не помогает понять само изображение.</p>",
+      "try": {
+        "title": "1. Подпись к иллюстрации",
+        "html": "<figure>\n  <img src=\"assets/riverbank.svg\" alt=\"Извилистая река среди холмов\">\n  <figcaption>Река меняет русло после весеннего паводка.</figcaption>\n</figure>",
+        "css": "figure { max-width: 34rem; margin: 0; }\nimg { display: block; width: 100%; border-radius: 12px; }\nfigcaption { padding-top: .5rem; color: #566475; }",
+        "height": 275
+      },
+      "remember": "alt кратко описывает изображение, figcaption добавляет видимую подпись к figure.",
+      "examples": [
+        {
+          "title": "1. Подпись к иллюстрации",
+          "html": "<figure>\n  <img src=\"assets/riverbank.svg\" alt=\"Извилистая река среди холмов\">\n  <figcaption>Река меняет русло после весеннего паводка.</figcaption>\n</figure>",
+          "css": "figure { max-width: 34rem; margin: 0; }\nimg { display: block; width: 100%; border-radius: 12px; }\nfigcaption { padding-top: .5rem; color: #566475; }",
+          "height": 275
+        },
+        {
+          "title": "2. Сложная схема и описание",
+          "html": "<figure>\n  <div role=\"img\" aria-label=\"Три этапа круговорота воды: испарение, облако, дождь\">\n    ☀️ → ☁️ → 🌧️\n  </div>\n  <figcaption>Солнце нагревает воду; пар образует облака, затем выпадают осадки.</figcaption>\n</figure>",
+          "css": "figure > div { padding: 1rem; border-radius: 12px; background: #edf6fb; font-size: 2rem; text-align: center; }\nfigcaption { max-width: 38rem; margin-top: .6rem; }",
+          "height": 275
+        }
+      ],
+      "mistake": {
+        "bad": "<figure><img src=\"river.svg\" alt=\"\"><figcaption></figcaption></figure>",
+        "good": "<figure><img src=\"river.svg\" alt=\"Река среди холмов\"><figcaption>Русло после весеннего дождя.</figcaption></figure>",
+        "why": "Значимая схема потеряет смысл без alt, а пустая подпись не добавит контекст читателю."
+      }
+    },
+    {
+      "id": "table-rows-cells",
+      "title": "Строки и ячейки",
+      "text": "<p><strong>HTML-таблица нужна для данных, где важны отношения строк и столбцов.</strong> В расписании кружка table содержит подпись caption, строку заголовков и записи для понедельника и среды. tr задаёт строку, th — заголовочную ячейку, td — обычное значение. Когда таблица разбита на thead и tbody, браузеру и читателю легче различить описание колонок и сами данные.</p><p>CSS с border-collapse объединяет соседние границы, а padding добавляет воздух внутри ячеек. Проверь, что время относится к правильной группе. Не используй таблицу для общей раскладки страницы: на телефоне она может потребовать прокрутки, а Flexbox и Grid лучше подходят для макета.</p>",
+      "try": {
+        "title": "1. Таблица расписания",
+        "html": "<table>\n  <caption>Занятия кружка робототехники</caption>\n  <thead><tr><th scope=\"col\">День</th><th scope=\"col\">Время</th><th scope=\"col\">Группа</th></tr></thead>\n  <tbody>\n    <tr><th scope=\"row\">Понедельник</th><td>16:00</td><td>Начальная</td></tr>\n    <tr><th scope=\"row\">Среда</th><td>17:30</td><td>Продвинутая</td></tr>\n  </tbody>\n</table>",
+        "css": "table { width: 100%; border-collapse: collapse; }\ncaption { padding: .7rem; font-weight: 700; text-align: left; }\nth, td { padding: .7rem; border: 1px solid #d6dee8; text-align: left; }\nthead { background: #edf2fa; }",
+        "height": 275
+      },
+      "remember": "Строки таблицы состоят из ячеек th или td; подпись caption описывает набор данных.",
+      "examples": [
+        {
+          "title": "1. Таблица расписания",
+          "html": "<table>\n  <caption>Занятия кружка робототехники</caption>\n  <thead><tr><th scope=\"col\">День</th><th scope=\"col\">Время</th><th scope=\"col\">Группа</th></tr></thead>\n  <tbody>\n    <tr><th scope=\"row\">Понедельник</th><td>16:00</td><td>Начальная</td></tr>\n    <tr><th scope=\"row\">Среда</th><td>17:30</td><td>Продвинутая</td></tr>\n  </tbody>\n</table>",
+          "css": "table { width: 100%; border-collapse: collapse; }\ncaption { padding: .7rem; font-weight: 700; text-align: left; }\nth, td { padding: .7rem; border: 1px solid #d6dee8; text-align: left; }\nthead { background: #edf2fa; }",
+          "height": 275
+        },
+        {
+          "title": "2. Объединение ячеек",
+          "html": "<table>\n  <caption>План выставки</caption>\n  <tr><th scope=\"col\">Зал</th><th scope=\"col\">Экспозиция</th></tr>\n  <tr><th scope=\"rowgroup\" rowspan=\"2\">Первый</th><td>Космос</td></tr>\n  <tr><td>Океан</td></tr>\n</table>",
+          "css": "table { border-collapse: collapse; }\nth, td { padding: .75rem 1rem; border: 1px solid #bcc9d8; }\nth { background: #edf2fa; }",
+          "height": 275
+        }
+      ],
+      "mistake": {
+        "bad": "<table><tr><td>Занятия клуба</td><td>Понедельник</td></tr></table>",
+        "good": "<table><caption>Занятия клуба</caption><tr><th scope=\"col\">День</th><th scope=\"col\">Время</th></tr></table>",
+        "why": "Название таблицы и заголовки столбцов должны быть отмечены отдельно от значений."
+      }
+    },
+    {
+      "id": "table-caption-headers",
+      "title": "Заголовки, подпись и группы строк",
+      "text": "<p><strong>caption, thead, tbody и th делают таблицу понятнее.</strong> caption называет набор данных; thead группирует строку заголовков, а tbody — записи. В примерах scope=\"col\" связывает заголовок с колонкой, scope=\"row\" — с названием строки. Во втором варианте заголовок «Этапы» объединяет два столбца и помогает понять, что именно сравнивается.</p><p>Попробуй мысленно прочитать отдельное значение без соседних ячеек: сможет ли ученик с экранным диктором узнать его контекст? Если в таблице есть только строки данных, не добавляй пустой thead ради формы. Частая ошибка — записать название таблицы отдельным td; используй caption, чтобы браузерная структура сообщала назначение таблицы.</p>",
+      "try": {
+        "title": "1. Связанные заголовки",
+        "html": "<table>\n  <caption>Расход воды за день</caption>\n  <thead><tr><th scope=\"col\">Комната</th><th scope=\"col\">Литры</th></tr></thead>\n  <tbody><tr><th scope=\"row\">Кухня</th><td>24</td></tr></tbody>\n</table>",
+        "css": "",
+        "height": 275
+      },
+      "remember": "caption даёт название, th и scope связывают значения с заголовками.",
+      "examples": [
+        {
+          "title": "1. Связанные заголовки",
+          "html": "<table>\n  <caption>Расход воды за день</caption>\n  <thead><tr><th scope=\"col\">Комната</th><th scope=\"col\">Литры</th></tr></thead>\n  <tbody><tr><th scope=\"row\">Кухня</th><td>24</td></tr></tbody>\n</table>",
+          "css": "",
+          "height": 275
+        },
+        {
+          "title": "2. Группы строк и заголовки колонок",
+          "html": "<table>\n  <caption>Очки команд по этапам</caption>\n  <thead><tr><th scope=\"col\">Команда</th><th scope=\"colgroup\" colspan=\"2\">Этапы</th></tr>\n    <tr><th scope=\"col\">Название</th><th scope=\"col\">Старт</th><th scope=\"col\">Финиш</th></tr></thead>\n  <tbody><tr><th scope=\"row\">Север</th><td>12</td><td>18</td></tr></tbody>\n</table>",
+          "css": "table { border-collapse: collapse; }\nth, td { padding: .65rem; border: 1px solid #cbd5e1; text-align: left; }\nthead { background: #edf2fa; }",
+          "height": 275
+        }
+      ],
+      "mistake": {
+        "bad": "<tr><td colspan=\"3\">Очки команд</td></tr>",
+        "good": "<caption>Очки команд</caption>",
+        "why": "Заголовок набора данных должен быть подписью таблицы, а не искусственной строкой данных."
+      }
+    },
+    {
+      "id": "table-scope-groups",
+      "title": "Связь заголовка со столбцом",
+      "text": "<p><strong>scope явно связывает заголовок с нужной группой данных.</strong> scope=\"col\" действует вниз по колонке, scope=\"row\" — вправо по строке; scope=\"rowgroup\" и scope=\"colgroup\" уточняют связь для сгруппированных данных. В примере расписания браузер сможет назвать «День» и «Время», когда читает конкретную ячейку.</p><p>Сравни вариант с несколькими уровнями заголовков: caption называет таблицу, а верхняя ячейка объединяет часть колонок. У сложной таблицы не полагайся на цвет фона как единственный сигнал. Не ставь scope=\"row\" на заголовок столбца; если таблица очень сложная, понадобится дополнительная схема id/headers, но для учебных таблиц начинай с понятных групп.</p>",
+      "try": {
+        "title": "1. Заголовок строки и столбца",
+        "html": "<table><tr><th scope=\"col\">Команда</th><th scope=\"col\">Очки</th></tr>\n  <tr><th scope=\"row\">Синие</th><td>18</td></tr>\n  <tr><th scope=\"row\">Зелёные</th><td>15</td></tr>\n</table>",
+        "css": "th { background: #edf2f8; text-align: left; }\nth, td { padding: .6rem; border: 1px solid #d8e0e9; }",
+        "height": 275
+      },
+      "remember": "Укажи scope по направлению связи: col для столбца, row для строки.",
+      "examples": [
+        {
+          "title": "1. Заголовок строки и столбца",
+          "html": "<table><tr><th scope=\"col\">Команда</th><th scope=\"col\">Очки</th></tr>\n  <tr><th scope=\"row\">Синие</th><td>18</td></tr>\n  <tr><th scope=\"row\">Зелёные</th><td>15</td></tr>\n</table>",
+          "css": "th { background: #edf2f8; text-align: left; }\nth, td { padding: .6rem; border: 1px solid #d8e0e9; }",
+          "height": 275
+        },
+        {
+          "title": "2. Подпись и группы заголовков",
+          "html": "<table><caption>Запись на занятия</caption><thead><tr><th scope=\"col\">Имя</th><th scope=\"col\">Группа</th></tr></thead>\n<tbody><tr><th scope=\"row\">Амина</th><td>Среда</td></tr></tbody></table>",
+          "css": "caption { padding: .6rem; font-weight: 700; text-align: left; }\ntable { border-collapse: collapse; }",
+          "height": 275
+        }
+      ],
+      "mistake": {
+        "bad": "<th scope=\"row\">Время</th><td>16:00</td>",
+        "good": "<th scope=\"col\">Время</th><td>16:00</td>",
+        "why": "«Время» обозначает заголовок колонки, а не название конкретной строки."
+      }
+    },
+    {
+      "id": "semantic-review-checklist",
+      "title": "Как проверить семантическую страницу",
+      "text": "<p><strong>Проверка семантики начинается с чтения структуры без CSS.</strong> В журнале должен быть один главный заголовок, основной раздел, подписанная навигация и подходящие landmarks. Для изображения проверь alt, а для данных — заголовки th. Второй фрагмент показывает последовательность h1, h2 и h3: вложенный подзаголовок не перескакивает через уровень.</p><p>Если заголовки одного уровня внезапно идут после h1 без h2, уточни, действительно ли это новый верхний раздел. Не оценивай семантику по жирности или размеру шрифта: внешний вид можно поменять, а иерархия останется той же. Частая ошибка — выбрать более мелкий h4 только потому, что браузер показывает его нужного размера.</p>",
+      "try": {
+        "title": "1. Проверить смысловую структуру",
+        "html": "<header><h1>Научный журнал</h1></header>\n<main><article><h2>Новая выставка</h2><p>Открытие в пятницу.</p></article><aside>Вход свободный</aside></main>\n<footer>Адрес музея</footer>",
+        "css": "main { display: grid; grid-template-columns: 2fr 1fr; gap: 1rem; }\narticle, aside { padding: 1rem; background: #eef2f7; }",
+        "height": 275
+      },
+      "remember": "Сначала проверь роли элементов и уровни заголовков, затем настраивай внешний вид.",
+      "examples": [
+        {
+          "title": "1. Проверить смысловую структуру",
+          "html": "<header><h1>Научный журнал</h1></header>\n<main><article><h2>Новая выставка</h2><p>Открытие в пятницу.</p></article><aside>Вход свободный</aside></main>\n<footer>Адрес музея</footer>",
+          "css": "main { display: grid; grid-template-columns: 2fr 1fr; gap: 1rem; }\narticle, aside { padding: 1rem; background: #eef2f7; }",
+          "height": 275
+        },
+        {
+          "title": "2. Заголовки не пропускают уровни",
+          "html": "<main><h1>Планетарий</h1>\n  <section><h2>Расписание</h2><h3>Сеанс для детей</h3></section>\n  <section><h2>Как добраться</h2></section>\n</main>",
+          "css": "main { max-width: 45rem; margin: auto; }\nsection + section { margin-top: 2rem; }",
+          "height": 275
+        }
+      ],
+      "mistake": {
+        "bad": "<h1>Планетарий</h1><h4>Расписание</h4>",
+        "good": "<h1>Планетарий</h1><h2>Расписание</h2>",
+        "why": "Заголовок раздела не должен перескакивать сразу на несколько уровней ради меньшего размера."
+      }
+    },
+    {
+      "id": "document-head-metadata",
+      "title": "Настройки head помогают браузеру и ссылкам",
+      "text": "<p><strong>head сообщает браузеру и внешним сервисам сведения о странице.</strong> В первом образце title задаёт название вкладки, meta description описывает музей, а viewport помогает отобразить страницу в размере устройства. Видимый h1 расположен внутри main и не является частью head.</p><p>Сравни два полных документа: у каждого есть lang, charset и отдельный title. Метаописание не заменяет заголовок статьи и обычно не отображается в самом содержимом. Не помещай внутрь head картинку или абзац; если элемент должен быть виден посетителю, перенеси его в body, иначе браузер может перестроить разметку неожиданным образом.</p>",
+      "try": {
+        "title": "1. HTML-документ",
+        "html": "<!doctype html>\n<html lang=\"ru\">\n<head>\n  <meta charset=\"utf-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n  <title>Моя первая страница</title>\n</head>\n<body>\n  <h1>Привет, браузер!</h1>\n</body>\n</html>",
+        "css": "",
+        "height": 275
+      },
+      "remember": "head хранит метаданные и подключения, а видимые элементы страницы размещаются в body.",
+      "examples": [
+        {
+          "title": "1. HTML-документ",
+          "html": "<!doctype html>\n<html lang=\"ru\">\n<head>\n  <meta charset=\"utf-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n  <title>Моя первая страница</title>\n</head>\n<body>\n  <h1>Привет, браузер!</h1>\n</body>\n</html>",
+          "css": "",
+          "height": 275
+        },
+        {
+          "title": "2. Страница с метаданными",
+          "html": "<!doctype html>\n<html lang=\"ru\">\n<head>\n  <meta charset=\"utf-8\">\n  <meta name=\"description\" content=\"Новости научного музея\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n  <title>Музей открытий</title>\n</head>\n<body>\n  <main><h1>Музей открытий</h1></main>\n</body>\n</html>",
+          "css": "",
+          "height": 275
+        }
+      ],
+      "mistake": {
+        "bad": "<head><h1>Музей открытий</h1></head>",
+        "good": "<head><title>Музей открытий</title></head><body><h1>Музей открытий</h1></body>",
+        "why": "Вкладка использует title из head, а главный заголовок для посетителя находится в body."
+      }
+    }
+  ],
+  "cheatsheet": {
+    "lang": "html",
+    "code": "<header><h1>Городской журнал</h1></header>\n<nav aria-label=\"Разделы\"><a href=\"#event\">Событие</a></nav>\n<main>\n  <section id=\"event\">\n    <h2>Расписание</h2>\n    <figure><img src=\"event.jpg\" alt=\"Сцена в городском парке\"><figcaption>Фестиваль в парке</figcaption></figure>\n    <table>\n      <caption>Программа дня</caption>\n      <thead><tr><th scope=\"col\">Время</th><th scope=\"col\">Событие</th></tr></thead>\n      <tbody><tr><td>18:00</td><td>Открытие</td></tr></tbody>\n    </table>\n  </section>\n</main>\n<footer>Контакты</footer>"
+  },
+  "practice": {
+    "intro": "Собери заметку о событии с автором, иллюстрацией и таблицей расписания. Проверь, что заголовки объясняют разделы и ячейки таблицы.",
+    "stages": [
+      {
+        "title": "Подготовь основу · Тег подсказывает роль содержимого",
+        "task": "Для проекта «заметку о городском событии с автором, иллюстрацией и таблицей расписания» выполни шаг «Тег подсказывает роль содержимого»: Смысловой тег выбирают по роли содержимого, а не по его внешнему виду. Примени правило к реальному элементу страницы и покажи результат в браузерном предпросмотре.",
+        "check": "Контрольная точка: ученик находит в коде «<main><h1>Новости города</h1></main>», отличает его от ошибки «<nav><p>Новости города</p></nav>» и объясняет: Текст без навигационных ссылок не является меню; nav оставь для групп переходов."
+      },
+      {
+        "title": "Добавь ключевой приём · Подпись к изображению и текстовое описание",
+        "task": "Для проекта «заметку о городском событии с автором, иллюстрацией и таблицей расписания» выполни шаг «Подпись к изображению и текстовое описание»: alt кратко описывает изображение, figcaption добавляет видимую подпись к figure. Примени правило к реальному элементу страницы и покажи результат в браузерном предпросмотре.",
+        "check": "Контрольная точка: ученик находит в коде «<figure><img src=\"river.svg\" alt=\"Река среди холмов\"><figcaption>Русло после весеннего дождя.</figca», отличает его от ошибки «<figure><img src=\"river.svg\" alt=\"\"><figcaption></figcaption></figure>» и объясняет: Значимая схема потеряет смысл без alt, а пустая подпись не добавит контекст читателю."
+      },
+      {
+        "title": "Собери рабочий фрагмент · Как проверить семантическую страницу",
+        "task": "Для проекта «заметку о городском событии с автором, иллюстрацией и таблицей расписания» выполни шаг «Как проверить семантическую страницу»: Сначала проверь роли элементов и уровни заголовков, затем настраивай внешний вид. Примени правило к реальному элементу страницы и покажи результат в браузерном предпросмотре.",
+        "check": "Контрольная точка: ученик находит в коде «<h1>Планетарий</h1><h2>Расписание</h2>», отличает его от ошибки «<h1>Планетарий</h1><h4>Расписание</h4>» и объясняет: Заголовок раздела не должен перескакивать сразу на несколько уровней ради меньшего размера."
+      },
+      {
+        "title": "Проверь и объясни · Настройки head помогают браузеру и ссылкам",
+        "task": "Для проекта «заметку о городском событии с автором, иллюстрацией и таблицей расписания» выполни шаг «Настройки head помогают браузеру и ссылкам»: head хранит метаданные и подключения, а видимые элементы страницы размещаются в body. Примени правило к реальному элементу страницы и покажи результат в браузерном предпросмотре.",
+        "check": "Контрольная точка: ученик находит в коде «<head><title>Музей открытий</title></head><body><h1>Музей открытий</h1></body>», отличает его от ошибки «<head><h1>Музей открытий</h1></head>» и объясняет: Вкладка использует title из head, а главный заголовок для посетителя находится в body."
+      }
+    ],
+    "hints": [
+      "Если застрял на «Тег подсказывает роль содержимого», проверь правило: Смысловой тег выбирают по роли содержимого, а не по его внешнему виду. Частая ошибка: <nav><p>Новости города</p></nav> — Текст без навигационных ссылок не является меню; nav оставь для групп переходов.",
+      "Если застрял на «Подпись к изображению и текстовое описание», проверь правило: alt кратко описывает изображение, figcaption добавляет видимую подпись к figure. Частая ошибка: <figure><img src=\"river.svg\" alt=\"\"><figcaption></figcaption></figure> — Значимая схема потеряет смысл без alt, а пустая подпись не добавит контекст читателю.",
+      "Если застрял на «Как проверить семантическую страницу», проверь правило: Сначала проверь роли элементов и уровни заголовков, затем настраивай внешний вид. Частая ошибка: <h1>Планетарий</h1><h4>Расписание</h4> — Заголовок раздела не должен перескакивать сразу на несколько уровней ради меньшего размера."
+    ],
+    "solution": {
+      "html": "<!doctype html>\n<html lang=\"ru\">\n<head>\n  <meta charset=\"utf-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n  <title>Семантический HTML и head — практика</title>\n</head>\n<body>\n  <main class=\"page\">\n    <header class=\"hero\"><p class=\"eyebrow\">УЧЕБНЫЙ ПРОЕКТ</p><h1>Небольшую страницу по теме «Семантический HTML и head»</h1><p>Небольшой макет, который можно улучшать по шагам.</p><a class=\"action\" href=\"#details\">Посмотреть содержание</a></header>\n    <section class=\"cards\" id=\"details\"><article class=\"card\"><h2>Основная часть</h2><p>Добавь полезное описание и подпись.</p></article><article class=\"card\"><h2>Следующий шаг</h2><p>Проверь поведение при длинном тексте.</p></article></section>\n  </main>\n</body>\n</html>",
+      "css": "*{box-sizing:border-box}\nbody{margin:0;padding:24px;background:#f2f5f2;color:#29372f;font:16px/1.6 Arial,sans-serif}\n.page{max-width:900px;margin:auto}\n.hero{padding:clamp(22px,5vw,48px);border-radius:22px;background:#e4efe7}\n.eyebrow{color:#52755d;font-size:.75rem;font-weight:700;letter-spacing:.12em}\nh1{max-width:18ch;font-size:clamp(2rem,6vw,3.6rem);line-height:1.1}\n.action{display:inline-block;padding:10px 14px;border-radius:8px;background:#326649;color:white;text-decoration:none}\n.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:14px;margin-top:18px}\n.card{padding:18px;border:1px solid #d7e0d9;border-radius:14px;background:white}\n@media(max-width:520px){body{padding:14px}}"
+    },
+    "findError": {
+      "code": ".page { width: 1000px; }\n.action { outline: none; }\nimg { width: 400px; }",
+      "solution": "<p>Фиксированная ширина переполняет мобильный экран; ограничь контейнер через max-width и оставь width:100%. Не убирай клавиатурный контур без заметной замены. Изображению задай max-width:100% и подходящее соотношение сторон.</p>"
+    }
+  },
+  "can": [
+    "Разделить страницу на смысловые области.",
+    "Отличить навигацию и основное содержимое.",
+    "Собрать таблицу из строк и ячеек с заголовками.",
+    "Подписать смысловые изображения и ячейки таблицы."
+  ],
+  "projects": [
+    {
+      "title": "Страница городского события",
+      "about": "Организатору фестиваля нужна доступная информационная страница без сложного дизайна.",
+      "steps": [
+        "Раздели страницу на header, nav, main, section и footer.",
+        "Добавь article с программой, figure с фото и figcaption.",
+        "Используй strong/em по смыслу, а не только ради жирного и наклонного вида."
+      ],
+      "done": [
+        "Главный материал находится в main.",
+        "Навигация подписана и ведёт к разделам.",
+        "У значимого изображения есть alt, заголовки разделов описательны."
+      ],
+      "stretch": "Добавь таблицу расписания с caption, thead/tbody и th со scope.",
+      "example": {
+        "title": "Страница городского события",
+        "description": "Образец готовой страницы для проекта «Страница городского события». Познакомься с художниками района, посмотри, как устроены мастерские, и попробуй сделать небольшую вещь сам.",
+        "html": "<!doctype html>\n<html lang=\"ru\">\n<head>\n  <meta charset=\"utf-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n  <title>День открытых мастерских</title>\n  <link rel=\"stylesheet\" href=\"./style.css\">\n  \n</head>\n<body>\n  <div class=\"demo demo--event\" id=\"top\" style=\"--accent:#475c8a;--soft:#eaf0f7\">\n    <header class=\"demo-header\"><a class=\"demo-brand\" href=\"#top\">ПРИМЕР ПРОЕКТА</a><nav class=\"demo-nav\" aria-label=\"Навигация по странице\"><a href=\"#top\">О проекте</a><a href=\"#details\">Подробности</a></nav></header>\n    <main>\n      <section class=\"demo-hero\" aria-labelledby=\"project-title\"><span class=\"demo-kicker\">СУББОТА · 12:00–18:00</span><h1 id=\"project-title\">День открытых мастерских</h1><p class=\"demo-lead\">Познакомься с художниками района, посмотри, как устроены мастерские, и попробуй сделать небольшую вещь сам.</p></section>\n      <section class=\"demo-section\" id=\"details\"><h2>Что важно знать</h2><figure class=\"demo-figure demo-event-image\"><img src=\"../assets/mountains.svg\" alt=\"Горы и озеро на рассвете\"><figcaption>Открытые мастерские приглашают на прогулку и творческие встречи.</figcaption></figure><div class=\"demo-grid\"><article class=\"demo-card\"><small>ВСТРЕЧА</small><h3>12:00</h3><p>Начало маршрута и короткая экскурсия</p></article><article class=\"demo-card\"><small>МАСТЕР-КЛАСС</small><h3>14:00</h3><p>Печатаем открытку на ручном прессе</p></article><article class=\"demo-card\"><small>ВСТРЕЧА</small><h3>16:30</h3><p>Открытый разговор с авторами</p></article><article class=\"demo-card\"><small>ФИНИШ</small><h3>18:00</h3><p>Завершение программы</p></article></div><div class=\"demo-note\">Вход свободный. На мастер-класс лучше прийти за десять минут до начала.</div></section>\n    </main>\n    <footer class=\"demo-footer\">Учебный пример HTML и CSS · макет для обсуждения на занятии</footer>\n  </div>\n</body>\n</html>",
+        "css": ":root { color-scheme: light; }\n* { box-sizing: border-box; }\nbody { margin: 0; color: #202635; background: #f4f6f8; font: 15px/1.55 Arial, sans-serif; }\na { color: inherit; }\n.demo { --accent: #365c8d; --soft: #eaf0f7; --ink: #202635; max-width: 1100px; min-height: 100vh; margin: 0 auto; padding: 0 26px 46px; background: #fff; }\n.demo-header { display: flex; align-items: center; justify-content: space-between; gap: 20px; min-height: 66px; border-bottom: 1px solid #e8ebef; }\n.demo-brand { color: var(--accent); font-size: 13px; font-weight: 800; letter-spacing: .08em; text-decoration: none; text-transform: uppercase; }\n.demo-nav { display: flex; flex-wrap: wrap; gap: 16px; color: #626b79; font-size: 12px; }\n.demo-nav a { display: flex; align-items: center; min-height: 44px; text-decoration: none; }\n.demo-nav a:hover, .demo-nav a:focus-visible { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }\n.demo-hero { position: relative; overflow: hidden; margin: 22px 0; padding: clamp(24px,5vw,56px); border-radius: 20px; background: linear-gradient(120deg,var(--soft),#fff 72%); }\n.demo-hero::after { position: absolute; right: -54px; bottom: -120px; width: 280px; height: 280px; border: 1px solid #d8e0eb; border-radius: 50%; content: ''; }\n.demo-kicker { color: var(--accent); font-size: 10px; font-weight: 800; letter-spacing: .14em; }\n.demo h1 { max-width: 760px; margin: 11px 0 10px; font-size: clamp(30px,5vw,48px); line-height: 1.08; letter-spacing: -.045em; }\n.demo-lead { max-width: 670px; margin: 0; color: #5e6877; font-size: 16px; }\n.demo-section { margin: 30px 0; }\n.demo-section h2 { margin: 0 0 13px; font-size: 21px; letter-spacing: -.025em; }\n.demo-section > p { max-width: 720px; color: #5e6877; }\n.demo-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 13px; }\n.demo-card { min-width: 0; padding: 19px; border: 1px solid #e7eaf0; border-radius: 14px; background: #fff; }\n.demo-card small { color: var(--accent); font-size: 10px; font-weight: 800; letter-spacing: .09em; text-transform: uppercase; }\n.demo-card h3 { margin: 9px 0 6px; font-size: 17px; }\n.demo-card p { margin: 0; color: #647080; font-size: 13px; }\n.demo-note { margin: 18px 0; padding: 14px 16px; border-left: 3px solid var(--accent); border-radius: 0 10px 10px 0; background: var(--soft); color: #424d5d; font-size: 13px; }\n.demo-list { display: grid; gap: 8px; margin: 0; padding-left: 21px; color: #465264; }\n.demo-cta { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; margin-top: 12px; padding: 10px 16px; border-radius: 9px; color: #fff; background: var(--accent); font-size: 13px; font-weight: 700; text-decoration: none; transition: filter .16s ease,transform .16s ease; }\n.demo-cta:hover, .demo-cta:focus-visible { filter: brightness(.9); outline: 3px solid #d6deea; outline-offset: 2px; }\n.demo-footer { margin-top: 40px; padding-top: 16px; border-top: 1px solid #e8ebef; color: #77808e; font-size: 11px; }\n.demo-footer-columns { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 18px; }\n.demo-footer-columns h2 { margin: 0 0 6px; color: #344050; font-size: 12px; }\n.demo-footer-columns p { margin: 0; }\n.demo-footer-columns a { color: var(--accent); }\n.demo-table-wrap { overflow-x: auto; border: 1px solid #e3e7ed; border-radius: 12px; }\n.demo-table { width: 100%; border-collapse: collapse; text-align: left; }\n.demo-table caption { padding: 13px; color: #5b6574; font-size: 12px; text-align: left; }\n.demo-table th, .demo-table td { padding: 12px 14px; border-top: 1px solid #e8ebef; }\n.demo-table thead th { color: var(--accent); background: var(--soft); font-size: 11px; }\n.demo-table tbody th { font-size: 12px; }\n.demo-table tbody td { color: #596473; font-size: 12px; }\n.demo-figure { margin: 0; }\n.demo-figure img { display: block; width: 100%; max-height: 300px; object-fit: cover; border-radius: 14px; }\n.demo-figure figcaption { margin-top: 6px; color: #707a88; font-size: 11px; }\n.demo-gallery { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 9px; }\n.demo-gallery figure { margin: 0; }\n.demo-gallery img { display: block; width: 100%; height: 130px; object-fit: cover; border-radius: 10px; }\n.demo-gallery figcaption { margin-top: 5px; color: #677180; font-size: 10px; }\n.demo-link-list { display: flex; flex-wrap: wrap; align-items: center; gap: 9px; margin: 17px 0; }\n.demo-link-list b { flex-basis: 100%; font-size: 13px; }\n.demo-link-list a { padding: 8px 10px; border: 1px solid #e3e8ef; border-radius: 8px; color: var(--accent); font-size: 11px; font-weight: 700; text-decoration: none; }\n.demo-link-list a:hover,.demo-link-list a:focus-visible { text-decoration: underline; text-underline-offset: 3px; }\n.demo-inline-book { display: inline-block; vertical-align: top; width: 30%; min-height: 270px; margin: 0 1.4% 12px 0; padding: 13px; border: 1px solid #e7eaf0; border-radius: 12px; background: linear-gradient(145deg,#fff,var(--soft)); }\n.demo-inline-book small { color: var(--accent); font-size: 10px; font-weight: 800; }\n.demo-inline-book b { display: block; margin: 22px 0 5px; font-size: 15px; }\n.demo-inline-book span { color: #677180; font-size: 11px; }\n.demo-book-cover { min-height: 100px; display: grid; place-items: end start; padding: 11px; border-radius: 6px; color: #fff; background: linear-gradient(145deg,var(--cover),#1d2f3e); box-shadow: 2px 3px 6px #20263525; font-size: 13px; font-weight: 700; }\n.demo-inline-book p { margin: 7px 0 0; color: #657181; font-size: 10px; }\n.demo-profile-list { display: flex; flex-wrap: wrap; gap: 12px; }\n.demo-profile { display: inline-block; vertical-align: top; width: calc(50% - 6px); overflow: hidden; border: 1px solid #e6eaf0; border-radius: 12px; background: #fff; }\n.demo-profile > img { display: block; width: 100%; height: 110px; object-fit: cover; }\n.demo-profile-copy { padding: 14px; }\n.demo-profile-copy small { color: var(--accent); font-size: 9px; font-weight: 800; }\n.demo-profile-copy h3 { margin: 6px 0 2px; font-size: 16px; }\n.demo-profile-copy > b { color: #5c6877; font-size: 11px; }\n.demo-profile-copy p { min-height: 38px; color: #647080; font-size: 11px; }\n.demo-profile-copy a { color: var(--accent); font-size: 11px; font-weight: 700; }\n.demo-flex-grid { display: flex; flex-wrap: wrap; align-items: stretch; gap: 13px; }\n.demo-flex-grid .demo-card { flex: 1 1 220px; }\n.demo-circle-row { display: flex; flex-wrap: wrap; gap: 18px; }\n.demo-circle { width: 150px; text-align: center; }\n.demo-circle-art { width: 112px; height: 112px; display: grid; place-items: center; margin: 0 auto 11px; border-radius: 50%; color: #fff; background: var(--bubble); box-shadow: inset -10px -12px 25px #0002; font-size: 13px; font-weight: 700; }\n.demo-circle b, .demo-circle span { display: block; }\n.demo-circle span { color: #697382; font-size: 11px; }\n.demo-stage { position: relative; min-height: 310px; overflow: hidden; border: 1px solid #e5e8ee; border-radius: 16px; background: repeating-linear-gradient(0deg,#fff,#fff 39px,#edf0f4 40px),repeating-linear-gradient(90deg,transparent,transparent 39px,#edf0f4 40px); }\n.scene-block { position: absolute; display: grid; place-items: center; border: 1px solid var(--accent); border-radius: 10px; color: var(--accent); background: var(--soft); font-size: 12px; font-weight: 700; }\n.scene-wide { inset: 11% 20% auto; height: 45px; }\n.scene-platform { left: 24%; right: 24%; bottom: 14%; height: 68px; color: #fff; background: var(--accent); }\n.scene-panel { left: 8%; top: 38%; width: 28%; height: 68px; }\n.scene-panel-alt { left: auto; right: 8%; }\n.scene-route { left: 45%; top: 34%; width: 10%; height: 40px; border-style: dashed; background: #fff; }\n.demo-poster { position: relative; overflow: hidden; min-height: 280px; padding: 30px; border-radius: 18px; color: #fff; background: linear-gradient(135deg,#1c354d,var(--accent)); }\n.demo-poster h2 { max-width: 530px; margin: 24px 0 8px; font-size: clamp(26px,4vw,40px); }\n.demo-poster p { color: #e5ebf4; }\n.demo-date { position: absolute; top: 18px; right: 18px; display: grid; place-items: center; width: 78px; height: 78px; border-radius: 50%; color: #27344a; background: #f5d887; font-size: 12px; font-weight: 800; text-align: center; }\n.demo-fixed-cta { position: fixed; right: 18px; bottom: 18px; z-index: 10; margin: 0; box-shadow: 0 8px 24px #12223855; }\n.demo-map { position: relative; min-height: 250px; overflow: hidden; border: 1px solid #d9e1e9; border-radius: 16px; background: linear-gradient(165deg,#edf3e8 0 44%,#c9e4ec 44% 58%,#eff1e5 58%); }\n.demo-map::before { position: absolute; left: 12%; top: 62%; width: 77%; border-top: 4px dashed #bd754b; transform: rotate(-16deg); content: \"\"; }\n.demo-map-marker { position: absolute; left: var(--x); top: var(--y); z-index: 2; display: grid; place-items: center; width: 32px; height: 32px; border: 3px solid #fff; border-radius: 50%; color: #fff; background: var(--accent); box-shadow: 0 3px 9px #1d304033; font-size: 10px; font-weight: 800; transform: translate(-50%,-50%); }\n.demo-stop-list { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 9px; margin-top: 12px; counter-reset: stop; }\n.demo-stop { position: relative; padding: 16px 13px; border: 1px solid #e6eaf0; border-radius: 12px; }\n.demo-stop b { display: block; color: var(--accent); font-size: 11px; }\n.demo-stop span { display: block; margin: 8px 0 3px; font-size: 13px; font-weight: 700; }\n.demo-stop small { color: #748090; }\n.demo-chess { position: relative; display: grid; grid-template-columns: repeat(8,1fr); width: min(100%,400px); aspect-ratio: 1; overflow: hidden; border: 5px solid #273345; border-radius: 6px; }\n.demo-square:nth-child(16n+1), .demo-square:nth-child(16n+3), .demo-square:nth-child(16n+5), .demo-square:nth-child(16n+7), .demo-square:nth-child(16n+10), .demo-square:nth-child(16n+12), .demo-square:nth-child(16n+14), .demo-square:nth-child(16n+16) { background: #dbe4d6; }\n.demo-square { background: #738a72; }\n.demo-piece { position: absolute; left: calc((var(--x) + .5) * 12.5%); top: calc((var(--y) + .5) * 12.5%); z-index: 2; width: 12.5%; height: 12.5%; transform: translate(-50%,-50%); color: #202635; font: 34px/1 Georgia,serif; text-align: center; text-shadow: 0 1px 2px #fff; }\n.demo-seat-grid { display: grid; grid-template-columns: repeat(6,minmax(22px,1fr)); gap: 7px; max-width: 500px; }\n.demo-seat { display: grid; place-items: center; aspect-ratio: 1.2; border: 1px solid #aab4c2; border-radius: 5px 5px 2px 2px; color: #596474; background: #edf0f4; font-size: 10px; }\n.demo-seat.is-taken { border-color: #4b806c; color: #fff; background: #4b806c; }\n.demo-legend { display: flex; flex-wrap: wrap; gap: 14px; margin: 14px 0; color: #5c6674; font-size: 11px; }\n.demo-legend span { display: inline-flex; align-items: center; gap: 6px; }\n.demo-legend i { width: 12px; height: 12px; border: 1px solid #aab4c2; border-radius: 3px; background: #edf0f4; }\n.demo-legend .taken { border-color: #4b806c; background: #4b806c; }\n.demo-kanban { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }\n.demo-column { padding: 13px; border-radius: 12px; background: #f3f5f8; }\n.demo-column h3 { margin: 0 0 10px; font-size: 13px; }\n.demo-task { margin-top: 8px; padding: 12px; border: 1px solid #e5e9ef; border-radius: 9px; background: #fff; font-size: 12px; }\n.demo-filter-label { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 14px; }\n.demo-filter-label span { padding: 6px 10px; border: 1px solid #e6eaf0; border-radius: 999px; color: #5d6877; font-size: 10px; }\n.demo-menu-list { display: flex; gap: 5px; padding: 0; margin: 0 0 24px; list-style: none; }\n.demo-menu-group { position: relative; }\n.demo-menu-group > a { display: flex; align-items: center; min-height: 44px; padding: 10px 12px; border-radius: 8px; color: #3c4858; font-size: 13px; text-decoration: none; }\n.demo-submenu { position: absolute; top: 100%; left: 0; z-index: 5; display: none; min-width: 205px; padding: 7px; border: 1px solid #e5e8ef; border-radius: 10px; background: #fff; box-shadow: 0 14px 34px #20263520; }\n.demo-submenu a { display: flex; align-items: center; min-height: 44px; padding: 9px; border-radius: 6px; font-size: 12px; text-decoration: none; }\n.demo-submenu a:hover, .demo-submenu a:focus-visible { color: var(--accent); background: var(--soft); }\n.demo-menu-group:hover .demo-submenu, .demo-menu-group:focus-within .demo-submenu { display: block; }\n.demo-hint { margin: 8px 0; padding: 12px; border: 1px solid #e5e8ef; border-radius: 9px; }\n.demo-hint summary { cursor: pointer; color: var(--accent); font-size: 13px; font-weight: 700; }\n.demo-hint p { margin: 9px 0 0; color: #5e6877; font-size: 12px; }\n.demo-product { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; align-items: center; padding: 22px; border: 1px solid #e6eaf0; border-radius: 16px; }\n.demo-product-art { min-height: 210px; display: grid; place-items: center; border-radius: 12px; color: var(--accent); background: linear-gradient(145deg,var(--soft),#fff); font-size: 56px; }\n.demo-product:hover { box-shadow: 0 15px 36px #20263518; transform: translateY(-2px); transition: transform .2s ease,box-shadow .2s ease; }\n.demo-product:focus-within { outline: 3px solid #d6deea; outline-offset: 3px; }\n.demo-facts { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 8px; margin: 16px 0; }\n.demo-fact { padding: 12px; border-radius: 10px; background: var(--soft); }\n.demo-fact b, .demo-fact span { display: block; }\n.demo-fact span { margin-top: 4px; color: #626d7c; font-size: 11px; }\n.demo-form { display: grid; gap: 14px; max-width: 650px; padding: 21px; border: 1px solid #e4e8ef; border-radius: 14px; }\n.demo-form fieldset { display: grid; gap: 9px; margin: 0; padding: 13px; border: 1px solid #e4e8ef; border-radius: 10px; }\n.demo-form legend { padding: 0 5px; font-weight: 700; }\n.demo-field { display: grid; gap: 5px; color: #485465; font-size: 12px; font-weight: 700; }\n.demo-field input, .demo-field select, .demo-field textarea { width: 100%; min-height: 43px; padding: 10px; border: 1px solid #cfd6df; border-radius: 7px; color: var(--ink); background: #fff; font: inherit; font-weight: 400; }\n.demo-field textarea { min-height: 100px; resize: vertical; }\n.demo-form > input, .demo-form > select, .demo-form > textarea { width: 100%; min-height: 43px; padding: 10px; border: 1px solid #cfd6df; border-radius: 7px; color: var(--ink); background: #fff; font: inherit; }\n.demo-form input:focus-visible, .demo-form select:focus-visible, .demo-form textarea:focus-visible { outline: 3px solid #d6deea; outline-offset: 1px; }\n.demo-radio { display: flex; align-items: center; gap: 8px; font-size: 12px; }\n.help-search { display: flex; gap: 8px; margin: 18px 0; }\n.help-search__label--visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; clip-path: inset(50%); }\n.help-search__input { min-width: 0; flex: 1; padding: 10px; border: 1px solid #cfd6df; border-radius: 8px; }\n.help-search__button { min-height: 44px; padding: 9px 15px; border: 0; border-radius: 8px; color: #fff; background: var(--accent); font-weight: 700; }\n.help-topic-list { margin-top: 14px; }\n.help-topic { min-height: 150px; padding: 17px; border: 1px solid #e6eaf0; border-radius: 12px; }\n.help-topic__count { color: var(--accent); font-size: 10px; font-weight: 800; }\n.help-topic__title { margin: 9px 0 5px; }\n.help-topic__description { color: #647080; font-size: 12px; }\n.demo-event-link { display: block; color: inherit; text-decoration: none; transition: transform .18s ease,box-shadow .18s ease; }\n.demo-event-link:hover,.demo-event-link:focus-visible { transform: translateY(-3px); box-shadow: 0 12px 26px #20263516; outline: 2px solid #b7c4d7; outline-offset: 2px; }\n.demo-event-link span { color: var(--accent); font-size: 11px; font-weight: 700; }\n.demo-event-link::before { display: block; width: 38px; margin-bottom: 11px; border-top: 3px solid var(--accent); content: \"\"; transform-origin: left; transition: transform .2s ease; }\n.demo-event-link:hover::before,.demo-event-link:focus-visible::before { transform: scaleX(1.5); }\n.demo-news-index { display: grid; gap: 8px; }\n.demo-news-index a { padding: 12px 14px; border-left: 3px solid var(--accent); border-radius: 0 8px 8px 0; color: #33445d; background: var(--soft); font-size: 12px; font-weight: 700; text-decoration: none; }\n.demo-news-index a:hover,.demo-news-index a:focus-visible { text-decoration: underline; text-underline-offset: 3px; }\n.demo-news-article { margin-top: 22px; padding: 18px; border: 1px solid #e6eaf0; border-radius: 12px; }\n.demo-news-article > small { color: var(--accent); font-weight: 800; }\n.demo-news-article h3 { margin: 7px 0; }\n.demo-news-article p { color: #5e6877; }\n.demo-news-card { margin: 10px 0; }\n.demo-optional-panel--hidden { display: none; }\n.demo--landing-hotel .demo-hero { color: #fff; background: linear-gradient(90deg,#152d42dc,#152d4270),url('../assets/mountains.svg') center/cover; }\n.demo--landing-hotel .demo-hero .demo-kicker,.demo--landing-hotel .demo-hero .demo-lead { color: #fff; }\n.demo--landing-hotel .demo-hero::after { border-color: #ffffff55; }\n.demo--landing-tour .demo-hero { background: linear-gradient(110deg,#18334dce,#18334d38),url('../assets/mountains.svg') center/cover; color: #fff; }\n.demo--landing-tour .demo-hero .demo-kicker,.demo--landing-tour .demo-hero .demo-lead { color: #fff; }\n.demo--landing-app .demo-app-image img { max-height: 230px; }\n.demo--bootstrap-anime .demo-header,.demo--bootstrap-events .demo-header { display: none; }\n.demo-status { display: inline-block; padding: 4px 7px; border-radius: 999px; font-size: 9px; font-weight: 800; }\n.demo-status--upcoming { color: #8c5612; background: #fff1d8; }\n.demo-status--confirmed { color: #28624b; background: #e4f4eb; }\n.demo-status--done { color: #586171; background: #eceff3; }\n.demo-skills { display: flex; flex-wrap: wrap; gap: 8px; padding: 0; list-style: none; }\n.demo-skills li { padding: 7px 10px; border-radius: 999px; color: var(--accent); background: var(--soft); font-size: 11px; font-weight: 700; }\n.demo-bootstrap-hero { padding: 32px; border-radius: 14px; color: white; background: #263958; }\n.demo-bootstrap-hero h2 { font-size: 29px; }\n.demo-bootstrap-card { height: 100%; padding: 18px; border: 1px solid #e1e5ea; border-radius: 10px; background: white; }\n@media (max-width: 700px) { .demo { padding: 0 16px 32px; } .demo-header { align-items: flex-start; flex-direction: column; justify-content: center; padding: 13px 0; } .demo-nav { gap: 11px; } .demo-grid,.demo-kanban { grid-template-columns: 1fr; } .demo-stop-list { grid-template-columns: repeat(2,minmax(0,1fr)); } .demo-inline-book { width: 47%; } .demo-product { grid-template-columns: 1fr; } .demo-circle { width: 125px; } .demo-circle-art { width: 96px; height: 96px; } .demo-fixed-cta { position: static !important; margin-top: 12px; } .demo-gallery { grid-template-columns: 1fr; } .demo-gallery img { height: 190px; } .demo-footer-columns { grid-template-columns: 1fr; } }\n@media (max-width: 430px) { .demo h1 { font-size: 30px; } .demo-seat-grid { gap: 4px; } .demo-seat { font-size: 8px; } .demo-stop-list { grid-template-columns: 1fr 1fr; } .demo-menu-list { flex-wrap: wrap; } .demo-profile { width: 100%; } .demo-inline-book { width: 100%; } }\n@media (prefers-reduced-motion: reduce) { *,*::before,*::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; } .demo-product:hover { transform: none; } }\n.demo { --accent: #475c8a; --soft: #eaf0f7; }\n.demo-card { border-top: 3px solid var(--accent); }"
+      }
+    },
+    {
+      "title": "Журнал школьных новостей",
+      "about": "Школьная редакция хочет разместить несколько самостоятельных новостей и общую навигацию.",
+      "steps": [
+        "Сделай общую шапку и nav, затем main с двумя article.",
+        "В каждом материале добавь h2, дату, абзац и подпись к фото.",
+        "Поставь footer с информацией редакции; используй семантические теги вместо безымянных div."
+      ],
+      "done": [
+        "У каждой части есть подходящая роль.",
+        "Заголовки не пропускают уровни без причины.",
+        "Тексты ссылок понятны вне контекста."
+      ],
+      "stretch": "Добавь таблицу дежурств редакторов и доступные заголовки столбцов.",
+      "example": {
+        "title": "Журнал школьных новостей",
+        "description": "Образец готовой страницы для проекта «Журнал школьных новостей». Раз в неделю ученики будут разбирать новости, проверять источники и выпускать короткий дайджест.",
+        "html": "<!doctype html>\n<html lang=\"ru\">\n<head>\n  <meta charset=\"utf-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n  <title>В школьной библиотеке открыли медиаклуб</title>\n  <link rel=\"stylesheet\" href=\"./style.css\">\n  \n</head>\n<body>\n  <div class=\"demo demo--news\" id=\"top\" style=\"--accent:#475c8a;--soft:#eaf0f7\">\n    <header class=\"demo-header\"><a class=\"demo-brand\" href=\"#top\">ПРИМЕР ПРОЕКТА</a><nav class=\"demo-nav\" aria-label=\"Навигация по странице\"><a href=\"#top\">О проекте</a><a href=\"#details\">Подробности</a></nav></header>\n    <main>\n      <section class=\"demo-hero\" aria-labelledby=\"project-title\"><span class=\"demo-kicker\">ШКОЛЬНЫЕ НОВОСТИ · 12 МАРТА</span><h1 id=\"project-title\">В школьной библиотеке открыли медиаклуб</h1><p class=\"demo-lead\">Раз в неделю ученики будут разбирать новости, проверять источники и выпускать короткий дайджест.</p></section>\n      <section class=\"demo-section\" id=\"details\"><h2>Что важно знать</h2><nav class=\"demo-news-index\" aria-label=\"Содержание выпуска\"><a href=\"#story-1\">Как всё устроено</a><a href=\"#story-2\">Кто может присоединиться</a></nav><article class=\"demo-news-article\" id=\"story-1\"><small>НОВОСТИ ШКОЛЫ</small><h3>Как всё устроено</h3><p>Первая встреча проходит по четвергам после уроков. Участники выбирают тему, находят первоисточники и готовят краткое объяснение для школьного сайта.</p></article><article class=\"demo-news-article\" id=\"story-2\"><small>ОБЪЯВЛЕНИЕ</small><h3>Кто может присоединиться</h3><p>Приходить можно без опыта. Библиотекарь поможет освоить каталог и найти надёжные материалы. Для первой встречи достаточно принести тетрадь.</p></article><div class=\"demo-note\">Следующая встреча — 19 марта, читальный зал на втором этаже. Редакция принимает идеи от всех классов.</div></section>\n    </main>\n    <footer class=\"demo-footer\">Учебный пример HTML и CSS · макет для обсуждения на занятии</footer>\n  </div>\n</body>\n</html>",
+        "css": ":root { color-scheme: light; }\n* { box-sizing: border-box; }\nbody { margin: 0; color: #202635; background: #f4f6f8; font: 15px/1.55 Arial, sans-serif; }\na { color: inherit; }\n.demo { --accent: #365c8d; --soft: #eaf0f7; --ink: #202635; max-width: 1100px; min-height: 100vh; margin: 0 auto; padding: 0 26px 46px; background: #fff; }\n.demo-header { display: flex; align-items: center; justify-content: space-between; gap: 20px; min-height: 66px; border-bottom: 1px solid #e8ebef; }\n.demo-brand { color: var(--accent); font-size: 13px; font-weight: 800; letter-spacing: .08em; text-decoration: none; text-transform: uppercase; }\n.demo-nav { display: flex; flex-wrap: wrap; gap: 16px; color: #626b79; font-size: 12px; }\n.demo-nav a { display: flex; align-items: center; min-height: 44px; text-decoration: none; }\n.demo-nav a:hover, .demo-nav a:focus-visible { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }\n.demo-hero { position: relative; overflow: hidden; margin: 22px 0; padding: clamp(24px,5vw,56px); border-radius: 20px; background: linear-gradient(120deg,var(--soft),#fff 72%); }\n.demo-hero::after { position: absolute; right: -54px; bottom: -120px; width: 280px; height: 280px; border: 1px solid #d8e0eb; border-radius: 50%; content: ''; }\n.demo-kicker { color: var(--accent); font-size: 10px; font-weight: 800; letter-spacing: .14em; }\n.demo h1 { max-width: 760px; margin: 11px 0 10px; font-size: clamp(30px,5vw,48px); line-height: 1.08; letter-spacing: -.045em; }\n.demo-lead { max-width: 670px; margin: 0; color: #5e6877; font-size: 16px; }\n.demo-section { margin: 30px 0; }\n.demo-section h2 { margin: 0 0 13px; font-size: 21px; letter-spacing: -.025em; }\n.demo-section > p { max-width: 720px; color: #5e6877; }\n.demo-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 13px; }\n.demo-card { min-width: 0; padding: 19px; border: 1px solid #e7eaf0; border-radius: 14px; background: #fff; }\n.demo-card small { color: var(--accent); font-size: 10px; font-weight: 800; letter-spacing: .09em; text-transform: uppercase; }\n.demo-card h3 { margin: 9px 0 6px; font-size: 17px; }\n.demo-card p { margin: 0; color: #647080; font-size: 13px; }\n.demo-note { margin: 18px 0; padding: 14px 16px; border-left: 3px solid var(--accent); border-radius: 0 10px 10px 0; background: var(--soft); color: #424d5d; font-size: 13px; }\n.demo-list { display: grid; gap: 8px; margin: 0; padding-left: 21px; color: #465264; }\n.demo-cta { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; margin-top: 12px; padding: 10px 16px; border-radius: 9px; color: #fff; background: var(--accent); font-size: 13px; font-weight: 700; text-decoration: none; transition: filter .16s ease,transform .16s ease; }\n.demo-cta:hover, .demo-cta:focus-visible { filter: brightness(.9); outline: 3px solid #d6deea; outline-offset: 2px; }\n.demo-footer { margin-top: 40px; padding-top: 16px; border-top: 1px solid #e8ebef; color: #77808e; font-size: 11px; }\n.demo-footer-columns { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 18px; }\n.demo-footer-columns h2 { margin: 0 0 6px; color: #344050; font-size: 12px; }\n.demo-footer-columns p { margin: 0; }\n.demo-footer-columns a { color: var(--accent); }\n.demo-table-wrap { overflow-x: auto; border: 1px solid #e3e7ed; border-radius: 12px; }\n.demo-table { width: 100%; border-collapse: collapse; text-align: left; }\n.demo-table caption { padding: 13px; color: #5b6574; font-size: 12px; text-align: left; }\n.demo-table th, .demo-table td { padding: 12px 14px; border-top: 1px solid #e8ebef; }\n.demo-table thead th { color: var(--accent); background: var(--soft); font-size: 11px; }\n.demo-table tbody th { font-size: 12px; }\n.demo-table tbody td { color: #596473; font-size: 12px; }\n.demo-figure { margin: 0; }\n.demo-figure img { display: block; width: 100%; max-height: 300px; object-fit: cover; border-radius: 14px; }\n.demo-figure figcaption { margin-top: 6px; color: #707a88; font-size: 11px; }\n.demo-gallery { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 9px; }\n.demo-gallery figure { margin: 0; }\n.demo-gallery img { display: block; width: 100%; height: 130px; object-fit: cover; border-radius: 10px; }\n.demo-gallery figcaption { margin-top: 5px; color: #677180; font-size: 10px; }\n.demo-link-list { display: flex; flex-wrap: wrap; align-items: center; gap: 9px; margin: 17px 0; }\n.demo-link-list b { flex-basis: 100%; font-size: 13px; }\n.demo-link-list a { padding: 8px 10px; border: 1px solid #e3e8ef; border-radius: 8px; color: var(--accent); font-size: 11px; font-weight: 700; text-decoration: none; }\n.demo-link-list a:hover,.demo-link-list a:focus-visible { text-decoration: underline; text-underline-offset: 3px; }\n.demo-inline-book { display: inline-block; vertical-align: top; width: 30%; min-height: 270px; margin: 0 1.4% 12px 0; padding: 13px; border: 1px solid #e7eaf0; border-radius: 12px; background: linear-gradient(145deg,#fff,var(--soft)); }\n.demo-inline-book small { color: var(--accent); font-size: 10px; font-weight: 800; }\n.demo-inline-book b { display: block; margin: 22px 0 5px; font-size: 15px; }\n.demo-inline-book span { color: #677180; font-size: 11px; }\n.demo-book-cover { min-height: 100px; display: grid; place-items: end start; padding: 11px; border-radius: 6px; color: #fff; background: linear-gradient(145deg,var(--cover),#1d2f3e); box-shadow: 2px 3px 6px #20263525; font-size: 13px; font-weight: 700; }\n.demo-inline-book p { margin: 7px 0 0; color: #657181; font-size: 10px; }\n.demo-profile-list { display: flex; flex-wrap: wrap; gap: 12px; }\n.demo-profile { display: inline-block; vertical-align: top; width: calc(50% - 6px); overflow: hidden; border: 1px solid #e6eaf0; border-radius: 12px; background: #fff; }\n.demo-profile > img { display: block; width: 100%; height: 110px; object-fit: cover; }\n.demo-profile-copy { padding: 14px; }\n.demo-profile-copy small { color: var(--accent); font-size: 9px; font-weight: 800; }\n.demo-profile-copy h3 { margin: 6px 0 2px; font-size: 16px; }\n.demo-profile-copy > b { color: #5c6877; font-size: 11px; }\n.demo-profile-copy p { min-height: 38px; color: #647080; font-size: 11px; }\n.demo-profile-copy a { color: var(--accent); font-size: 11px; font-weight: 700; }\n.demo-flex-grid { display: flex; flex-wrap: wrap; align-items: stretch; gap: 13px; }\n.demo-flex-grid .demo-card { flex: 1 1 220px; }\n.demo-circle-row { display: flex; flex-wrap: wrap; gap: 18px; }\n.demo-circle { width: 150px; text-align: center; }\n.demo-circle-art { width: 112px; height: 112px; display: grid; place-items: center; margin: 0 auto 11px; border-radius: 50%; color: #fff; background: var(--bubble); box-shadow: inset -10px -12px 25px #0002; font-size: 13px; font-weight: 700; }\n.demo-circle b, .demo-circle span { display: block; }\n.demo-circle span { color: #697382; font-size: 11px; }\n.demo-stage { position: relative; min-height: 310px; overflow: hidden; border: 1px solid #e5e8ee; border-radius: 16px; background: repeating-linear-gradient(0deg,#fff,#fff 39px,#edf0f4 40px),repeating-linear-gradient(90deg,transparent,transparent 39px,#edf0f4 40px); }\n.scene-block { position: absolute; display: grid; place-items: center; border: 1px solid var(--accent); border-radius: 10px; color: var(--accent); background: var(--soft); font-size: 12px; font-weight: 700; }\n.scene-wide { inset: 11% 20% auto; height: 45px; }\n.scene-platform { left: 24%; right: 24%; bottom: 14%; height: 68px; color: #fff; background: var(--accent); }\n.scene-panel { left: 8%; top: 38%; width: 28%; height: 68px; }\n.scene-panel-alt { left: auto; right: 8%; }\n.scene-route { left: 45%; top: 34%; width: 10%; height: 40px; border-style: dashed; background: #fff; }\n.demo-poster { position: relative; overflow: hidden; min-height: 280px; padding: 30px; border-radius: 18px; color: #fff; background: linear-gradient(135deg,#1c354d,var(--accent)); }\n.demo-poster h2 { max-width: 530px; margin: 24px 0 8px; font-size: clamp(26px,4vw,40px); }\n.demo-poster p { color: #e5ebf4; }\n.demo-date { position: absolute; top: 18px; right: 18px; display: grid; place-items: center; width: 78px; height: 78px; border-radius: 50%; color: #27344a; background: #f5d887; font-size: 12px; font-weight: 800; text-align: center; }\n.demo-fixed-cta { position: fixed; right: 18px; bottom: 18px; z-index: 10; margin: 0; box-shadow: 0 8px 24px #12223855; }\n.demo-map { position: relative; min-height: 250px; overflow: hidden; border: 1px solid #d9e1e9; border-radius: 16px; background: linear-gradient(165deg,#edf3e8 0 44%,#c9e4ec 44% 58%,#eff1e5 58%); }\n.demo-map::before { position: absolute; left: 12%; top: 62%; width: 77%; border-top: 4px dashed #bd754b; transform: rotate(-16deg); content: \"\"; }\n.demo-map-marker { position: absolute; left: var(--x); top: var(--y); z-index: 2; display: grid; place-items: center; width: 32px; height: 32px; border: 3px solid #fff; border-radius: 50%; color: #fff; background: var(--accent); box-shadow: 0 3px 9px #1d304033; font-size: 10px; font-weight: 800; transform: translate(-50%,-50%); }\n.demo-stop-list { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 9px; margin-top: 12px; counter-reset: stop; }\n.demo-stop { position: relative; padding: 16px 13px; border: 1px solid #e6eaf0; border-radius: 12px; }\n.demo-stop b { display: block; color: var(--accent); font-size: 11px; }\n.demo-stop span { display: block; margin: 8px 0 3px; font-size: 13px; font-weight: 700; }\n.demo-stop small { color: #748090; }\n.demo-chess { position: relative; display: grid; grid-template-columns: repeat(8,1fr); width: min(100%,400px); aspect-ratio: 1; overflow: hidden; border: 5px solid #273345; border-radius: 6px; }\n.demo-square:nth-child(16n+1), .demo-square:nth-child(16n+3), .demo-square:nth-child(16n+5), .demo-square:nth-child(16n+7), .demo-square:nth-child(16n+10), .demo-square:nth-child(16n+12), .demo-square:nth-child(16n+14), .demo-square:nth-child(16n+16) { background: #dbe4d6; }\n.demo-square { background: #738a72; }\n.demo-piece { position: absolute; left: calc((var(--x) + .5) * 12.5%); top: calc((var(--y) + .5) * 12.5%); z-index: 2; width: 12.5%; height: 12.5%; transform: translate(-50%,-50%); color: #202635; font: 34px/1 Georgia,serif; text-align: center; text-shadow: 0 1px 2px #fff; }\n.demo-seat-grid { display: grid; grid-template-columns: repeat(6,minmax(22px,1fr)); gap: 7px; max-width: 500px; }\n.demo-seat { display: grid; place-items: center; aspect-ratio: 1.2; border: 1px solid #aab4c2; border-radius: 5px 5px 2px 2px; color: #596474; background: #edf0f4; font-size: 10px; }\n.demo-seat.is-taken { border-color: #4b806c; color: #fff; background: #4b806c; }\n.demo-legend { display: flex; flex-wrap: wrap; gap: 14px; margin: 14px 0; color: #5c6674; font-size: 11px; }\n.demo-legend span { display: inline-flex; align-items: center; gap: 6px; }\n.demo-legend i { width: 12px; height: 12px; border: 1px solid #aab4c2; border-radius: 3px; background: #edf0f4; }\n.demo-legend .taken { border-color: #4b806c; background: #4b806c; }\n.demo-kanban { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }\n.demo-column { padding: 13px; border-radius: 12px; background: #f3f5f8; }\n.demo-column h3 { margin: 0 0 10px; font-size: 13px; }\n.demo-task { margin-top: 8px; padding: 12px; border: 1px solid #e5e9ef; border-radius: 9px; background: #fff; font-size: 12px; }\n.demo-filter-label { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 14px; }\n.demo-filter-label span { padding: 6px 10px; border: 1px solid #e6eaf0; border-radius: 999px; color: #5d6877; font-size: 10px; }\n.demo-menu-list { display: flex; gap: 5px; padding: 0; margin: 0 0 24px; list-style: none; }\n.demo-menu-group { position: relative; }\n.demo-menu-group > a { display: flex; align-items: center; min-height: 44px; padding: 10px 12px; border-radius: 8px; color: #3c4858; font-size: 13px; text-decoration: none; }\n.demo-submenu { position: absolute; top: 100%; left: 0; z-index: 5; display: none; min-width: 205px; padding: 7px; border: 1px solid #e5e8ef; border-radius: 10px; background: #fff; box-shadow: 0 14px 34px #20263520; }\n.demo-submenu a { display: flex; align-items: center; min-height: 44px; padding: 9px; border-radius: 6px; font-size: 12px; text-decoration: none; }\n.demo-submenu a:hover, .demo-submenu a:focus-visible { color: var(--accent); background: var(--soft); }\n.demo-menu-group:hover .demo-submenu, .demo-menu-group:focus-within .demo-submenu { display: block; }\n.demo-hint { margin: 8px 0; padding: 12px; border: 1px solid #e5e8ef; border-radius: 9px; }\n.demo-hint summary { cursor: pointer; color: var(--accent); font-size: 13px; font-weight: 700; }\n.demo-hint p { margin: 9px 0 0; color: #5e6877; font-size: 12px; }\n.demo-product { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; align-items: center; padding: 22px; border: 1px solid #e6eaf0; border-radius: 16px; }\n.demo-product-art { min-height: 210px; display: grid; place-items: center; border-radius: 12px; color: var(--accent); background: linear-gradient(145deg,var(--soft),#fff); font-size: 56px; }\n.demo-product:hover { box-shadow: 0 15px 36px #20263518; transform: translateY(-2px); transition: transform .2s ease,box-shadow .2s ease; }\n.demo-product:focus-within { outline: 3px solid #d6deea; outline-offset: 3px; }\n.demo-facts { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 8px; margin: 16px 0; }\n.demo-fact { padding: 12px; border-radius: 10px; background: var(--soft); }\n.demo-fact b, .demo-fact span { display: block; }\n.demo-fact span { margin-top: 4px; color: #626d7c; font-size: 11px; }\n.demo-form { display: grid; gap: 14px; max-width: 650px; padding: 21px; border: 1px solid #e4e8ef; border-radius: 14px; }\n.demo-form fieldset { display: grid; gap: 9px; margin: 0; padding: 13px; border: 1px solid #e4e8ef; border-radius: 10px; }\n.demo-form legend { padding: 0 5px; font-weight: 700; }\n.demo-field { display: grid; gap: 5px; color: #485465; font-size: 12px; font-weight: 700; }\n.demo-field input, .demo-field select, .demo-field textarea { width: 100%; min-height: 43px; padding: 10px; border: 1px solid #cfd6df; border-radius: 7px; color: var(--ink); background: #fff; font: inherit; font-weight: 400; }\n.demo-field textarea { min-height: 100px; resize: vertical; }\n.demo-form > input, .demo-form > select, .demo-form > textarea { width: 100%; min-height: 43px; padding: 10px; border: 1px solid #cfd6df; border-radius: 7px; color: var(--ink); background: #fff; font: inherit; }\n.demo-form input:focus-visible, .demo-form select:focus-visible, .demo-form textarea:focus-visible { outline: 3px solid #d6deea; outline-offset: 1px; }\n.demo-radio { display: flex; align-items: center; gap: 8px; font-size: 12px; }\n.help-search { display: flex; gap: 8px; margin: 18px 0; }\n.help-search__label--visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; clip-path: inset(50%); }\n.help-search__input { min-width: 0; flex: 1; padding: 10px; border: 1px solid #cfd6df; border-radius: 8px; }\n.help-search__button { min-height: 44px; padding: 9px 15px; border: 0; border-radius: 8px; color: #fff; background: var(--accent); font-weight: 700; }\n.help-topic-list { margin-top: 14px; }\n.help-topic { min-height: 150px; padding: 17px; border: 1px solid #e6eaf0; border-radius: 12px; }\n.help-topic__count { color: var(--accent); font-size: 10px; font-weight: 800; }\n.help-topic__title { margin: 9px 0 5px; }\n.help-topic__description { color: #647080; font-size: 12px; }\n.demo-event-link { display: block; color: inherit; text-decoration: none; transition: transform .18s ease,box-shadow .18s ease; }\n.demo-event-link:hover,.demo-event-link:focus-visible { transform: translateY(-3px); box-shadow: 0 12px 26px #20263516; outline: 2px solid #b7c4d7; outline-offset: 2px; }\n.demo-event-link span { color: var(--accent); font-size: 11px; font-weight: 700; }\n.demo-event-link::before { display: block; width: 38px; margin-bottom: 11px; border-top: 3px solid var(--accent); content: \"\"; transform-origin: left; transition: transform .2s ease; }\n.demo-event-link:hover::before,.demo-event-link:focus-visible::before { transform: scaleX(1.5); }\n.demo-news-index { display: grid; gap: 8px; }\n.demo-news-index a { padding: 12px 14px; border-left: 3px solid var(--accent); border-radius: 0 8px 8px 0; color: #33445d; background: var(--soft); font-size: 12px; font-weight: 700; text-decoration: none; }\n.demo-news-index a:hover,.demo-news-index a:focus-visible { text-decoration: underline; text-underline-offset: 3px; }\n.demo-news-article { margin-top: 22px; padding: 18px; border: 1px solid #e6eaf0; border-radius: 12px; }\n.demo-news-article > small { color: var(--accent); font-weight: 800; }\n.demo-news-article h3 { margin: 7px 0; }\n.demo-news-article p { color: #5e6877; }\n.demo-news-card { margin: 10px 0; }\n.demo-optional-panel--hidden { display: none; }\n.demo--landing-hotel .demo-hero { color: #fff; background: linear-gradient(90deg,#152d42dc,#152d4270),url('../assets/mountains.svg') center/cover; }\n.demo--landing-hotel .demo-hero .demo-kicker,.demo--landing-hotel .demo-hero .demo-lead { color: #fff; }\n.demo--landing-hotel .demo-hero::after { border-color: #ffffff55; }\n.demo--landing-tour .demo-hero { background: linear-gradient(110deg,#18334dce,#18334d38),url('../assets/mountains.svg') center/cover; color: #fff; }\n.demo--landing-tour .demo-hero .demo-kicker,.demo--landing-tour .demo-hero .demo-lead { color: #fff; }\n.demo--landing-app .demo-app-image img { max-height: 230px; }\n.demo--bootstrap-anime .demo-header,.demo--bootstrap-events .demo-header { display: none; }\n.demo-status { display: inline-block; padding: 4px 7px; border-radius: 999px; font-size: 9px; font-weight: 800; }\n.demo-status--upcoming { color: #8c5612; background: #fff1d8; }\n.demo-status--confirmed { color: #28624b; background: #e4f4eb; }\n.demo-status--done { color: #586171; background: #eceff3; }\n.demo-skills { display: flex; flex-wrap: wrap; gap: 8px; padding: 0; list-style: none; }\n.demo-skills li { padding: 7px 10px; border-radius: 999px; color: var(--accent); background: var(--soft); font-size: 11px; font-weight: 700; }\n.demo-bootstrap-hero { padding: 32px; border-radius: 14px; color: white; background: #263958; }\n.demo-bootstrap-hero h2 { font-size: 29px; }\n.demo-bootstrap-card { height: 100%; padding: 18px; border: 1px solid #e1e5ea; border-radius: 10px; background: white; }\n@media (max-width: 700px) { .demo { padding: 0 16px 32px; } .demo-header { align-items: flex-start; flex-direction: column; justify-content: center; padding: 13px 0; } .demo-nav { gap: 11px; } .demo-grid,.demo-kanban { grid-template-columns: 1fr; } .demo-stop-list { grid-template-columns: repeat(2,minmax(0,1fr)); } .demo-inline-book { width: 47%; } .demo-product { grid-template-columns: 1fr; } .demo-circle { width: 125px; } .demo-circle-art { width: 96px; height: 96px; } .demo-fixed-cta { position: static !important; margin-top: 12px; } .demo-gallery { grid-template-columns: 1fr; } .demo-gallery img { height: 190px; } .demo-footer-columns { grid-template-columns: 1fr; } }\n@media (max-width: 430px) { .demo h1 { font-size: 30px; } .demo-seat-grid { gap: 4px; } .demo-seat { font-size: 8px; } .demo-stop-list { grid-template-columns: 1fr 1fr; } .demo-menu-list { flex-wrap: wrap; } .demo-profile { width: 100%; } .demo-inline-book { width: 100%; } }\n@media (prefers-reduced-motion: reduce) { *,*::before,*::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; } .demo-product:hover { transform: none; } }\n.demo { --accent: #475c8a; --soft: #eaf0f7; }\n.demo-card { border-left: 3px solid var(--accent); }"
+      }
+    }
+  ],
+  "title": "Смысловая разметка и таблицы",
+  "goal": "Разделяй страницу на понятные смысловые части и оформляй данные в доступной таблице."
+};

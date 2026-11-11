@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 520" role="img" aria-labelledby="title desc">
+  <title id="title">Горы и озеро на рассвете</title>
+  <desc id="desc">Синие горные пики отражаются в спокойном озере под светлым небом.</desc>
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#bdddf0"/><stop offset="1" stop-color="#f3d8ba"/></linearGradient>
+    <linearGradient id="lake" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#648eaa"/><stop offset="1" stop-color="#244c69"/></linearGradient>
+  </defs>
+  <rect width="1200" height="520" fill="url(#sky)"/>
+  <circle cx="900" cy="120" r="55" fill="#fff0ce"/>
+  <path d="M0 340 220 95l174 184L565 48l255 293 173-190 207 190v179H0z" fill="#627d91"/>
+  <path d="m220 95 87 91-63-18-50 50-45-2zm345-47 130 149-93-42-48 42-71-26-53 61zM993 151l93 88-62-21-54 30-45-31z" fill="#eef4f5"/>
+  <path d="M0 340q150-22 300 0t300 0 300 0 300 0v180H0z" fill="url(#lake)"/>
+  <path d="m0 385 120-9 130 10 170-12 155 14 160-9 185 11 150-8 130 9M65 437l145-8 115 9 180-7 130 8 155-10 160 8 180-7" fill="none" stroke="#c6dce5" stroke-opacity=".48" stroke-width="5"/>
+</svg>

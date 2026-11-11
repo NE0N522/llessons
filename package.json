@@ -1,0 +1,61 @@
+{
+  "name": "kod-po-polochkam-classroom",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Учебный курс HTML/CSS с кабинетами учителя и учеников",
+  "main": "server/index.js",
+  "scripts": {
+    "start": "node server/index.js",
+    "start:local": "node server/index.js",
+    "db:check": "node server/scripts/check-db.js",
+    "create-teacher": "node server/scripts/create-teacher.js",
+    "seed:demo": "node server/scripts/seed-demo.js",
+    "backup": "node server/scripts/backup.js",
+    "restore": "node server/scripts/restore.js",
+    "build:editor": "node editor-src/build.js",
+    "build:classroom-tools": "node scripts/build-classroom-tools.js",
+    "build:vendor": "node scripts/build-course-vendor.js",
+    "check:deploy": "node scripts/check-deploy-doc.js",
+    "check:secrets": "node scripts/secret-scan.js",
+    "qa:browser": "node scripts/final-browser-qa.js",
+    "loadtest": "node scripts/loadtest.js",
+    "test": "node --test --test-concurrency=1"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "@electric-sql/pglite": "^0.5.16",
+    "compression": "^1.8.2",
+    "exceljs": "^4.4.0",
+    "express": "^5.1.0",
+    "express-rate-limit": "^8.7.4",
+    "helmet": "^8.1.0",
+    "pdfkit": "^0.20.2",
+    "pg": "^8.23.1"
+  },
+  "devDependencies": {
+    "@codemirror/autocomplete": "^6.20.4",
+    "@codemirror/commands": "^6.11.1",
+    "@codemirror/lang-css": "^6.3.1",
+    "@codemirror/lang-html": "^6.4.12",
+    "@codemirror/language": "^6.13.1",
+    "@codemirror/lint": "^6.9.7",
+    "@codemirror/state": "^6.7.6",
+    "@codemirror/view": "^6.43.15",
+    "@emmetio/codemirror6-plugin": "^0.4.2",
+    "@napi-rs/canvas": "^1.1.0",
+    "axe-core": "^4.14.0",
+    "bootstrap": "^5.3.8",
+    "codemirror": "^6.0.2",
+    "esbuild": "^0.28.2",
+    "fflate": "^0.8.3",
+    "jsqr": "^1.4.0",
+    "pdfjs-dist": "^6.5.438",
+    "playwright": "^1.65.0",
+    "qrcode": "^1.5.4"
+  },
+  "overrides": {
+    "uuid": "^11.1.1"
+  }
+}

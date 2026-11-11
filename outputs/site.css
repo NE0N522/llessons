@@ -1,0 +1,2 @@
+/* Пользовательские правила идут после Bootstrap. */
+.btn-primary { --bs-btn-bg: #356b4b; --bs-btn-border-color: #356b4b; --bs-btn-hover-bg: #28563b; --bs-btn-hover-border-color: #28563b; }

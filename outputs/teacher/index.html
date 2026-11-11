@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="">
+  <title>Кабинет учителя — Код по полочкам</title>
+  <script src="../assets/app/theme.js"></script>
+  <link rel="stylesheet" href="../assets/app/lesson-v3.css"><link rel="stylesheet" href="../assets/app/theme-v3.css"><link rel="stylesheet" href="../assets/app/accounts/theme.css"><link rel="stylesheet" href="../assets/app/accounts/accounts.css"><link rel="stylesheet" href="../assets/app/accounts/stage5.css"><link rel="stylesheet" href="../assets/app/accounts/stage6.css">
+  <script src="../assets/course.js" defer></script>
+  <script src="../assets/app/editor-loader.js" defer></script>
+  <script src="../assets/vendor/classroom-tools.js" defer></script>
+  <script src="../assets/app/accounts/ui-utils.js" defer></script><script src="../assets/app/accounts/ui-strings.js" defer></script>
+  <script src="../assets/app/accounts/common.js" defer></script>
+  <script src="../assets/app/accounts/teacher.js" defer></script>
+  <link rel="stylesheet" href="../assets/app/privacy.css">
+</head>
+<body class="account-app-body"><header class="account-topbar"><a class="v3-brand" aria-label="Код по полочкам — главная страница курса" href="../index.html"><span class="v3-brand-mark" aria-hidden="true">&lt;/&gt;</span><span>код по полочкам</span></a><nav aria-label="Навигация кабинета"><a href="../index.html">Курс</a><button class="account-quiet-button account-pending-alert" type="button" data-pending-alert hidden></button><button class="account-quiet-button" type="button" data-owner-backup hidden title="Файл содержит персональные данные учеников">Скачать резервную копию</button><button class="theme-toggle" type="button" data-theme-toggle aria-pressed="false"><span class="theme-toggle-icon" data-theme-icon aria-hidden="true"></span><span data-theme-label>Тёмная тема</span></button><span class="account-user-name" data-user-name></span><button class="account-quiet-button" type="button" data-logout>Выйти</button></nav></header>
+<main class="account-shell"><header class="account-page-heading"><div><div class="account-eyebrow">ПАНЕЛЬ ПРЕПОДАВАТЕЛЯ</div><h1>Выберите класс</h1><p class="account-muted">Классы, ученики, задания и проверка работ собраны в одном месте.</p></div><button class="v3-button" data-new-class>+ Новый класс</button></header><div class="account-message" data-app-message role="status" aria-live="polite"></div>
+<section class="account-class-grid" data-class-grid aria-live="polite"></section>
+<section class="account-empty" data-empty-classes hidden><div class="account-empty-icon" aria-hidden="true">＋</div><h2>Пока нет классов</h2><p>Создай класс, затем добавь учеников и подготовь первое короткое задание.</p><button class="v3-button" data-new-class-empty>Создать класс</button></section>
+<section class="account-class-workspace" data-class-workspace hidden></section></main>
+<dialog class="account-dialog" data-dialog></dialog><footer class="site-privacy-footer"><a class="site-privacy-link" href="../privacy.html">Конфиденциальность</a></footer></body>
+</html>
+

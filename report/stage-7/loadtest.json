@@ -1,0 +1,15 @@
+{
+  "runtime": "локальный Express + PGlite",
+  "students": 30,
+  "duration_seconds": 300,
+  "autosaves_per_minute_per_student": 12,
+  "interval_seconds": 5,
+  "requests": 1800,
+  "responses_429": 0,
+  "failed_requests": 0,
+  "p50_ms": 937.74,
+  "p95_ms": 2482.27,
+  "elapsed_seconds": 300.02,
+  "failed": [],
+  "note": "Локальный результат на PGlite не прогнозирует задержку, лимиты или поведение Render/Neon."
+}

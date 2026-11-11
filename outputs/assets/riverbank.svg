@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" role="img" aria-labelledby="title desc">
+  <title id="title">Чистый берег горной реки</title>
+  <desc id="desc">Горная река проходит между зелёными берегами и камнями.</desc>
+  <defs><linearGradient id="water" x2="0" y2="1"><stop stop-color="#9ed3da"/><stop offset="1" stop-color="#46849a"/></linearGradient></defs>
+  <rect width="640" height="360" fill="#d7e9db"/><path d="M0 70q100-55 209 15t195 1q105-70 236-9v283H0z" fill="#89a875"/><path d="M0 164q145-60 259 8t186 0q92-47 195-22v210H0z" fill="#5c8060"/><path d="M244 0q74 78 27 148t-12 121q15 44 78 91H445q-61-74-66-122t39-113Q458 56 391 0z" fill="url(#water)"/><path d="M273 155q47 6 83 1m-71 38q55 7 99-3m-105 46q44 8 87 0" fill="none" stroke="#d8f1eb" stroke-width="5" stroke-linecap="round"/>
+  <g fill="#506c4d"><path d="m35 191 33-81 33 81zm14-30h38v89H49zM520 168l38-91 39 91zm18-32h41v108h-41z"/><path d="m128 211 25-62 25 62zm10-23h31v70h-31zM446 220l28-68 29 68zm12-24h33v82h-33z"/></g>
+  <g fill="#bcc4a4"><ellipse cx="226" cy="279" rx="38" ry="17"/><ellipse cx="456" cy="302" rx="47" ry="18"/><ellipse cx="190" cy="326" rx="25" ry="11"/></g>
+</svg>

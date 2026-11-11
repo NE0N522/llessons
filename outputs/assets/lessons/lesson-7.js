@@ -1,0 +1,386 @@
+window.LESSONS = window.LESSONS || {};
+window.LESSONS[7] = {
+  "id": 7,
+  "learn": [
+    "Различишь block, inline и inline-block на примерах.",
+    "Научишься размещать элемент относительно страницы или родительского блока.",
+    "Разберёшь fixed, sticky и порядок наложения элементов."
+  ],
+  "teacher": {
+    "plan": [
+      {
+        "title": "Старт: Block, inline и inline-block",
+        "minutes": 10,
+        "steps": [
+          1
+        ]
+      },
+      {
+        "title": "Разбор шагов 1–4: Block, inline и inline-block · Карточки в строке · Поток и координаты · Контейнер relative",
+        "minutes": 40,
+        "steps": [
+          1,
+          2,
+          3,
+          4
+        ]
+      },
+      {
+        "title": "Разбор шагов 5–7: Absolute и четыре стороны · Fixed и sticky · z-index и контекст наложения",
+        "minutes": 35,
+        "steps": [
+          5,
+          6,
+          7
+        ]
+      },
+      {
+        "title": "Практика и самостоятельная сборка",
+        "minutes": 25,
+        "steps": []
+      },
+      {
+        "title": "Повторение и вопросы",
+        "minutes": 10,
+        "steps": []
+      }
+    ],
+    "review": [
+      {
+        "q": "Какое правило нужно вспомнить для шага «Block, inline и inline-block»?",
+        "a": "Block начинает новую строку, inline течёт в тексте, inline-block сохраняет строчное расположение и принимает размеры."
+      },
+      {
+        "q": "Какое правило нужно вспомнить для шага «Поток и координаты»?",
+        "a": "Без специальных правил блоки читаются в том же порядке, в каком записаны в HTML."
+      },
+      {
+        "q": "Какое правило нужно вспомнить для шага «Absolute и четыре стороны»?",
+        "a": "Absolute-позиция опирается на ближайший предок с position, отличный от static."
+      },
+      {
+        "q": "Какое правило нужно вспомнить для шага «z-index и контекст наложения»?",
+        "a": "Сначала найди контекст наложения предков, затем сравни z-index внутри него."
+      }
+    ],
+    "tips": [
+      "Начни с вопроса о теме «Block, inline и inline-block»: пусть ученик назовёт роль свойства своими словами, затем покажи пример.",
+      "После шага «Контейнер relative» предложи восстановить небольшой фрагмент без подсказки и объяснить каждую строку.",
+      "Заверши занятие карточкой события с меткой даты: сначала попроси спланировать структуру, затем сравните результат с образцом."
+    ],
+    "answers": "<p><strong>Образец для разбора:</strong> сравни с практикой урока. Ученик объясняет, какие части относятся к HTML, какие правила задают внешний вид и как метка связана с родительским блоком.</p><h4>Фрагмент HTML</h4><pre><code>&lt;!doctype html&gt;\n&lt;html lang=\"ru\"&gt;&lt;head&gt;&lt;meta charset=\"utf-8\"&gt;&lt;meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"&gt;&lt;title&gt;Position и клетки&lt;/title&gt;&lt;/head&gt;&lt;body&gt;\n  &lt;main class=\"page\"&gt;&lt;h1&gt;Проба абсолютных координат&lt;/h1&gt;&lt;p&gt;Четыре на четыре: упражнение для понимания position.&lt;/p&gt;&lt;div class=\"board\"&gt;\n      &lt;span class=\"light\" style=\"top:0%;left:0%\" aria-hidden=\"true\"&gt;&lt;/span&gt;\n      &lt;span class=\"dark\" style=\"top:0%;left:25%\" aria-hidden=\"true\"&gt;&lt;/span&gt;\n      &lt;span class=\"light\" style=\"top:0%;left:50%\" aria-hidden=\"true\"&gt;&lt;/span&gt;\n      &lt;span class=\"dark\" style=\"top:0%;left:75%\" aria-hidden=\"true\"&gt;&lt;/span&gt;\n      &lt;span class=\"dark\" style=\"top:25%;left:0%\" aria-hidden=\"true\"&gt;&lt;/span&gt;\n      &lt;span class=\"light\" style=\"top:25%;left:25%\" aria-hidden=\"true\"&gt;&lt;/span&gt;\n      &lt;span class=\"dark\" style=\"top:25%;left:50%\" aria-hidden=\"true\"&gt;&lt;/span&gt;\n      &lt;span class=\"light\" style=\"top:25%;left:75%\" aria-hidden=\"true\"&gt;&lt;/span&gt;\n      &lt;span class=\"light\" style=\"top:50%;left:0%\" aria-hidden=\"true\"&gt;&lt;/span&gt;\n      &lt;span class=\"dark\" style=\"top:50%;left:25%\" aria-hidden=\"true\"&gt;&lt;/span&gt;\n      &lt;span class=\"light\" style=\"top:50%;left:50%\" aria-hidden=\"true\"&gt;&lt;/span&gt;\n      &lt;span class=\"dark\" style=\"top:50%;left:75%\" aria-hidden=\"true\"&gt;&lt;/span&gt;\n      &lt;span class=\"dark\" style=\"top:75%;left:0%\" aria-hidden=\"true\"&gt;&lt;/span&gt;\n      &lt;span class=\"light\" style=\"top:75%;left:25%\" aria-hidden=\"true\"&gt;&lt;/span&gt;\n      &lt;span class=\"dark\" style=\"top:75%;left:50%\" aria-hidden=\"true\"&gt;&lt;/span&gt;</code></pre><h4>Фрагмент CSS</h4><pre><code>*{box-sizing:border-box}\nbody{margin:0;padding:24px;background:#f4f5f1;color:#2e3b31;font:16px/1.5 Arial,sans-serif}\n.page{max-width:520px;margin:auto}\n.board{position:relative;width:min(100%,320px);aspect-ratio:1;border:4px solid #52685a}\n.board span{position:absolute;width:25%;height:25%}\n.light{background:#f4ead7}.dark{background:#7c967f}</code></pre>"
+  },
+  "steps": [
+    {
+      "id": "display-inline-block-block",
+      "title": "Block, inline и inline-block",
+      "text": "<p><strong>display задаёт, как коробка элемента участвует в потоке.</strong> Блочный абзац занимает свою строку; обычный span остаётся внутри строки; inline-block позволяет строчному бейджу получить padding и скругление. В примерах сравни эти формы на реальном тексте, чтобы увидеть разницу между переносом строки и коробкой внутри строки.</p><p>Проверь, что ссылка внутри абзаца не разрывает его на отдельный блок, а метка остаётся рядом с текстом. Не меняй все элементы на block автоматически: это может растянуть каждую ссылку и разрушить короткую фразу. Если нужна ширина и высота при сохранении соседства, inline-block может подойти.</p>",
+      "try": {
+        "title": "1. Block, inline и inline-block",
+        "html": "<p>Блочный абзац занимает <a href=\"#more\">свою строку</a>.</p>\n<span class=\"badge\">inline-block</span> <span>можно поставить рядом.</span>",
+        "css": ".badge { display: inline-block; padding: .3rem .6rem; border-radius: 999px; background: #e7f1e8; }\np { max-width: 34rem; }",
+        "height": 275
+      },
+      "remember": "Block начинает новую строку, inline течёт в тексте, inline-block сохраняет строчное расположение и принимает размеры.",
+      "examples": [
+        {
+          "title": "1. Block, inline и inline-block",
+          "html": "<p>Блочный абзац занимает <a href=\"#more\">свою строку</a>.</p>\n<span class=\"badge\">inline-block</span> <span>можно поставить рядом.</span>",
+          "css": ".badge { display: inline-block; padding: .3rem .6rem; border-radius: 999px; background: #e7f1e8; }\np { max-width: 34rem; }",
+          "height": 275
+        },
+        {
+          "title": "2. Блочные и строчные элементы",
+          "html": "<p>Каждый абзац начинает новую строку.</p>\n<p>Текст продолжается, а <span class=\"badge\">метка inline-block</span> остаётся внутри строки.</p>",
+          "css": "p { max-width: 34rem; }\n.badge { display: inline-block; padding: .25rem .5rem; border-radius: 999px; background: #e7f1e8; }",
+          "height": 275
+        }
+      ],
+      "mistake": {
+        "bad": "a { display: block; } /* для ссылки внутри предложения */",
+        "good": "a { display: inline; }",
+        "why": "Ссылка внутри фразы обычно остаётся частью строки; block вынесет её на отдельную строку."
+      }
+    },
+    {
+      "id": "inline-block-flex-cards",
+      "title": "Карточки в строке",
+      "text": "<p><strong>Несколько карточек можно поставить рядом разными способами.</strong> В первом образце inline-block делает article строчными коробками, задаёт им ширину и выравнивает верхние края. Во втором контейнер .cards использует flex, а дочерним карточкам задаёт гибкую основу 12rem и перенос на новую строку.</p><p>Сожми область просмотра: второй вариант перестраивается за счёт flex-wrap, первый может потребовать подбора ширины и отступов. Здесь сравнивается поведение display, а подробные оси и выравнивание будут изучаться позже. Не рассчитывай, что обычный inline-элемент получит width и height так же, как inline-block.</p>",
+      "try": {
+        "title": "1. Карточки рядом через inline-block",
+        "html": "<section class=\"cards\"><article><h2>Озеро</h2><p>Маршрут на выходной.</p></article><article><h2>Лес</h2><p>Прогулка в тени.</p></article></section>",
+        "css": ".cards article { display: inline-block; vertical-align: top; width: min(42%, 14rem); margin: .4rem; padding: 1rem; background: #eef3ed; }",
+        "height": 275
+      },
+      "remember": "Inline-block удобен для небольших соседних коробок; Flexbox даёт контейнеру управление строкой и переносом.",
+      "examples": [
+        {
+          "title": "1. Карточки рядом через inline-block",
+          "html": "<section class=\"cards\"><article><h2>Озеро</h2><p>Маршрут на выходной.</p></article><article><h2>Лес</h2><p>Прогулка в тени.</p></article></section>",
+          "css": ".cards article { display: inline-block; vertical-align: top; width: min(42%, 14rem); margin: .4rem; padding: 1rem; background: #eef3ed; }",
+          "height": 275
+        },
+        {
+          "title": "2. Карточки в строке через flex",
+          "html": "<section class=\"cards\"><article><h2>Озеро</h2><p>Маршрут на выходной.</p></article><article><h2>Лес</h2><p>Прогулка в тени.</p></article></section>",
+          "css": ".cards { display: flex; gap: 1rem; flex-wrap: wrap; }\n.cards article { flex: 1 1 12rem; padding: 1rem; background: #edf2fa; }",
+          "height": 275
+        }
+      ],
+      "mistake": {
+        "bad": ".cards article { display: inline; width: 14rem; }",
+        "good": ".cards article { display: inline-block; width: 14rem; }",
+        "why": "Обычный inline не принимает заданную ширину как полноценная коробка."
+      }
+    },
+    {
+      "id": "normal-flow-document-order",
+      "title": "Поток и координаты",
+      "text": "<p><strong>Обычный поток размещает элементы согласно их типу и порядку в HTML.</strong> Заголовок и абзацы обычно начинают новую строку, поэтому план экскурсии читается сверху вниз. Inline-элементы, например слова внутри текста, располагаются в строке. Во втором фрагменте flex специально меняет расположение детей; это уже отдельное правило раскладки, не поведение обычного потока.</p><p>Поменяй порядок двух абзацев в HTML и посмотри на тот же порядок в предпросмотре. Затем сравни его с карточками, где порядок задаёт display:flex. Не двигай блоки абсолютными координатами, если достаточно обычного потока: так текст может перестать занимать нужное место и перекрыть соседей.</p>",
+      "try": {
+        "title": "1. Обычный поток сверху вниз",
+        "html": "<h2>План экскурсии</h2><p>Сбор у входа.</p><p>Посещение оранжереи.</p>",
+        "css": "h2 { margin-bottom: 1rem; }\np { padding: .6rem; border-bottom: 1px solid #dce3e8; }",
+        "height": 275
+      },
+      "remember": "Без специальных правил блоки читаются в том же порядке, в каком записаны в HTML.",
+      "examples": [
+        {
+          "title": "1. Обычный поток сверху вниз",
+          "html": "<h2>План экскурсии</h2><p>Сбор у входа.</p><p>Посещение оранжереи.</p>",
+          "css": "h2 { margin-bottom: 1rem; }\np { padding: .6rem; border-bottom: 1px solid #dce3e8; }",
+          "height": 275
+        },
+        {
+          "title": "2. Поток меняется только при позиционировании",
+          "html": "<div class=\"items\"><span>Карточка A</span><span>Карточка B</span></div>",
+          "css": ".items { display: flex; gap: .8rem; }\nspan { padding: 1rem; background: #eef2f7; }",
+          "height": 275
+        }
+      ],
+      "mistake": {
+        "bad": "Расставлять обычные карточки absolute по всему экрану",
+        "good": "Сначала выстроить разделы обычным потоком и отступами",
+        "why": "Абсолютное позиционирование вынимает элементы из потока и не резервирует для них место."
+      }
+    },
+    {
+      "id": "relative-offsets-container",
+      "title": "Контейнер relative",
+      "text": "<p><strong>position: relative имеет два полезных применения.</strong> Сдвиг top и left перемещает элемент от исходного места, но его первоначальная область остаётся зарезервированной. Второй образец использует карточку с position:relative как систему координат для метки position:absolute, чтобы бейдж стоял в углу именно этой карточки.</p><p>Сравни положение следующего абзаца: после относительного сдвига он не занимает оставленное место. Меняй координаты .badge и наблюдай, что она остаётся внутри .card. Не назначай relative случайному дальнему предку: тогда абсолютный элемент будет считать координаты не от нужной коробки. После пробы нажми сброс.</p>",
+      "try": {
+        "title": "1. Сдвиг без потери исходного места",
+        "html": "<p>До карточки</p>\n<article class=\"note\"><strong>Наблюдение</strong><p>Элемент сдвинулся, но его место сохранено.</p></article>\n<p>Следующий блок не поднялся на это место.</p>",
+        "css": ".note { position: relative; top: 10px; left: 14px; max-width: 25rem; padding: 1rem; background: #eaf1e8; }",
+        "height": 275
+      },
+      "remember": "Relative сдвигает от исходного места и задаёт ближайшую систему координат для absolute-потомка.",
+      "examples": [
+        {
+          "title": "1. Сдвиг без потери исходного места",
+          "html": "<p>До карточки</p>\n<article class=\"note\"><strong>Наблюдение</strong><p>Элемент сдвинулся, но его место сохранено.</p></article>\n<p>Следующий блок не поднялся на это место.</p>",
+          "css": ".note { position: relative; top: 10px; left: 14px; max-width: 25rem; padding: 1rem; background: #eaf1e8; }",
+          "height": 275
+        },
+        {
+          "title": "2. Родитель задаёт систему координат",
+          "html": "<article class=\"card\">\n  <span class=\"badge\">Новое</span>\n  <h2>Лесная тропа</h2>\n  <p>Метка позиционируется относительно карточки.</p>\n</article>",
+          "css": ".card { position: relative; max-width: 25rem; padding: 1.5rem; border: 1px solid #d9e1eb; border-radius: 14px; }\n.badge { position: absolute; top: .7rem; right: .7rem; padding: .25rem .5rem; background: #eaf1ff; }",
+          "height": 275
+        }
+      ],
+      "mistake": {
+        "bad": ".badge { position: absolute; top: 0; right: 0; }",
+        "good": ".card { position: relative; } .badge { position: absolute; top: 0; right: 0; }",
+        "why": "Без position:relative у карточки бейдж привяжется к другому позиционированному предку или странице."
+      }
+    },
+    {
+      "id": "absolute-inset-position",
+      "title": "Absolute и четыре стороны",
+      "text": "<p><strong>position:absolute выводит элемент из обычного потока и размещает его относительно ближайшего позиционированного предка.</strong> В бейдже значения top и right задают отступ от двух краёв карточки. Второй вариант центрирует метку на карте с помощью left и top в процентах, а также transform, который сдвигает её на половину собственного размера.</p><p>Проверь, что .card или .map получили position:relative: иначе элемент может привязаться к окну. Используй inset, когда нужно указать сразу несколько сторон, и оставляй понятный родитель. Не задавай все координаты сразу без нужды — содержимое меняется, и такой элемент может перекрыть текст.</p>",
+      "try": {
+        "title": "1. Бейдж в углу карточки",
+        "html": "<article class=\"card\"><span class=\"badge\">Новое</span><h2>Лесная прогулка</h2><p>3,5 км · 90 минут</p></article>",
+        "css": ".card { position: relative; padding: 1.3rem; border: 1px solid #dce3e8; }\n.badge { position: absolute; top: .5rem; right: .5rem; padding: .3rem .5rem; background: #ffe29b; }",
+        "height": 275
+      },
+      "remember": "Absolute-позиция опирается на ближайший предок с position, отличный от static.",
+      "examples": [
+        {
+          "title": "1. Бейдж в углу карточки",
+          "html": "<article class=\"card\"><span class=\"badge\">Новое</span><h2>Лесная прогулка</h2><p>3,5 км · 90 минут</p></article>",
+          "css": ".card { position: relative; padding: 1.3rem; border: 1px solid #dce3e8; }\n.badge { position: absolute; top: .5rem; right: .5rem; padding: .3rem .5rem; background: #ffe29b; }",
+          "height": 275
+        },
+        {
+          "title": "2. Слой внутри заданной области",
+          "html": "<div class=\"map\"><span class=\"pin\">Место встречи</span></div>",
+          "css": ".map { position: relative; min-height: 10rem; background: #e9f1e6; }\n.pin { position: absolute; left: 50%; top: 45%; transform: translate(-50%, -50%); }",
+          "height": 275
+        }
+      ],
+      "mistake": {
+        "bad": ".badge { position: absolute; right: .5rem; top: .5rem; }",
+        "good": ".card { position: relative; } .badge { position: absolute; right: .5rem; top: .5rem; }",
+        "why": "Если родитель не задаёт систему координат, бейдж может оказаться в углу всей страницы."
+      }
+    },
+    {
+      "id": "fixed-sticky-position",
+      "title": "Fixed и sticky",
+      "text": "<p><strong>fixed привязывает элемент к окну, sticky — удерживает его у края при прокрутке в пределах контейнера.</strong> Кнопка «Наверх» остаётся в одном месте экрана независимо от страницы, а липкая шапка сначала занимает обычное место и прилипает, когда достигает top:0.</p><p>Прокрути длинный образец и сравни поведение обоих элементов. У fixed-кнопки оставь свободное место, чтобы она не закрывала текст; у sticky-панели проверь высоту её родителя и направление прокрутки. Не забывай, что sticky часто не сработает, если у предка стоит неподходящий overflow или контейнер слишком короткий.</p>",
+      "try": {
+        "title": "1. Кнопка fixed у окна",
+        "html": "<main><h1>Длинная статья</h1><p>Прокрути страницу вниз.</p></main><a class=\"top\" href=\"#top\">Наверх</a>",
+        "css": ".top { position: fixed; right: 1rem; bottom: 1rem; padding: .7rem; background: #315f47; color: white; }\nmain { min-height: 80vh; }",
+        "height": 275
+      },
+      "remember": "Fixed связан с окном, sticky удерживается у края своего прокручиваемого контейнера.",
+      "examples": [
+        {
+          "title": "1. Кнопка fixed у окна",
+          "html": "<main><h1>Длинная статья</h1><p>Прокрути страницу вниз.</p></main><a class=\"top\" href=\"#top\">Наверх</a>",
+          "css": ".top { position: fixed; right: 1rem; bottom: 1rem; padding: .7rem; background: #315f47; color: white; }\nmain { min-height: 80vh; }",
+          "height": 275
+        },
+        {
+          "title": "2. Навигация sticky у края",
+          "html": "<header class=\"sticky\">Разделы статьи</header><main><h1>История парка</h1><p>Прокрути страницу, шапка останется видимой.</p></main>",
+          "css": ".sticky { position: sticky; top: 0; padding: .8rem; background: #fff; border-bottom: 1px solid #dce3e8; }\nmain { min-height: 70vh; }",
+          "height": 275
+        }
+      ],
+      "mistake": {
+        "bad": ".sticky { position: sticky; }",
+        "good": ".sticky { position: sticky; top: 0; }",
+        "why": "Без порога top браузеру не задано, где панель должна прилипать."
+      }
+    },
+    {
+      "id": "z-index-stacking-context",
+      "title": "z-index и контекст наложения",
+      "text": "<p><strong>z-index управляет порядком наложения, но сравнивается внутри контекстов.</strong> В первом примере isolation:isolate создаёт локальную сцену, а backdrop и badge получают разные уровни. Во втором метка располагается поверх карточки, если находится в том же контексте и имеет подходящий z-index.</p><p>Изменяй числа по одному и наблюдай, какой объект перекрывает другой. Очень большое число не поднимет элемент выше отдельного контекста предка: сначала найди ближайшие stacking context, которые могут появиться из-за transform или opacity. Не ставь z-index всем элементам; используй уровни только там, где интерфейсу действительно нужно наложение.</p>",
+      "try": {
+        "title": "1. Контекст наложения",
+        "html": "<div class=\"scene\">\n  <div class=\"backdrop\">Фон карточки</div>\n  <div class=\"badge\">Подсказка</div>\n</div>",
+        "css": ".scene { position: relative; isolation: isolate; min-height: 130px; }\n.backdrop { position: absolute; inset: 20px 30px; z-index: -1; background: #eef2ff; }\n.badge { position: absolute; top: 0; right: 0; padding: .5rem; background: #ffd77b; }",
+        "height": 275
+      },
+      "remember": "Сначала найди контекст наложения предков, затем сравни z-index внутри него.",
+      "examples": [
+        {
+          "title": "1. Контекст наложения",
+          "html": "<div class=\"scene\">\n  <div class=\"backdrop\">Фон карточки</div>\n  <div class=\"badge\">Подсказка</div>\n</div>",
+          "css": ".scene { position: relative; isolation: isolate; min-height: 130px; }\n.backdrop { position: absolute; inset: 20px 30px; z-index: -1; background: #eef2ff; }\n.badge { position: absolute; top: 0; right: 0; padding: .5rem; background: #ffd77b; }",
+          "height": 275
+        },
+        {
+          "title": "2. Оверлей над карточкой",
+          "html": "<article class=\"card\">\n  <span class=\"label\">ОСТАЛОСЬ 3 МЕСТА</span>\n  <h2>Экскурсия в обсерваторию</h2>\n</article>",
+          "css": ".card { position: relative; min-height: 150px; padding: 1rem; background: #eaf0ec; }\n.label { position: absolute; top: .7rem; right: .7rem; z-index: 1; padding: .3rem .5rem; background: #fff; }",
+          "height": 275
+        }
+      ],
+      "mistake": {
+        "bad": ".tooltip { z-index: 999999; }",
+        "good": ".card { position: relative; isolation: isolate; } .tooltip { position: absolute; z-index: 1; }",
+        "why": "Чрезмерное число не помогает, если элемент остаётся внутри более низкого контекста предка."
+      }
+    }
+  ],
+  "cheatsheet": {
+    "lang": "css",
+    "code": ".card {\n  position: relative;\n  display: block;\n}\n.badge {\n  position: absolute;\n  top: 12px;\n  right: 12px;\n}\n.label { display: inline-block; padding: 6px 10px; }"
+  },
+  "practice": {
+    "intro": "Собери карточку события с меткой даты: сначала разложи текст, затем закрепи метку относительно карточки.",
+    "stages": [
+      {
+        "title": "Подготовь основу · Поток и координаты",
+        "task": "Для проекта «карточку события с меткой даты, закреплённой в углу» выполни шаг «Поток и координаты»: Без специальных правил блоки читаются в том же порядке, в каком записаны в HTML. Примени правило к реальному элементу страницы и покажи результат в браузерном предпросмотре.",
+        "check": "Контрольная точка: ученик находит в коде «Сначала выстроить разделы обычным потоком и отступами», отличает его от ошибки «Расставлять обычные карточки absolute по всему экрану» и объясняет: Абсолютное позиционирование вынимает элементы из потока и не резервирует для них место."
+      },
+      {
+        "title": "Добавь ключевой приём · Absolute и четыре стороны",
+        "task": "Для проекта «карточку события с меткой даты, закреплённой в углу» выполни шаг «Absolute и четыре стороны»: Absolute-позиция опирается на ближайший предок с position, отличный от static. Примени правило к реальному элементу страницы и покажи результат в браузерном предпросмотре.",
+        "check": "Контрольная точка: ученик находит в коде «.card { position: relative; } .badge { position: absolute; right: .5rem; top: .5rem; }», отличает его от ошибки «.badge { position: absolute; right: .5rem; top: .5rem; }» и объясняет: Если родитель не задаёт систему координат, бейдж может оказаться в углу всей страницы."
+      },
+      {
+        "title": "Собери рабочий фрагмент · z-index и контекст наложения",
+        "task": "Для проекта «карточку события с меткой даты, закреплённой в углу» выполни шаг «z-index и контекст наложения»: Сначала найди контекст наложения предков, затем сравни z-index внутри него. Примени правило к реальному элементу страницы и покажи результат в браузерном предпросмотре.",
+        "check": "Контрольная точка: ученик находит в коде «.card { position: relative; isolation: isolate; } .tooltip { position: absolute; z-index: 1; }», отличает его от ошибки «.tooltip { z-index: 999999; }» и объясняет: Чрезмерное число не помогает, если элемент остаётся внутри более низкого контекста предка."
+      },
+      {
+        "title": "Проверь и объясни · Шахматная доска: светлые и тёмные клетки",
+        "task": "Для проекта «карточку события с меткой даты, закреплённой в углу» выполни шаг «Шахматная доска: светлые и тёмные клетки»: Считай позиции nth-child относительно общего родителя и проверь повтор рисунка через строку. Примени правило к реальному элементу страницы и покажи результат в браузерном предпросмотре.",
+        "check": "Контрольная точка: ученик находит в коде «.board span:nth-child(16n + 1), .board span:nth-child(16n + 3) { background: #789076; }», отличает его от ошибки «.board span:nth-child(even) { background: #789076; }» и объясняет: Обычное чередование even продолжится через конец ряда и не сдвинет узор на следующей строке."
+      }
+    ],
+    "hints": [
+      "Если застрял на «Поток и координаты», проверь правило: Без специальных правил блоки читаются в том же порядке, в каком записаны в HTML. Частая ошибка: Расставлять обычные карточки absolute по всему экрану — Абсолютное позиционирование вынимает элементы из потока и не резервирует для них место.",
+      "Если застрял на «Absolute и четыре стороны», проверь правило: Absolute-позиция опирается на ближайший предок с position, отличный от static. Частая ошибка: .badge { position: absolute; right: .5rem; top: .5rem; } — Если родитель не задаёт систему координат, бейдж может оказаться в углу всей страницы.",
+      "Если застрял на «z-index и контекст наложения», проверь правило: Сначала найди контекст наложения предков, затем сравни z-index внутри него. Частая ошибка: .tooltip { z-index: 999999; } — Чрезмерное число не помогает, если элемент остаётся внутри более низкого контекста предка."
+    ],
+    "solution": {
+      "html": "<!doctype html>\n<html lang=\"ru\"><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"><title>Position и клетки</title></head><body>\n  <main class=\"page\"><h1>Проба абсолютных координат</h1><p>Четыре на четыре: упражнение для понимания position.</p><div class=\"board\">\n      <span class=\"light\" style=\"top:0%;left:0%\" aria-hidden=\"true\"></span>\n      <span class=\"dark\" style=\"top:0%;left:25%\" aria-hidden=\"true\"></span>\n      <span class=\"light\" style=\"top:0%;left:50%\" aria-hidden=\"true\"></span>\n      <span class=\"dark\" style=\"top:0%;left:75%\" aria-hidden=\"true\"></span>\n      <span class=\"dark\" style=\"top:25%;left:0%\" aria-hidden=\"true\"></span>\n      <span class=\"light\" style=\"top:25%;left:25%\" aria-hidden=\"true\"></span>\n      <span class=\"dark\" style=\"top:25%;left:50%\" aria-hidden=\"true\"></span>\n      <span class=\"light\" style=\"top:25%;left:75%\" aria-hidden=\"true\"></span>\n      <span class=\"light\" style=\"top:50%;left:0%\" aria-hidden=\"true\"></span>\n      <span class=\"dark\" style=\"top:50%;left:25%\" aria-hidden=\"true\"></span>\n      <span class=\"light\" style=\"top:50%;left:50%\" aria-hidden=\"true\"></span>\n      <span class=\"dark\" style=\"top:50%;left:75%\" aria-hidden=\"true\"></span>\n      <span class=\"dark\" style=\"top:75%;left:0%\" aria-hidden=\"true\"></span>\n      <span class=\"light\" style=\"top:75%;left:25%\" aria-hidden=\"true\"></span>\n      <span class=\"dark\" style=\"top:75%;left:50%\" aria-hidden=\"true\"></span>\n      <span class=\"light\" style=\"top:75%;left:75%\" aria-hidden=\"true\"></span>\n  </div><p>Для настоящей регулярной сетки используй CSS Grid.</p></main>\n</body></html>",
+      "css": "*{box-sizing:border-box}\nbody{margin:0;padding:24px;background:#f4f5f1;color:#2e3b31;font:16px/1.5 Arial,sans-serif}\n.page{max-width:520px;margin:auto}\n.board{position:relative;width:min(100%,320px);aspect-ratio:1;border:4px solid #52685a}\n.board span{position:absolute;width:25%;height:25%}\n.light{background:#f4ead7}.dark{background:#7c967f}"
+    },
+    "findError": {
+      "code": ".page { width: 1000px; }\n.action { outline: none; }\nimg { width: 400px; }",
+      "solution": "<p>Фиксированная ширина переполняет мобильный экран; ограничь контейнер через max-width и оставь width:100%. Не убирай клавиатурный контур без заметной замены. Изображению задай max-width:100% и подходящее соотношение сторон.</p>"
+    }
+  },
+  "can": [
+    "Объяснить разницу между block и inline.",
+    "Выбрать display для простого ряда элементов.",
+    "Задать position: relative родительскому блоку и absolute метке.",
+    "Понять, когда применяются fixed, sticky и z-index."
+  ],
+  "projects": [
+    {
+      "title": "Афиша с плавающей датой",
+      "about": "Площадке нужна афиша, где дата закреплена в углу изображения события.",
+      "steps": [
+        "Создай карточку события и назначь ей position: relative.",
+        "Размести бейдж даты через absolute и координаты top/right.",
+        "Добавь отдельный fixed элемент «Купить билет» и убедись, что он не закрывает текст."
+      ],
+      "done": [
+        "Понятно, относительно какого блока размещён бейдж.",
+        "Бейдж остаётся внутри своей карточки.",
+        "Закреплённая кнопка не перекрывает важное содержимое."
+      ],
+      "stretch": "Добавь слой с затемнением изображения и проверь порядок через z-index.",
+      "example": {
+        "title": "Афиша с плавающей датой",
+        "description": "Образец готовой страницы для проекта «Афиша с плавающей датой». Музыка во дворе, вечерний кинопоказ и небольшая ярмарка местных проектов.",
+        "html": "<!doctype html>\n<html lang=\"ru\">\n<head>\n  <meta charset=\"utf-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n  <title>Фестиваль «Летний двор»</title>\n  <link rel=\"stylesheet\" href=\"./style.css\">\n  \n</head>\n<body>\n  <div class=\"demo demo--poster\" id=\"top\" style=\"--accent:#945a35;--soft:#eaf0f7\">\n    <header class=\"demo-header\"><a class=\"demo-brand\" href=\"#top\">ПРИМЕР ПРОЕКТА</a><nav class=\"demo-nav\" aria-label=\"Навигация по странице\"><a href=\"#top\">О проекте</a><a href=\"#details\">Подробности</a></nav></header>\n    <main>\n      <section class=\"demo-hero\" aria-labelledby=\"project-title\"><span class=\"demo-kicker\">АФИША · 21 ИЮНЯ</span><h1 id=\"project-title\">Фестиваль «Летний двор»</h1><p class=\"demo-lead\">Музыка во дворе, вечерний кинопоказ и небольшая ярмарка местных проектов.</p></section>\n      <section class=\"demo-section\" id=\"details\"><h2>Что важно знать</h2><div class=\"demo-poster\"><span class=\"demo-kicker\">АФИША · 21 ИЮНЯ</span><span class=\"demo-date\">21 ИЮНЯ</span><h2>Фестиваль «Летний двор»</h2><p>Музыка во дворе, вечерний кинопоказ и небольшая ярмарка местных проектов.</p><a class=\"demo-cta\" href=\"#details\">Посмотреть программу</a></div><section class=\"demo-section\"><h2>Программа дня</h2><div class=\"demo-grid\"><article class=\"demo-card\"><small>ВНУТРЕННИЙ ДВОР</small><h3>17:00</h3><p>Открытие ярмарки</p></article><article class=\"demo-card\"><small>МАЛАЯ СЦЕНА</small><h3>19:00</h3><p>Живой концерт</p></article><article class=\"demo-card\"><small>ВОЗЬМИ ПЛЕД</small><h3>21:00</h3><p>Кино под открытым небом</p></article></div></section><div class=\"demo-note\">Вход свободный. На площадке есть питьевая вода и места для отдыха.</div><a class=\"demo-cta demo-fixed-cta\" href=\"#details\">Купить билет</a></section>\n    </main>\n    <footer class=\"demo-footer\">Учебный пример HTML и CSS · макет для обсуждения на занятии</footer>\n  </div>\n</body>\n</html>",
+        "css": ":root { color-scheme: light; }\n* { box-sizing: border-box; }\nbody { margin: 0; color: #202635; background: #f4f6f8; font: 15px/1.55 Arial, sans-serif; }\na { color: inherit; }\n.demo { --accent: #365c8d; --soft: #eaf0f7; --ink: #202635; max-width: 1100px; min-height: 100vh; margin: 0 auto; padding: 0 26px 46px; background: #fff; }\n.demo-header { display: flex; align-items: center; justify-content: space-between; gap: 20px; min-height: 66px; border-bottom: 1px solid #e8ebef; }\n.demo-brand { color: var(--accent); font-size: 13px; font-weight: 800; letter-spacing: .08em; text-decoration: none; text-transform: uppercase; }\n.demo-nav { display: flex; flex-wrap: wrap; gap: 16px; color: #626b79; font-size: 12px; }\n.demo-nav a { display: flex; align-items: center; min-height: 44px; text-decoration: none; }\n.demo-nav a:hover, .demo-nav a:focus-visible { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }\n.demo-hero { position: relative; overflow: hidden; margin: 22px 0; padding: clamp(24px,5vw,56px); border-radius: 20px; background: linear-gradient(120deg,var(--soft),#fff 72%); }\n.demo-hero::after { position: absolute; right: -54px; bottom: -120px; width: 280px; height: 280px; border: 1px solid #d8e0eb; border-radius: 50%; content: ''; }\n.demo-kicker { color: var(--accent); font-size: 10px; font-weight: 800; letter-spacing: .14em; }\n.demo h1 { max-width: 760px; margin: 11px 0 10px; font-size: clamp(30px,5vw,48px); line-height: 1.08; letter-spacing: -.045em; }\n.demo-lead { max-width: 670px; margin: 0; color: #5e6877; font-size: 16px; }\n.demo-section { margin: 30px 0; }\n.demo-section h2 { margin: 0 0 13px; font-size: 21px; letter-spacing: -.025em; }\n.demo-section > p { max-width: 720px; color: #5e6877; }\n.demo-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 13px; }\n.demo-card { min-width: 0; padding: 19px; border: 1px solid #e7eaf0; border-radius: 14px; background: #fff; }\n.demo-card small { color: var(--accent); font-size: 10px; font-weight: 800; letter-spacing: .09em; text-transform: uppercase; }\n.demo-card h3 { margin: 9px 0 6px; font-size: 17px; }\n.demo-card p { margin: 0; color: #647080; font-size: 13px; }\n.demo-note { margin: 18px 0; padding: 14px 16px; border-left: 3px solid var(--accent); border-radius: 0 10px 10px 0; background: var(--soft); color: #424d5d; font-size: 13px; }\n.demo-list { display: grid; gap: 8px; margin: 0; padding-left: 21px; color: #465264; }\n.demo-cta { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; margin-top: 12px; padding: 10px 16px; border-radius: 9px; color: #fff; background: var(--accent); font-size: 13px; font-weight: 700; text-decoration: none; transition: filter .16s ease,transform .16s ease; }\n.demo-cta:hover, .demo-cta:focus-visible { filter: brightness(.9); outline: 3px solid #d6deea; outline-offset: 2px; }\n.demo-footer { margin-top: 40px; padding-top: 16px; border-top: 1px solid #e8ebef; color: #77808e; font-size: 11px; }\n.demo-footer-columns { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 18px; }\n.demo-footer-columns h2 { margin: 0 0 6px; color: #344050; font-size: 12px; }\n.demo-footer-columns p { margin: 0; }\n.demo-footer-columns a { color: var(--accent); }\n.demo-table-wrap { overflow-x: auto; border: 1px solid #e3e7ed; border-radius: 12px; }\n.demo-table { width: 100%; border-collapse: collapse; text-align: left; }\n.demo-table caption { padding: 13px; color: #5b6574; font-size: 12px; text-align: left; }\n.demo-table th, .demo-table td { padding: 12px 14px; border-top: 1px solid #e8ebef; }\n.demo-table thead th { color: var(--accent); background: var(--soft); font-size: 11px; }\n.demo-table tbody th { font-size: 12px; }\n.demo-table tbody td { color: #596473; font-size: 12px; }\n.demo-figure { margin: 0; }\n.demo-figure img { display: block; width: 100%; max-height: 300px; object-fit: cover; border-radius: 14px; }\n.demo-figure figcaption { margin-top: 6px; color: #707a88; font-size: 11px; }\n.demo-gallery { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 9px; }\n.demo-gallery figure { margin: 0; }\n.demo-gallery img { display: block; width: 100%; height: 130px; object-fit: cover; border-radius: 10px; }\n.demo-gallery figcaption { margin-top: 5px; color: #677180; font-size: 10px; }\n.demo-link-list { display: flex; flex-wrap: wrap; align-items: center; gap: 9px; margin: 17px 0; }\n.demo-link-list b { flex-basis: 100%; font-size: 13px; }\n.demo-link-list a { padding: 8px 10px; border: 1px solid #e3e8ef; border-radius: 8px; color: var(--accent); font-size: 11px; font-weight: 700; text-decoration: none; }\n.demo-link-list a:hover,.demo-link-list a:focus-visible { text-decoration: underline; text-underline-offset: 3px; }\n.demo-inline-book { display: inline-block; vertical-align: top; width: 30%; min-height: 270px; margin: 0 1.4% 12px 0; padding: 13px; border: 1px solid #e7eaf0; border-radius: 12px; background: linear-gradient(145deg,#fff,var(--soft)); }\n.demo-inline-book small { color: var(--accent); font-size: 10px; font-weight: 800; }\n.demo-inline-book b { display: block; margin: 22px 0 5px; font-size: 15px; }\n.demo-inline-book span { color: #677180; font-size: 11px; }\n.demo-book-cover { min-height: 100px; display: grid; place-items: end start; padding: 11px; border-radius: 6px; color: #fff; background: linear-gradient(145deg,var(--cover),#1d2f3e); box-shadow: 2px 3px 6px #20263525; font-size: 13px; font-weight: 700; }\n.demo-inline-book p { margin: 7px 0 0; color: #657181; font-size: 10px; }\n.demo-profile-list { display: flex; flex-wrap: wrap; gap: 12px; }\n.demo-profile { display: inline-block; vertical-align: top; width: calc(50% - 6px); overflow: hidden; border: 1px solid #e6eaf0; border-radius: 12px; background: #fff; }\n.demo-profile > img { display: block; width: 100%; height: 110px; object-fit: cover; }\n.demo-profile-copy { padding: 14px; }\n.demo-profile-copy small { color: var(--accent); font-size: 9px; font-weight: 800; }\n.demo-profile-copy h3 { margin: 6px 0 2px; font-size: 16px; }\n.demo-profile-copy > b { color: #5c6877; font-size: 11px; }\n.demo-profile-copy p { min-height: 38px; color: #647080; font-size: 11px; }\n.demo-profile-copy a { color: var(--accent); font-size: 11px; font-weight: 700; }\n.demo-flex-grid { display: flex; flex-wrap: wrap; align-items: stretch; gap: 13px; }\n.demo-flex-grid .demo-card { flex: 1 1 220px; }\n.demo-circle-row { display: flex; flex-wrap: wrap; gap: 18px; }\n.demo-circle { width: 150px; text-align: center; }\n.demo-circle-art { width: 112px; height: 112px; display: grid; place-items: center; margin: 0 auto 11px; border-radius: 50%; color: #fff; background: var(--bubble); box-shadow: inset -10px -12px 25px #0002; font-size: 13px; font-weight: 700; }\n.demo-circle b, .demo-circle span { display: block; }\n.demo-circle span { color: #697382; font-size: 11px; }\n.demo-stage { position: relative; min-height: 310px; overflow: hidden; border: 1px solid #e5e8ee; border-radius: 16px; background: repeating-linear-gradient(0deg,#fff,#fff 39px,#edf0f4 40px),repeating-linear-gradient(90deg,transparent,transparent 39px,#edf0f4 40px); }\n.scene-block { position: absolute; display: grid; place-items: center; border: 1px solid var(--accent); border-radius: 10px; color: var(--accent); background: var(--soft); font-size: 12px; font-weight: 700; }\n.scene-wide { inset: 11% 20% auto; height: 45px; }\n.scene-platform { left: 24%; right: 24%; bottom: 14%; height: 68px; color: #fff; background: var(--accent); }\n.scene-panel { left: 8%; top: 38%; width: 28%; height: 68px; }\n.scene-panel-alt { left: auto; right: 8%; }\n.scene-route { left: 45%; top: 34%; width: 10%; height: 40px; border-style: dashed; background: #fff; }\n.demo-poster { position: relative; overflow: hidden; min-height: 280px; padding: 30px; border-radius: 18px; color: #fff; background: linear-gradient(135deg,#1c354d,var(--accent)); }\n.demo-poster h2 { max-width: 530px; margin: 24px 0 8px; font-size: clamp(26px,4vw,40px); }\n.demo-poster p { color: #e5ebf4; }\n.demo-date { position: absolute; top: 18px; right: 18px; display: grid; place-items: center; width: 78px; height: 78px; border-radius: 50%; color: #27344a; background: #f5d887; font-size: 12px; font-weight: 800; text-align: center; }\n.demo-fixed-cta { position: fixed; right: 18px; bottom: 18px; z-index: 10; margin: 0; box-shadow: 0 8px 24px #12223855; }\n.demo-map { position: relative; min-height: 250px; overflow: hidden; border: 1px solid #d9e1e9; border-radius: 16px; background: linear-gradient(165deg,#edf3e8 0 44%,#c9e4ec 44% 58%,#eff1e5 58%); }\n.demo-map::before { position: absolute; left: 12%; top: 62%; width: 77%; border-top: 4px dashed #bd754b; transform: rotate(-16deg); content: \"\"; }\n.demo-map-marker { position: absolute; left: var(--x); top: var(--y); z-index: 2; display: grid; place-items: center; width: 32px; height: 32px; border: 3px solid #fff; border-radius: 50%; color: #fff; background: var(--accent); box-shadow: 0 3px 9px #1d304033; font-size: 10px; font-weight: 800; transform: translate(-50%,-50%); }\n.demo-stop-list { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 9px; margin-top: 12px; counter-reset: stop; }\n.demo-stop { position: relative; padding: 16px 13px; border: 1px solid #e6eaf0; border-radius: 12px; }\n.demo-stop b { display: block; color: var(--accent); font-size: 11px; }\n.demo-stop span { display: block; margin: 8px 0 3px; font-size: 13px; font-weight: 700; }\n.demo-stop small { color: #748090; }\n.demo-chess { position: relative; display: grid; grid-template-columns: repeat(8,1fr); width: min(100%,400px); aspect-ratio: 1; overflow: hidden; border: 5px solid #273345; border-radius: 6px; }\n.demo-square:nth-child(16n+1), .demo-square:nth-child(16n+3), .demo-square:nth-child(16n+5), .demo-square:nth-child(16n+7), .demo-square:nth-child(16n+10), .demo-square:nth-child(16n+12), .demo-square:nth-child(16n+14), .demo-square:nth-child(16n+16) { background: #dbe4d6; }\n.demo-square { background: #738a72; }\n.demo-piece { position: absolute; left: calc((var(--x) + .5) * 12.5%); top: calc((var(--y) + .5) * 12.5%); z-index: 2; width: 12.5%; height: 12.5%; transform: translate(-50%,-50%); color: #202635; font: 34px/1 Georgia,serif; text-align: center; text-shadow: 0 1px 2px #fff; }\n.demo-seat-grid { display: grid; grid-template-columns: repeat(6,minmax(22px,1fr)); gap: 7px; max-width: 500px; }\n.demo-seat { display: grid; place-items: center; aspect-ratio: 1.2; border: 1px solid #aab4c2; border-radius: 5px 5px 2px 2px; color: #596474; background: #edf0f4; font-size: 10px; }\n.demo-seat.is-taken { border-color: #4b806c; color: #fff; background: #4b806c; }\n.demo-legend { display: flex; flex-wrap: wrap; gap: 14px; margin: 14px 0; color: #5c6674; font-size: 11px; }\n.demo-legend span { display: inline-flex; align-items: center; gap: 6px; }\n.demo-legend i { width: 12px; height: 12px; border: 1px solid #aab4c2; border-radius: 3px; background: #edf0f4; }\n.demo-legend .taken { border-color: #4b806c; background: #4b806c; }\n.demo-kanban { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }\n.demo-column { padding: 13px; border-radius: 12px; background: #f3f5f8; }\n.demo-column h3 { margin: 0 0 10px; font-size: 13px; }\n.demo-task { margin-top: 8px; padding: 12px; border: 1px solid #e5e9ef; border-radius: 9px; background: #fff; font-size: 12px; }\n.demo-filter-label { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 14px; }\n.demo-filter-label span { padding: 6px 10px; border: 1px solid #e6eaf0; border-radius: 999px; color: #5d6877; font-size: 10px; }\n.demo-menu-list { display: flex; gap: 5px; padding: 0; margin: 0 0 24px; list-style: none; }\n.demo-menu-group { position: relative; }\n.demo-menu-group > a { display: flex; align-items: center; min-height: 44px; padding: 10px 12px; border-radius: 8px; color: #3c4858; font-size: 13px; text-decoration: none; }\n.demo-submenu { position: absolute; top: 100%; left: 0; z-index: 5; display: none; min-width: 205px; padding: 7px; border: 1px solid #e5e8ef; border-radius: 10px; background: #fff; box-shadow: 0 14px 34px #20263520; }\n.demo-submenu a { display: flex; align-items: center; min-height: 44px; padding: 9px; border-radius: 6px; font-size: 12px; text-decoration: none; }\n.demo-submenu a:hover, .demo-submenu a:focus-visible { color: var(--accent); background: var(--soft); }\n.demo-menu-group:hover .demo-submenu, .demo-menu-group:focus-within .demo-submenu { display: block; }\n.demo-hint { margin: 8px 0; padding: 12px; border: 1px solid #e5e8ef; border-radius: 9px; }\n.demo-hint summary { cursor: pointer; color: var(--accent); font-size: 13px; font-weight: 700; }\n.demo-hint p { margin: 9px 0 0; color: #5e6877; font-size: 12px; }\n.demo-product { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; align-items: center; padding: 22px; border: 1px solid #e6eaf0; border-radius: 16px; }\n.demo-product-art { min-height: 210px; display: grid; place-items: center; border-radius: 12px; color: var(--accent); background: linear-gradient(145deg,var(--soft),#fff); font-size: 56px; }\n.demo-product:hover { box-shadow: 0 15px 36px #20263518; transform: translateY(-2px); transition: transform .2s ease,box-shadow .2s ease; }\n.demo-product:focus-within { outline: 3px solid #d6deea; outline-offset: 3px; }\n.demo-facts { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 8px; margin: 16px 0; }\n.demo-fact { padding: 12px; border-radius: 10px; background: var(--soft); }\n.demo-fact b, .demo-fact span { display: block; }\n.demo-fact span { margin-top: 4px; color: #626d7c; font-size: 11px; }\n.demo-form { display: grid; gap: 14px; max-width: 650px; padding: 21px; border: 1px solid #e4e8ef; border-radius: 14px; }\n.demo-form fieldset { display: grid; gap: 9px; margin: 0; padding: 13px; border: 1px solid #e4e8ef; border-radius: 10px; }\n.demo-form legend { padding: 0 5px; font-weight: 700; }\n.demo-field { display: grid; gap: 5px; color: #485465; font-size: 12px; font-weight: 700; }\n.demo-field input, .demo-field select, .demo-field textarea { width: 100%; min-height: 43px; padding: 10px; border: 1px solid #cfd6df; border-radius: 7px; color: var(--ink); background: #fff; font: inherit; font-weight: 400; }\n.demo-field textarea { min-height: 100px; resize: vertical; }\n.demo-form > input, .demo-form > select, .demo-form > textarea { width: 100%; min-height: 43px; padding: 10px; border: 1px solid #cfd6df; border-radius: 7px; color: var(--ink); background: #fff; font: inherit; }\n.demo-form input:focus-visible, .demo-form select:focus-visible, .demo-form textarea:focus-visible { outline: 3px solid #d6deea; outline-offset: 1px; }\n.demo-radio { display: flex; align-items: center; gap: 8px; font-size: 12px; }\n.help-search { display: flex; gap: 8px; margin: 18px 0; }\n.help-search__label--visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; clip-path: inset(50%); }\n.help-search__input { min-width: 0; flex: 1; padding: 10px; border: 1px solid #cfd6df; border-radius: 8px; }\n.help-search__button { min-height: 44px; padding: 9px 15px; border: 0; border-radius: 8px; color: #fff; background: var(--accent); font-weight: 700; }\n.help-topic-list { margin-top: 14px; }\n.help-topic { min-height: 150px; padding: 17px; border: 1px solid #e6eaf0; border-radius: 12px; }\n.help-topic__count { color: var(--accent); font-size: 10px; font-weight: 800; }\n.help-topic__title { margin: 9px 0 5px; }\n.help-topic__description { color: #647080; font-size: 12px; }\n.demo-event-link { display: block; color: inherit; text-decoration: none; transition: transform .18s ease,box-shadow .18s ease; }\n.demo-event-link:hover,.demo-event-link:focus-visible { transform: translateY(-3px); box-shadow: 0 12px 26px #20263516; outline: 2px solid #b7c4d7; outline-offset: 2px; }\n.demo-event-link span { color: var(--accent); font-size: 11px; font-weight: 700; }\n.demo-event-link::before { display: block; width: 38px; margin-bottom: 11px; border-top: 3px solid var(--accent); content: \"\"; transform-origin: left; transition: transform .2s ease; }\n.demo-event-link:hover::before,.demo-event-link:focus-visible::before { transform: scaleX(1.5); }\n.demo-news-index { display: grid; gap: 8px; }\n.demo-news-index a { padding: 12px 14px; border-left: 3px solid var(--accent); border-radius: 0 8px 8px 0; color: #33445d; background: var(--soft); font-size: 12px; font-weight: 700; text-decoration: none; }\n.demo-news-index a:hover,.demo-news-index a:focus-visible { text-decoration: underline; text-underline-offset: 3px; }\n.demo-news-article { margin-top: 22px; padding: 18px; border: 1px solid #e6eaf0; border-radius: 12px; }\n.demo-news-article > small { color: var(--accent); font-weight: 800; }\n.demo-news-article h3 { margin: 7px 0; }\n.demo-news-article p { color: #5e6877; }\n.demo-news-card { margin: 10px 0; }\n.demo-optional-panel--hidden { display: none; }\n.demo--landing-hotel .demo-hero { color: #fff; background: linear-gradient(90deg,#152d42dc,#152d4270),url('../assets/mountains.svg') center/cover; }\n.demo--landing-hotel .demo-hero .demo-kicker,.demo--landing-hotel .demo-hero .demo-lead { color: #fff; }\n.demo--landing-hotel .demo-hero::after { border-color: #ffffff55; }\n.demo--landing-tour .demo-hero { background: linear-gradient(110deg,#18334dce,#18334d38),url('../assets/mountains.svg') center/cover; color: #fff; }\n.demo--landing-tour .demo-hero .demo-kicker,.demo--landing-tour .demo-hero .demo-lead { color: #fff; }\n.demo--landing-app .demo-app-image img { max-height: 230px; }\n.demo--bootstrap-anime .demo-header,.demo--bootstrap-events .demo-header { display: none; }\n.demo-status { display: inline-block; padding: 4px 7px; border-radius: 999px; font-size: 9px; font-weight: 800; }\n.demo-status--upcoming { color: #8c5612; background: #fff1d8; }\n.demo-status--confirmed { color: #28624b; background: #e4f4eb; }\n.demo-status--done { color: #586171; background: #eceff3; }\n.demo-skills { display: flex; flex-wrap: wrap; gap: 8px; padding: 0; list-style: none; }\n.demo-skills li { padding: 7px 10px; border-radius: 999px; color: var(--accent); background: var(--soft); font-size: 11px; font-weight: 700; }\n.demo-bootstrap-hero { padding: 32px; border-radius: 14px; color: white; background: #263958; }\n.demo-bootstrap-hero h2 { font-size: 29px; }\n.demo-bootstrap-card { height: 100%; padding: 18px; border: 1px solid #e1e5ea; border-radius: 10px; background: white; }\n@media (max-width: 700px) { .demo { padding: 0 16px 32px; } .demo-header { align-items: flex-start; flex-direction: column; justify-content: center; padding: 13px 0; } .demo-nav { gap: 11px; } .demo-grid,.demo-kanban { grid-template-columns: 1fr; } .demo-stop-list { grid-template-columns: repeat(2,minmax(0,1fr)); } .demo-inline-book { width: 47%; } .demo-product { grid-template-columns: 1fr; } .demo-circle { width: 125px; } .demo-circle-art { width: 96px; height: 96px; } .demo-fixed-cta { position: static !important; margin-top: 12px; } .demo-gallery { grid-template-columns: 1fr; } .demo-gallery img { height: 190px; } .demo-footer-columns { grid-template-columns: 1fr; } }\n@media (max-width: 430px) { .demo h1 { font-size: 30px; } .demo-seat-grid { gap: 4px; } .demo-seat { font-size: 8px; } .demo-stop-list { grid-template-columns: 1fr 1fr; } .demo-menu-list { flex-wrap: wrap; } .demo-profile { width: 100%; } .demo-inline-book { width: 100%; } }\n@media (prefers-reduced-motion: reduce) { *,*::before,*::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; } .demo-product:hover { transform: none; } }\n.demo { --accent: #945a35; --soft: #eaf0f7; }\n.demo-poster::after { position: absolute; right: 70px; bottom: -110px; width: 230px; height: 230px; border: 1px solid #ffffff50; border-radius: 50%; content: \"\"; }"
+      }
+    },
+    {
+      "title": "Карточка места на карте",
+      "about": "Туристический сайт делает карточки точек маршрута с меткой, расстоянием и быстрым действием.",
+      "steps": [
+        "Сделай карту-схему из контейнера и позиционированных маркеров.",
+        "Используй relative как систему координат и absolute для меток.",
+        "Добавь фиксированную панель подсказки, но оставь основное описание доступным."
+      ],
+      "done": [
+        "Маркеры привязаны к карте, а не к окну.",
+        "У элементов правильный порядок наложения.",
+        "На странице нет необъяснимых отрицательных отступов."
+      ],
+      "stretch": "Добавь второй слой маршрута и подписи к трём точкам.",
+      "example": {
+        "title": "Карточка места на карте",
+        "description": "Образец готовой страницы для проекта «Карточка места на карте». Небольшая прогулка по трём точкам: видовая площадка, родник и место для отдыха.",
+        "html": "<!doctype html>\n<html lang=\"ru\">\n<head>\n  <meta charset=\"utf-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n  <title>Маршрут у озера</title>\n  <link rel=\"stylesheet\" href=\"./style.css\">\n  \n</head>\n<body>\n  <div class=\"demo demo--map\" id=\"top\" style=\"--accent:#945a35;--soft:#eaf0f7\">\n    <header class=\"demo-header\"><a class=\"demo-brand\" href=\"#top\">ПРИМЕР ПРОЕКТА</a><nav class=\"demo-nav\" aria-label=\"Навигация по странице\"><a href=\"#top\">О проекте</a><a href=\"#details\">Подробности</a></nav></header>\n    <main>\n      <section class=\"demo-hero\" aria-labelledby=\"project-title\"><span class=\"demo-kicker\">МАРШРУТ · 3,4 КМ</span><h1 id=\"project-title\">Маршрут у озера</h1><p class=\"demo-lead\">Небольшая прогулка по трём точкам: видовая площадка, родник и место для отдыха.</p></section>\n      <section class=\"demo-section\" id=\"details\"><h2>Что важно знать</h2><div class=\"demo-map\" role=\"img\" aria-label=\"Схема маршрута с четырьмя отмеченными точками\"><span class=\"demo-map-marker\" style=\"--x:12%;--y:72%\" aria-hidden=\"true\">01</span><span class=\"demo-map-marker\" style=\"--x:39%;--y:58%\" aria-hidden=\"true\">02</span><span class=\"demo-map-marker\" style=\"--x:66%;--y:42%\" aria-hidden=\"true\">03</span><span class=\"demo-map-marker\" style=\"--x:88%;--y:27%\" aria-hidden=\"true\">04</span></div><div class=\"demo-stop-list\"><article class=\"demo-stop\"><b>ТОЧКА 01</b><span>Начало тропы</span><small>0 км от старта</small></article><article class=\"demo-stop\"><b>ТОЧКА 02</b><span>Смотровая площадка</span><small>1,1 км от старта</small></article><article class=\"demo-stop\"><b>ТОЧКА 03</b><span>Родник</span><small>2,0 км от старта</small></article><article class=\"demo-stop\"><b>ТОЧКА 04</b><span>Поляна для отдыха</span><small>3,4 км от старта</small></article></div><div class=\"demo-note\">Оставайся на обозначенной тропе и забери мусор с собой.</div></section>\n    </main>\n    <footer class=\"demo-footer\">Учебный пример HTML и CSS · макет для обсуждения на занятии</footer>\n  </div>\n</body>\n</html>",
+        "css": ":root { color-scheme: light; }\n* { box-sizing: border-box; }\nbody { margin: 0; color: #202635; background: #f4f6f8; font: 15px/1.55 Arial, sans-serif; }\na { color: inherit; }\n.demo { --accent: #365c8d; --soft: #eaf0f7; --ink: #202635; max-width: 1100px; min-height: 100vh; margin: 0 auto; padding: 0 26px 46px; background: #fff; }\n.demo-header { display: flex; align-items: center; justify-content: space-between; gap: 20px; min-height: 66px; border-bottom: 1px solid #e8ebef; }\n.demo-brand { color: var(--accent); font-size: 13px; font-weight: 800; letter-spacing: .08em; text-decoration: none; text-transform: uppercase; }\n.demo-nav { display: flex; flex-wrap: wrap; gap: 16px; color: #626b79; font-size: 12px; }\n.demo-nav a { display: flex; align-items: center; min-height: 44px; text-decoration: none; }\n.demo-nav a:hover, .demo-nav a:focus-visible { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }\n.demo-hero { position: relative; overflow: hidden; margin: 22px 0; padding: clamp(24px,5vw,56px); border-radius: 20px; background: linear-gradient(120deg,var(--soft),#fff 72%); }\n.demo-hero::after { position: absolute; right: -54px; bottom: -120px; width: 280px; height: 280px; border: 1px solid #d8e0eb; border-radius: 50%; content: ''; }\n.demo-kicker { color: var(--accent); font-size: 10px; font-weight: 800; letter-spacing: .14em; }\n.demo h1 { max-width: 760px; margin: 11px 0 10px; font-size: clamp(30px,5vw,48px); line-height: 1.08; letter-spacing: -.045em; }\n.demo-lead { max-width: 670px; margin: 0; color: #5e6877; font-size: 16px; }\n.demo-section { margin: 30px 0; }\n.demo-section h2 { margin: 0 0 13px; font-size: 21px; letter-spacing: -.025em; }\n.demo-section > p { max-width: 720px; color: #5e6877; }\n.demo-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 13px; }\n.demo-card { min-width: 0; padding: 19px; border: 1px solid #e7eaf0; border-radius: 14px; background: #fff; }\n.demo-card small { color: var(--accent); font-size: 10px; font-weight: 800; letter-spacing: .09em; text-transform: uppercase; }\n.demo-card h3 { margin: 9px 0 6px; font-size: 17px; }\n.demo-card p { margin: 0; color: #647080; font-size: 13px; }\n.demo-note { margin: 18px 0; padding: 14px 16px; border-left: 3px solid var(--accent); border-radius: 0 10px 10px 0; background: var(--soft); color: #424d5d; font-size: 13px; }\n.demo-list { display: grid; gap: 8px; margin: 0; padding-left: 21px; color: #465264; }\n.demo-cta { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; margin-top: 12px; padding: 10px 16px; border-radius: 9px; color: #fff; background: var(--accent); font-size: 13px; font-weight: 700; text-decoration: none; transition: filter .16s ease,transform .16s ease; }\n.demo-cta:hover, .demo-cta:focus-visible { filter: brightness(.9); outline: 3px solid #d6deea; outline-offset: 2px; }\n.demo-footer { margin-top: 40px; padding-top: 16px; border-top: 1px solid #e8ebef; color: #77808e; font-size: 11px; }\n.demo-footer-columns { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 18px; }\n.demo-footer-columns h2 { margin: 0 0 6px; color: #344050; font-size: 12px; }\n.demo-footer-columns p { margin: 0; }\n.demo-footer-columns a { color: var(--accent); }\n.demo-table-wrap { overflow-x: auto; border: 1px solid #e3e7ed; border-radius: 12px; }\n.demo-table { width: 100%; border-collapse: collapse; text-align: left; }\n.demo-table caption { padding: 13px; color: #5b6574; font-size: 12px; text-align: left; }\n.demo-table th, .demo-table td { padding: 12px 14px; border-top: 1px solid #e8ebef; }\n.demo-table thead th { color: var(--accent); background: var(--soft); font-size: 11px; }\n.demo-table tbody th { font-size: 12px; }\n.demo-table tbody td { color: #596473; font-size: 12px; }\n.demo-figure { margin: 0; }\n.demo-figure img { display: block; width: 100%; max-height: 300px; object-fit: cover; border-radius: 14px; }\n.demo-figure figcaption { margin-top: 6px; color: #707a88; font-size: 11px; }\n.demo-gallery { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 9px; }\n.demo-gallery figure { margin: 0; }\n.demo-gallery img { display: block; width: 100%; height: 130px; object-fit: cover; border-radius: 10px; }\n.demo-gallery figcaption { margin-top: 5px; color: #677180; font-size: 10px; }\n.demo-link-list { display: flex; flex-wrap: wrap; align-items: center; gap: 9px; margin: 17px 0; }\n.demo-link-list b { flex-basis: 100%; font-size: 13px; }\n.demo-link-list a { padding: 8px 10px; border: 1px solid #e3e8ef; border-radius: 8px; color: var(--accent); font-size: 11px; font-weight: 700; text-decoration: none; }\n.demo-link-list a:hover,.demo-link-list a:focus-visible { text-decoration: underline; text-underline-offset: 3px; }\n.demo-inline-book { display: inline-block; vertical-align: top; width: 30%; min-height: 270px; margin: 0 1.4% 12px 0; padding: 13px; border: 1px solid #e7eaf0; border-radius: 12px; background: linear-gradient(145deg,#fff,var(--soft)); }\n.demo-inline-book small { color: var(--accent); font-size: 10px; font-weight: 800; }\n.demo-inline-book b { display: block; margin: 22px 0 5px; font-size: 15px; }\n.demo-inline-book span { color: #677180; font-size: 11px; }\n.demo-book-cover { min-height: 100px; display: grid; place-items: end start; padding: 11px; border-radius: 6px; color: #fff; background: linear-gradient(145deg,var(--cover),#1d2f3e); box-shadow: 2px 3px 6px #20263525; font-size: 13px; font-weight: 700; }\n.demo-inline-book p { margin: 7px 0 0; color: #657181; font-size: 10px; }\n.demo-profile-list { display: flex; flex-wrap: wrap; gap: 12px; }\n.demo-profile { display: inline-block; vertical-align: top; width: calc(50% - 6px); overflow: hidden; border: 1px solid #e6eaf0; border-radius: 12px; background: #fff; }\n.demo-profile > img { display: block; width: 100%; height: 110px; object-fit: cover; }\n.demo-profile-copy { padding: 14px; }\n.demo-profile-copy small { color: var(--accent); font-size: 9px; font-weight: 800; }\n.demo-profile-copy h3 { margin: 6px 0 2px; font-size: 16px; }\n.demo-profile-copy > b { color: #5c6877; font-size: 11px; }\n.demo-profile-copy p { min-height: 38px; color: #647080; font-size: 11px; }\n.demo-profile-copy a { color: var(--accent); font-size: 11px; font-weight: 700; }\n.demo-flex-grid { display: flex; flex-wrap: wrap; align-items: stretch; gap: 13px; }\n.demo-flex-grid .demo-card { flex: 1 1 220px; }\n.demo-circle-row { display: flex; flex-wrap: wrap; gap: 18px; }\n.demo-circle { width: 150px; text-align: center; }\n.demo-circle-art { width: 112px; height: 112px; display: grid; place-items: center; margin: 0 auto 11px; border-radius: 50%; color: #fff; background: var(--bubble); box-shadow: inset -10px -12px 25px #0002; font-size: 13px; font-weight: 700; }\n.demo-circle b, .demo-circle span { display: block; }\n.demo-circle span { color: #697382; font-size: 11px; }\n.demo-stage { position: relative; min-height: 310px; overflow: hidden; border: 1px solid #e5e8ee; border-radius: 16px; background: repeating-linear-gradient(0deg,#fff,#fff 39px,#edf0f4 40px),repeating-linear-gradient(90deg,transparent,transparent 39px,#edf0f4 40px); }\n.scene-block { position: absolute; display: grid; place-items: center; border: 1px solid var(--accent); border-radius: 10px; color: var(--accent); background: var(--soft); font-size: 12px; font-weight: 700; }\n.scene-wide { inset: 11% 20% auto; height: 45px; }\n.scene-platform { left: 24%; right: 24%; bottom: 14%; height: 68px; color: #fff; background: var(--accent); }\n.scene-panel { left: 8%; top: 38%; width: 28%; height: 68px; }\n.scene-panel-alt { left: auto; right: 8%; }\n.scene-route { left: 45%; top: 34%; width: 10%; height: 40px; border-style: dashed; background: #fff; }\n.demo-poster { position: relative; overflow: hidden; min-height: 280px; padding: 30px; border-radius: 18px; color: #fff; background: linear-gradient(135deg,#1c354d,var(--accent)); }\n.demo-poster h2 { max-width: 530px; margin: 24px 0 8px; font-size: clamp(26px,4vw,40px); }\n.demo-poster p { color: #e5ebf4; }\n.demo-date { position: absolute; top: 18px; right: 18px; display: grid; place-items: center; width: 78px; height: 78px; border-radius: 50%; color: #27344a; background: #f5d887; font-size: 12px; font-weight: 800; text-align: center; }\n.demo-fixed-cta { position: fixed; right: 18px; bottom: 18px; z-index: 10; margin: 0; box-shadow: 0 8px 24px #12223855; }\n.demo-map { position: relative; min-height: 250px; overflow: hidden; border: 1px solid #d9e1e9; border-radius: 16px; background: linear-gradient(165deg,#edf3e8 0 44%,#c9e4ec 44% 58%,#eff1e5 58%); }\n.demo-map::before { position: absolute; left: 12%; top: 62%; width: 77%; border-top: 4px dashed #bd754b; transform: rotate(-16deg); content: \"\"; }\n.demo-map-marker { position: absolute; left: var(--x); top: var(--y); z-index: 2; display: grid; place-items: center; width: 32px; height: 32px; border: 3px solid #fff; border-radius: 50%; color: #fff; background: var(--accent); box-shadow: 0 3px 9px #1d304033; font-size: 10px; font-weight: 800; transform: translate(-50%,-50%); }\n.demo-stop-list { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 9px; margin-top: 12px; counter-reset: stop; }\n.demo-stop { position: relative; padding: 16px 13px; border: 1px solid #e6eaf0; border-radius: 12px; }\n.demo-stop b { display: block; color: var(--accent); font-size: 11px; }\n.demo-stop span { display: block; margin: 8px 0 3px; font-size: 13px; font-weight: 700; }\n.demo-stop small { color: #748090; }\n.demo-chess { position: relative; display: grid; grid-template-columns: repeat(8,1fr); width: min(100%,400px); aspect-ratio: 1; overflow: hidden; border: 5px solid #273345; border-radius: 6px; }\n.demo-square:nth-child(16n+1), .demo-square:nth-child(16n+3), .demo-square:nth-child(16n+5), .demo-square:nth-child(16n+7), .demo-square:nth-child(16n+10), .demo-square:nth-child(16n+12), .demo-square:nth-child(16n+14), .demo-square:nth-child(16n+16) { background: #dbe4d6; }\n.demo-square { background: #738a72; }\n.demo-piece { position: absolute; left: calc((var(--x) + .5) * 12.5%); top: calc((var(--y) + .5) * 12.5%); z-index: 2; width: 12.5%; height: 12.5%; transform: translate(-50%,-50%); color: #202635; font: 34px/1 Georgia,serif; text-align: center; text-shadow: 0 1px 2px #fff; }\n.demo-seat-grid { display: grid; grid-template-columns: repeat(6,minmax(22px,1fr)); gap: 7px; max-width: 500px; }\n.demo-seat { display: grid; place-items: center; aspect-ratio: 1.2; border: 1px solid #aab4c2; border-radius: 5px 5px 2px 2px; color: #596474; background: #edf0f4; font-size: 10px; }\n.demo-seat.is-taken { border-color: #4b806c; color: #fff; background: #4b806c; }\n.demo-legend { display: flex; flex-wrap: wrap; gap: 14px; margin: 14px 0; color: #5c6674; font-size: 11px; }\n.demo-legend span { display: inline-flex; align-items: center; gap: 6px; }\n.demo-legend i { width: 12px; height: 12px; border: 1px solid #aab4c2; border-radius: 3px; background: #edf0f4; }\n.demo-legend .taken { border-color: #4b806c; background: #4b806c; }\n.demo-kanban { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }\n.demo-column { padding: 13px; border-radius: 12px; background: #f3f5f8; }\n.demo-column h3 { margin: 0 0 10px; font-size: 13px; }\n.demo-task { margin-top: 8px; padding: 12px; border: 1px solid #e5e9ef; border-radius: 9px; background: #fff; font-size: 12px; }\n.demo-filter-label { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 14px; }\n.demo-filter-label span { padding: 6px 10px; border: 1px solid #e6eaf0; border-radius: 999px; color: #5d6877; font-size: 10px; }\n.demo-menu-list { display: flex; gap: 5px; padding: 0; margin: 0 0 24px; list-style: none; }\n.demo-menu-group { position: relative; }\n.demo-menu-group > a { display: flex; align-items: center; min-height: 44px; padding: 10px 12px; border-radius: 8px; color: #3c4858; font-size: 13px; text-decoration: none; }\n.demo-submenu { position: absolute; top: 100%; left: 0; z-index: 5; display: none; min-width: 205px; padding: 7px; border: 1px solid #e5e8ef; border-radius: 10px; background: #fff; box-shadow: 0 14px 34px #20263520; }\n.demo-submenu a { display: flex; align-items: center; min-height: 44px; padding: 9px; border-radius: 6px; font-size: 12px; text-decoration: none; }\n.demo-submenu a:hover, .demo-submenu a:focus-visible { color: var(--accent); background: var(--soft); }\n.demo-menu-group:hover .demo-submenu, .demo-menu-group:focus-within .demo-submenu { display: block; }\n.demo-hint { margin: 8px 0; padding: 12px; border: 1px solid #e5e8ef; border-radius: 9px; }\n.demo-hint summary { cursor: pointer; color: var(--accent); font-size: 13px; font-weight: 700; }\n.demo-hint p { margin: 9px 0 0; color: #5e6877; font-size: 12px; }\n.demo-product { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; align-items: center; padding: 22px; border: 1px solid #e6eaf0; border-radius: 16px; }\n.demo-product-art { min-height: 210px; display: grid; place-items: center; border-radius: 12px; color: var(--accent); background: linear-gradient(145deg,var(--soft),#fff); font-size: 56px; }\n.demo-product:hover { box-shadow: 0 15px 36px #20263518; transform: translateY(-2px); transition: transform .2s ease,box-shadow .2s ease; }\n.demo-product:focus-within { outline: 3px solid #d6deea; outline-offset: 3px; }\n.demo-facts { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 8px; margin: 16px 0; }\n.demo-fact { padding: 12px; border-radius: 10px; background: var(--soft); }\n.demo-fact b, .demo-fact span { display: block; }\n.demo-fact span { margin-top: 4px; color: #626d7c; font-size: 11px; }\n.demo-form { display: grid; gap: 14px; max-width: 650px; padding: 21px; border: 1px solid #e4e8ef; border-radius: 14px; }\n.demo-form fieldset { display: grid; gap: 9px; margin: 0; padding: 13px; border: 1px solid #e4e8ef; border-radius: 10px; }\n.demo-form legend { padding: 0 5px; font-weight: 700; }\n.demo-field { display: grid; gap: 5px; color: #485465; font-size: 12px; font-weight: 700; }\n.demo-field input, .demo-field select, .demo-field textarea { width: 100%; min-height: 43px; padding: 10px; border: 1px solid #cfd6df; border-radius: 7px; color: var(--ink); background: #fff; font: inherit; font-weight: 400; }\n.demo-field textarea { min-height: 100px; resize: vertical; }\n.demo-form > input, .demo-form > select, .demo-form > textarea { width: 100%; min-height: 43px; padding: 10px; border: 1px solid #cfd6df; border-radius: 7px; color: var(--ink); background: #fff; font: inherit; }\n.demo-form input:focus-visible, .demo-form select:focus-visible, .demo-form textarea:focus-visible { outline: 3px solid #d6deea; outline-offset: 1px; }\n.demo-radio { display: flex; align-items: center; gap: 8px; font-size: 12px; }\n.help-search { display: flex; gap: 8px; margin: 18px 0; }\n.help-search__label--visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; clip-path: inset(50%); }\n.help-search__input { min-width: 0; flex: 1; padding: 10px; border: 1px solid #cfd6df; border-radius: 8px; }\n.help-search__button { min-height: 44px; padding: 9px 15px; border: 0; border-radius: 8px; color: #fff; background: var(--accent); font-weight: 700; }\n.help-topic-list { margin-top: 14px; }\n.help-topic { min-height: 150px; padding: 17px; border: 1px solid #e6eaf0; border-radius: 12px; }\n.help-topic__count { color: var(--accent); font-size: 10px; font-weight: 800; }\n.help-topic__title { margin: 9px 0 5px; }\n.help-topic__description { color: #647080; font-size: 12px; }\n.demo-event-link { display: block; color: inherit; text-decoration: none; transition: transform .18s ease,box-shadow .18s ease; }\n.demo-event-link:hover,.demo-event-link:focus-visible { transform: translateY(-3px); box-shadow: 0 12px 26px #20263516; outline: 2px solid #b7c4d7; outline-offset: 2px; }\n.demo-event-link span { color: var(--accent); font-size: 11px; font-weight: 700; }\n.demo-event-link::before { display: block; width: 38px; margin-bottom: 11px; border-top: 3px solid var(--accent); content: \"\"; transform-origin: left; transition: transform .2s ease; }\n.demo-event-link:hover::before,.demo-event-link:focus-visible::before { transform: scaleX(1.5); }\n.demo-news-index { display: grid; gap: 8px; }\n.demo-news-index a { padding: 12px 14px; border-left: 3px solid var(--accent); border-radius: 0 8px 8px 0; color: #33445d; background: var(--soft); font-size: 12px; font-weight: 700; text-decoration: none; }\n.demo-news-index a:hover,.demo-news-index a:focus-visible { text-decoration: underline; text-underline-offset: 3px; }\n.demo-news-article { margin-top: 22px; padding: 18px; border: 1px solid #e6eaf0; border-radius: 12px; }\n.demo-news-article > small { color: var(--accent); font-weight: 800; }\n.demo-news-article h3 { margin: 7px 0; }\n.demo-news-article p { color: #5e6877; }\n.demo-news-card { margin: 10px 0; }\n.demo-optional-panel--hidden { display: none; }\n.demo--landing-hotel .demo-hero { color: #fff; background: linear-gradient(90deg,#152d42dc,#152d4270),url('../assets/mountains.svg') center/cover; }\n.demo--landing-hotel .demo-hero .demo-kicker,.demo--landing-hotel .demo-hero .demo-lead { color: #fff; }\n.demo--landing-hotel .demo-hero::after { border-color: #ffffff55; }\n.demo--landing-tour .demo-hero { background: linear-gradient(110deg,#18334dce,#18334d38),url('../assets/mountains.svg') center/cover; color: #fff; }\n.demo--landing-tour .demo-hero .demo-kicker,.demo--landing-tour .demo-hero .demo-lead { color: #fff; }\n.demo--landing-app .demo-app-image img { max-height: 230px; }\n.demo--bootstrap-anime .demo-header,.demo--bootstrap-events .demo-header { display: none; }\n.demo-status { display: inline-block; padding: 4px 7px; border-radius: 999px; font-size: 9px; font-weight: 800; }\n.demo-status--upcoming { color: #8c5612; background: #fff1d8; }\n.demo-status--confirmed { color: #28624b; background: #e4f4eb; }\n.demo-status--done { color: #586171; background: #eceff3; }\n.demo-skills { display: flex; flex-wrap: wrap; gap: 8px; padding: 0; list-style: none; }\n.demo-skills li { padding: 7px 10px; border-radius: 999px; color: var(--accent); background: var(--soft); font-size: 11px; font-weight: 700; }\n.demo-bootstrap-hero { padding: 32px; border-radius: 14px; color: white; background: #263958; }\n.demo-bootstrap-hero h2 { font-size: 29px; }\n.demo-bootstrap-card { height: 100%; padding: 18px; border: 1px solid #e1e5ea; border-radius: 10px; background: white; }\n@media (max-width: 700px) { .demo { padding: 0 16px 32px; } .demo-header { align-items: flex-start; flex-direction: column; justify-content: center; padding: 13px 0; } .demo-nav { gap: 11px; } .demo-grid,.demo-kanban { grid-template-columns: 1fr; } .demo-stop-list { grid-template-columns: repeat(2,minmax(0,1fr)); } .demo-inline-book { width: 47%; } .demo-product { grid-template-columns: 1fr; } .demo-circle { width: 125px; } .demo-circle-art { width: 96px; height: 96px; } .demo-fixed-cta { position: static !important; margin-top: 12px; } .demo-gallery { grid-template-columns: 1fr; } .demo-gallery img { height: 190px; } .demo-footer-columns { grid-template-columns: 1fr; } }\n@media (max-width: 430px) { .demo h1 { font-size: 30px; } .demo-seat-grid { gap: 4px; } .demo-seat { font-size: 8px; } .demo-stop-list { grid-template-columns: 1fr 1fr; } .demo-menu-list { flex-wrap: wrap; } .demo-profile { width: 100%; } .demo-inline-book { width: 100%; } }\n@media (prefers-reduced-motion: reduce) { *,*::before,*::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; } .demo-product:hover { transform: none; } }\n.demo { --accent: #945a35; --soft: #eaf0f7; }\n.demo-stop:not(:last-child)::after { position: absolute; top: 25px; right: -10px; width: 10px; border-top: 2px dashed var(--accent); content: \"\"; }"
+      }
+    }
+  ],
+  "title": "Display и position: размещение элементов",
+  "goal": "Пойми обычный поток страницы, виды отображения и то, как позиционировать элементы внутри блока."
+};

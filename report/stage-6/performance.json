@@ -1,0 +1,17 @@
+{
+  "class_size": 30,
+  "assignment_count": 3,
+  "analytics_ms": 14.63,
+  "xlsx_ms": 53.59,
+  "xlsx_bytes": 11512,
+  "pdf_ms": 288.73,
+  "pdf_bytes": 8394,
+  "pdf_pages": 1,
+  "memory": {
+    "heap_used_before_reports": 75930648,
+    "heap_used_after_xlsx": 89273960,
+    "heap_used_after_pdf": 85713776,
+    "rss_before_reports": 466530304,
+    "rss_after_pdf": 500277248
+  }
+}
