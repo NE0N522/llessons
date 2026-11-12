@@ -38,7 +38,7 @@ test('Stage 1: private source and database paths are not public', async () => {
 
 test('Stage 1: PostgreSQL-compatible migrations create the current schema', async () => {
   const migrations = await app.locals.db.query('SELECT version,name FROM schema_migrations ORDER BY version');
-  assert.deepEqual(migrations.rows.map((row) => row.version), ['001', '002', '003', '004', '005']);
+  assert.deepEqual(migrations.rows.map((row) => row.version), ['001', '002', '003', '004', '005', '006']);
   const types = await app.locals.db.query("SELECT column_name,data_type FROM information_schema.columns WHERE table_name='assignments'");
   assert.equal(types.rows.find((row) => row.column_name === 'checks_json').data_type, 'jsonb');
   assert.equal(types.rows.find((row) => row.column_name === 'due_at').data_type, 'timestamp with time zone');

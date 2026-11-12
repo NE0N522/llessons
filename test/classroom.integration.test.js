@@ -258,6 +258,9 @@ test('Stage 1: logical backup restores the same rows into an empty PostgreSQL-co
   await source.query('INSERT INTO assignment_due_extensions(assignment_id,student_id,due_at,updated_at) VALUES($1,$2,now(),now())', [assignmentId, studentId]);
   await source.query("INSERT INTO assignment_line_comments(version_id,teacher_id,language,line_number,excerpt,comment,created_at) VALUES($1,$2,'html',1,'<h1>','Хороший заголовок',now())", [versionId, teacherId]);
   await source.query("INSERT INTO teacher_comment_templates(teacher_id,title,body,created_at,updated_at) VALUES($1,'Похвала','Отличная работа',now(),now())", [teacherId]);
+  await source.query("INSERT INTO teacher_assignment_templates(teacher_id,title,config_json,created_at,updated_at) VALUES($1,'Карточка профиля','{\"task_type\":\"build\"}'::jsonb,now(),now())", [teacherId]);
+  await source.query("INSERT INTO teacher_rubric_templates(teacher_id,title,criteria_json,created_at,updated_at) VALUES($1,'Базовая рубрика','[{\"title\":\"Содержание\",\"max_score\":5}]'::jsonb,now(),now())", [teacherId]);
+  await source.query("INSERT INTO class_gallery_projects(class_id,student_id,assignment_id,submission_id,title,description,html,css,created_at) VALUES($1,$2,$3,$4,'Проект ученика','Описание','<main>Проект</main>','main { color: navy; }',now())", [oldClassId, studentId, assignmentId, submissionId]);
   await source.query("INSERT INTO class_announcements(class_id,teacher_id,title,body,pinned,created_at) VALUES($1,$2,'Объявление','Текст',1,now())", [oldClassId, teacherId]);
   await source.query("INSERT INTO assignment_questions(assignment_id,student_id,question,teacher_reply,reply_public,created_at) VALUES($1,$2,'Вопрос?','Ответ',1,now())", [assignmentId, studentId]);
   await source.query('INSERT INTO assignment_similarity(assignment_id,submission_id,other_submission_id,score,created_at) VALUES($1,$2,$3,82,now())', [assignmentId, submissionId, secondSubmissionId]);
@@ -275,14 +278,14 @@ test('Stage 1: logical backup restores the same rows into an empty PostgreSQL-co
     const rows = await target.query('SELECT u.login,c.name,c2.name AS next_class FROM users u JOIN classes c ON c.teacher_id=u.id LEFT JOIN classes c2 ON c2.id=c.rollover_class_id WHERE c.id=$1', [oldClassId]);
     assert.deepEqual(rows.rows, [{ login: 'backup.teacher', name: 'Класс копии', next_class: 'Новый класс' }]);
     assert.equal(Number((await target.query('SELECT class_id FROM users WHERE id=$1', [studentId])).rows[0].class_id), oldClassId);
-    for (const table of ['assignment_hint_opens','assignment_due_extensions','assignment_line_comments','teacher_comment_templates','class_announcements','assignment_questions','assignment_similarity']) {
+    for (const table of ['assignment_hint_opens','assignment_due_extensions','assignment_line_comments','teacher_comment_templates','teacher_assignment_templates','teacher_rubric_templates','class_gallery_projects','class_announcements','assignment_questions','assignment_similarity']) {
       assert.equal(Number((await target.query(`SELECT COUNT(*) AS n FROM ${table}`)).rows[0].n), 1, `${table} data is restored`);
     }
     const nextTemplate = await target.query("INSERT INTO teacher_comment_templates(teacher_id,title,body,created_at,updated_at) VALUES($1,'Ещё','',now(),now()) RETURNING id", [teacherId]);
     assert.ok(Number(nextTemplate.rows[0].id) > Number(backup.data.teacher_comment_templates[0].id), 'identity sequences are reset for restored tables');
     await assert.rejects(restoreBackup(target, backup), /База не пустая/);
     const legacy = structuredClone(backup);
-    for (const table of ['user_settings','lesson_notes','student_activity_days','assignment_hint_opens','assignment_due_extensions','assignment_line_comments','teacher_comment_templates','class_announcements','assignment_questions','assignment_similarity']) delete legacy.data[table];
+    for (const table of ['user_settings','lesson_notes','student_activity_days','assignment_hint_opens','assignment_due_extensions','assignment_line_comments','teacher_comment_templates','teacher_assignment_templates','teacher_rubric_templates','class_gallery_projects','class_announcements','assignment_questions','assignment_similarity']) delete legacy.data[table];
     const legacyResult = await restoreBackup(legacyTarget, legacy);
     assert.equal(legacy.data.assignment_questions.length, 0, 'missing tables in an older version-1 backup default to empty');
     assert.ok(legacyResult.restored_rows < restored.restored_rows);

@@ -6,17 +6,20 @@ const TABLES = [
   'users', 'classes', 'user_settings', 'assignments', 'assignment_targets', 'submissions', 'submission_versions',
   'lesson_progress', 'lesson_notes', 'student_activity_days', 'sessions', 'login_attempts', 'login_events', 'audit_log',
   'activity_events', 'assignment_hint_opens', 'assignment_due_extensions', 'assignment_line_comments',
-  'teacher_comment_templates', 'class_announcements', 'assignment_questions', 'assignment_similarity'
+  'teacher_comment_templates', 'teacher_assignment_templates', 'teacher_rubric_templates', 'class_gallery_projects',
+  'class_announcements', 'assignment_questions', 'assignment_similarity'
 ];
 const OPTIONAL_LEGACY_TABLES = new Set([
   'user_settings', 'lesson_notes', 'student_activity_days', 'assignment_hint_opens', 'assignment_due_extensions',
-  'assignment_line_comments', 'teacher_comment_templates', 'class_announcements', 'assignment_questions', 'assignment_similarity'
+  'assignment_line_comments', 'teacher_comment_templates', 'teacher_assignment_templates', 'teacher_rubric_templates',
+  'class_gallery_projects', 'class_announcements', 'assignment_questions', 'assignment_similarity'
 ]);
 const RESTORE_ORDER = [
   'user_settings', 'assignments', 'assignment_targets', 'submissions', 'submission_versions', 'lesson_progress',
   'lesson_notes', 'student_activity_days', 'sessions', 'login_attempts', 'login_events', 'audit_log', 'activity_events',
   'assignment_hint_opens', 'assignment_due_extensions', 'assignment_line_comments', 'teacher_comment_templates',
-  'class_announcements', 'assignment_questions', 'assignment_similarity'
+  'teacher_assignment_templates', 'teacher_rubric_templates', 'class_announcements', 'assignment_questions', 'assignment_similarity',
+  'class_gallery_projects'
 ];
 
 async function createBackup(db) {
@@ -54,7 +57,7 @@ async function restoreBackup(db, backup, { force = false } = {}) {
     await db.query('UPDATE classes c SET rollover_class_id=source.rollover_class_id FROM (SELECT id,rollover_class_id FROM jsonb_to_recordset($1::jsonb) AS x(id integer,rollover_class_id integer)) AS source WHERE c.id=source.id', [JSON.stringify(backup.data.classes.map((row) => ({ id: row.id, rollover_class_id: row.rollover_class_id ?? null })))]);
     await db.query('UPDATE users u SET class_id=source.class_id FROM (SELECT id,class_id FROM jsonb_to_recordset($1::jsonb) AS x(id integer,class_id integer)) AS source WHERE u.id=source.id', [JSON.stringify(backup.data.users)]);
     for (const table of RESTORE_ORDER) await insertRows(db, table, backup.data[table]);
-    for (const table of ['users', 'classes', 'assignments', 'submissions', 'submission_versions', 'login_events', 'audit_log', 'activity_events', 'assignment_line_comments', 'teacher_comment_templates', 'class_announcements', 'assignment_questions']) {
+    for (const table of ['users', 'classes', 'assignments', 'submissions', 'submission_versions', 'login_events', 'audit_log', 'activity_events', 'assignment_line_comments', 'teacher_comment_templates', 'teacher_assignment_templates', 'teacher_rubric_templates', 'class_gallery_projects', 'class_announcements', 'assignment_questions']) {
       await db.query(`SELECT setval(pg_get_serial_sequence('${table}','id'), COALESCE((SELECT MAX(id) FROM ${table}),1), EXISTS(SELECT 1 FROM ${table}))`);
     }
     return { restored_tables: TABLES.length, restored_rows: TABLES.reduce((sum, table) => sum + backup.data[table].length, 0) };

@@ -1,6 +1,6 @@
 (() => {
   const loaderSource = document.currentScript?.src;
-  const editorSource = loaderSource ? new URL('../vendor/code-editor.js?v=editor-shortcuts-20261112', loaderSource).href : 'assets/vendor/code-editor.js?v=editor-shortcuts-20261112';
+  const editorSource = loaderSource ? new URL('../vendor/code-editor.js?v=account-ui-20261112', loaderSource).href : 'assets/vendor/code-editor.js?v=account-ui-20261112';
   const fontKey = 'course-code-editor-font-size';
   let modulePromise;
   let userPromise;
@@ -21,7 +21,6 @@
       .catch(() => false);
     return userPromise;
   };
-
   window.loadCourseCodeEditor = () => {
     if (window.CourseCodeEditor) return Promise.resolve(window.CourseCodeEditor);
     if (!modulePromise) modulePromise = new Promise((resolve, reject) => {

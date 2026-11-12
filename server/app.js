@@ -118,19 +118,24 @@ async function createApp(options = {}) {
   });
   app.get('/', (req,res) => res.sendFile(path.join(config.publicDir,'index.html')));
 
-  const staticFiles = express.static(config.publicDir, {
-    dotfiles: 'deny',
-    index: false,
-    fallthrough: true,
-    redirect: false,
-    maxAge: config.production ? '1h' : 0,
-    setHeaders(res, filePath) {
-      if (/[/\\](?:teacher|student)[/\\]|login\.html$|change-password\.html$/i.test(filePath)) res.setHeader('Cache-Control','no-store');
-      if (filePath.endsWith('.html')) res.setHeader('Content-Type','text/html; charset=utf-8');
-    }
-  });
   app.use((req,res,next) => {
     if (!['GET','HEAD'].includes(req.method) || !isPublicPath(req.path)) return res.status(404).type('text').send('Not found');
+    const requestPath = req.originalUrl.split('?')[0];
+    const versionedAsset = requestPath.startsWith('/assets/') && /(?:\?|&)v=[^&]+/.test(req.originalUrl);
+    const staticFiles = express.static(config.publicDir, {
+      dotfiles: 'deny',
+      index: false,
+      fallthrough: true,
+      redirect: false,
+      maxAge: config.production ? '1h' : 0,
+      setHeaders(response, filePath) {
+        if (filePath.endsWith('.html')) {
+          response.setHeader('Content-Type','text/html; charset=utf-8');
+          response.setHeader('Cache-Control','no-store');
+        } else if (/[/\\](?:teacher|student)[/\\]/i.test(filePath)) response.setHeader('Cache-Control','no-store');
+        else if (config.production && versionedAsset) response.setHeader('Cache-Control','public, max-age=31536000, immutable');
+      }
+    });
     staticFiles(req,res,(error) => {
       if (error) return next(error);
       res.status(404).type('text').send('Not found');

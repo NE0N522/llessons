@@ -5,21 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="">
   <title>Первая настройка — Код по полочкам</title>
-  <script src="assets/app/theme.js"></script>
-  <link rel="stylesheet" href="assets/app/lesson-v3.css">
-  <link rel="stylesheet" href="assets/app/theme-v3.css">
-  <link rel="stylesheet" href="assets/app/accounts/theme.css">
-  <link rel="stylesheet" href="assets/app/accounts/accounts.css">
-  <link rel="stylesheet" href="assets/app/accounts/setup.css">
-  <script src="assets/app/accounts/ui-utils.js" defer></script>
-  <script src="assets/app/accounts/ui-strings.js" defer></script>
-  <script src="assets/app/accounts/common.js" defer></script>
-  <script src="assets/app/accounts/setup.js" defer></script>
-  <link rel="stylesheet" href="assets/app/privacy.css">
+  <script src="assets/app/theme.js?v=account-ui-20261112"></script>
+  <link rel="stylesheet" href="assets/app/accounts/accounts.css?v=account-ui-20261112">
+  <script src="assets/app/accounts/ui-utils.js?v=account-ui-20261112" defer></script>
+  <script src="assets/app/accounts/ui-strings.js?v=account-ui-20261112" defer></script>
+  <script src="assets/app/accounts/common.js?v=account-ui-20261112" defer></script>
+  <script src="assets/app/accounts/setup.js?v=account-ui-20261112" defer></script>
+  <link rel="stylesheet" href="assets/app/privacy.css?v=account-ui-20261112">
 </head>
 <body class="account-body">
   <main class="account-login-wrap setup-wrap">
-    <a class="v3-brand account-brand" href="index.html"><span class="v3-brand-mark" aria-hidden="true">&lt;/&gt;</span><span>код по полочкам</span></a>
+    <a class="account-brand" href="index.html"><span class="account-brand-mark" aria-hidden="true">&lt;/&gt;</span><span>код по полочкам</span></a>
     <section class="account-card account-login-card setup-card" aria-labelledby="setup-heading">
       <div class="account-eyebrow">ПЕРВАЯ НАСТРОЙКА</div>
       <h1 id="setup-heading">Создайте аккаунт учителя</h1>
@@ -29,7 +25,7 @@
         <label>Логин<input name="login" autocomplete="username" required minlength="3" maxlength="40" pattern="[a-zA-Z0-9][a-zA-Z0-9._\-]{2,39}" aria-describedby="login-help"><small id="login-help">Латиница, цифры, точка, дефис или подчёркивание.</small></label>
         <label>Надёжный пароль<input name="password" type="password" autocomplete="new-password" required minlength="12" maxlength="200" aria-describedby="password-help"><small id="password-help">От 12 символов, с буквами и цифрами. Сохраните его в надёжном месте.</small></label>
         <label class="setup-token-field">Ключ первой настройки, если он задан на сервере<input name="setup_token" autocomplete="off" maxlength="300"></label>
-        <button class="v3-button account-submit" type="submit">Создать аккаунт</button>
+        <button class="account-button account-submit" type="submit">Создать аккаунт</button>
       </form>
       <p class="account-message" data-setup-message role="status" aria-live="polite"></p>
     </section>

@@ -29,11 +29,15 @@
       if (label) label.textContent = dark ? 'Светлая тема' : 'Тёмная тема';
       if (icon) icon.innerHTML = dark ? sunIcon : moonIcon;
     });
-    const themeColor = document.querySelector('meta[name="theme-color"]');
-    if (themeColor) themeColor.content = darkThemeColor(theme);
+    const updateThemeColor = () => {
+      const themeColor = document.querySelector('meta[name="theme-color"]');
+      if (themeColor) themeColor.content = darkThemeColor(theme);
+    };
+    if (document.readyState === 'loading') requestAnimationFrame(updateThemeColor);
+    else updateThemeColor();
   };
 
-  const darkThemeColor = () => getComputedStyle(document.documentElement).getPropertyValue('--v3-canvas').trim() || document.querySelector('meta[name="theme-color"]')?.content || '';
+  const darkThemeColor = () => getComputedStyle(document.documentElement).getPropertyValue('--account-canvas').trim() || getComputedStyle(document.documentElement).getPropertyValue('--v3-canvas').trim() || document.querySelector('meta[name="theme-color"]')?.content || '';
   applyTheme(currentTheme);
 
   const bindControls = () => {

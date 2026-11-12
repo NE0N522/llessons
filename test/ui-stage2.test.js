@@ -23,16 +23,20 @@ test('Stage 2: empty inline message is hidden and has no visible copy', () => {
   assert.equal(element.hidden, false);
 });
 
-test('Stage 2: account code has no native popups or hard-coded CSS colors', () => {
+test('Stage 2: account UI has no native popups and uses layered theme tokens', () => {
   const root = path.join(__dirname, '..', 'outputs', 'assets', 'app', 'accounts');
   const scripts = fs.readdirSync(root).filter((name) => name.endsWith('.js'));
   for (const script of scripts) {
     const source = fs.readFileSync(path.join(root, script), 'utf8');
     assert.doesNotMatch(source, /window\.(?:confirm|alert|prompt)\s*\(/, `${script} should use the shared dialog`);
   }
-  for (const stylesheet of ['accounts.css', 'setup.css']) {
-    assert.doesNotMatch(fs.readFileSync(path.join(root, stylesheet), 'utf8'), /#[\da-f]{3,8}\b/i, `${stylesheet} should use theme tokens`);
-  }
+  const stylesheet = fs.readFileSync(path.join(root, 'accounts.css'), 'utf8');
+  assert.match(stylesheet, /@layer account\.tokens, account\.base, account\.components, account\.pages/);
+  assert.match(stylesheet, /--account-accent:/, 'the accent palette should live in the token layer');
+  assert.doesNotMatch(stylesheet, /var\(--v3-/, 'account pages should not depend on course theme variables');
+  const componentStyles = stylesheet.slice(stylesheet.indexOf('@layer account.base'));
+  assert.match(componentStyles, /var\(--account-(?:surface|ink|line|accent)(?:-[\w-]+)?\)/, 'account components should use the standalone palette');
+  assert.equal(fs.existsSync(path.join(root, 'setup.css')), false, 'setup styles should be merged into accounts.css');
   assert.equal(isPublicPath('/ui-kit.html'), false, 'the component catalog must not enter the public static allowlist');
 });
 
@@ -55,4 +59,21 @@ test('Stage 2: UI kit is available in development and hidden in production', asy
   assert.match(development.body, /Библиотека компонентов/);
   const production = await run('production');
   assert.equal(production.status, 404);
+});
+
+test('Stage 2: HTML is never cached and versioned account assets are immutable', async () => {
+  const db = { query: async () => ({ rows: [] }) };
+  const app = await createApp({ db, nodeEnv: 'production', databaseUrl: 'postgres://unused-pooler', migrationsDatabaseUrl: 'postgres://unused-direct', sessionSecret: 'stage-two-cache-secret-at-least-32-characters' });
+  const server = app.listen(0, '127.0.0.1');
+  await new Promise((resolve) => server.once('listening', resolve));
+  try {
+    const base = `http://127.0.0.1:${server.address().port}`;
+    const html = await fetch(`${base}/login.html`);
+    const css = await fetch(`${base}/assets/app/accounts/accounts.css?v=test-version`);
+    assert.equal(html.headers.get('cache-control'), 'no-store');
+    assert.equal(css.headers.get('cache-control'), 'public, max-age=31536000, immutable');
+  } finally {
+    clearInterval(app.locals.maintenanceTimer);
+    await new Promise((resolve) => server.close(resolve));
+  }
 });

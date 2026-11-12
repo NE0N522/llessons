@@ -23,6 +23,7 @@
   let dirty = false;
   let editable = false;
   let fontSize = 15;
+  let editorLoadPromise = null;
   let draftRevision = 0;
   let retryDelay = 5000;
   let cachedAssignmentData = null;
@@ -40,7 +41,7 @@
   async function clearLocalDraft(){try{const db=await openDraftDb();await new Promise((resolve,reject)=>{const request=db.transaction('drafts','readwrite').objectStore('drafts').delete(draftKey());request.onsuccess=resolve;request.onerror=()=>reject(request.error);});}catch{}}
 
   async function showConflict(server){
-    return new Promise(resolve=>{const dialog=document.createElement('dialog');dialog.className='account-dialog';const local=codeValues();dialog.innerHTML=`<div class="account-dialog-inner"><h2>Черновик изменён на другом устройстве</h2><p>Открой обе версии и выбери, какую продолжить. Ничего не будет перезаписано без выбора.</p><div class="account-conflict-versions"><section><h3>На этом устройстве</h3><pre>${esc(local.html.slice(0,5000))}</pre><pre>${esc(local.css.slice(0,3000))}</pre></section><section><h3>На сервере</h3><pre>${esc(server.html.slice(0,5000))}</pre><pre>${esc(server.css.slice(0,3000))}</pre></section></div><div class="account-dialog-actions"><button type="button" data-choice="server" class="account-small-button">Продолжить с серверной версией</button><button type="button" data-choice="local" class="v3-button">Оставить версию этого устройства</button></div></div>`;document.body.append(dialog);dialog.showModal();dialog.querySelectorAll('[data-choice]').forEach(button=>button.addEventListener('click',()=>{const choice=button.dataset.choice;dialog.close();dialog.remove();resolve(choice);}));});
+    return new Promise(resolve=>{const dialog=document.createElement('dialog');dialog.className='account-dialog';const local=codeValues();dialog.innerHTML=`<div class="account-dialog-inner"><h2>Черновик изменён на другом устройстве</h2><p>Открой обе версии и выбери, какую продолжить. Ничего не будет перезаписано без выбора.</p><div class="account-conflict-versions"><section><h3>На этом устройстве</h3><pre>${esc(local.html.slice(0,5000))}</pre><pre>${esc(local.css.slice(0,3000))}</pre></section><section><h3>На сервере</h3><pre>${esc(server.html.slice(0,5000))}</pre><pre>${esc(server.css.slice(0,3000))}</pre></section></div><div class="account-dialog-actions"><button type="button" data-choice="server" class="account-small-button">Продолжить с серверной версией</button><button type="button" data-choice="local" class="account-button">Оставить версию этого устройства</button></div></div>`;document.body.append(dialog);dialog.showModal();dialog.querySelectorAll('[data-choice]').forEach(button=>button.addEventListener('click',()=>{const choice=button.dataset.choice;dialog.close();dialog.remove();resolve(choice);}));});
   }
 
   const lessonLabel = (lessonId) => {
@@ -54,9 +55,10 @@
     fontSize = Math.max(12, Math.min(24, Number(next) || 15));
     htmlEditor?.setFontSize(fontSize);
     cssEditor?.setFontSize(fontSize);
-    $('[data-font-label]').textContent = `${fontSize} px`;
-    $('[data-font-minus]').disabled = fontSize <= 12;
-    $('[data-font-plus]').disabled = fontSize >= 24;
+    const label = $('[data-font-label]'), minus = $('[data-font-minus]'), plus = $('[data-font-plus]');
+    if (label) label.textContent = `${fontSize} px`;
+    if (minus) minus.disabled = fontSize <= 12;
+    if (plus) plus.disabled = fontSize >= 24;
   };
 
   function preview() {
@@ -125,17 +127,23 @@
       <header class="account-page-heading"><div><div class="account-eyebrow">${esc(taskLabels[assignment.task_type]||'ПРАКТИЧЕСКОЕ ЗАДАНИЕ')}${assignment.lesson_id ? ` · ${esc(lessonLabel(assignment.lesson_id))}` : ''}</div><h1>${esc(assignment.title)}</h1><div class="account-description">${A.formatDescription(assignment.description || 'Учитель пока не добавил инструкцию.')}</div><p class="account-muted">${assignment.due_at ? `Срок сдачи: ${A.formatDueDate(assignment.due_at)}` : 'Срок сдачи не установлен'} · Максимум: ${assignment.max_score} баллов</p>${Number(assignment.late_penalty_percent_per_day)>0?`<p class="account-warning">При опоздании балл уменьшается на ${assignment.late_penalty_percent_per_day}% за день, не больше ${assignment.late_penalty_max_percent}%.</p>`:''}${submission?.late_penalty_percent?`<p class="account-muted">Учитель применил штраф ${submission.late_penalty_percent}%.</p>`:''}</div><span class="account-status" data-status="${submission?.status || 'not_started'}">${Number(assignment.archived)?'Архив · просмотр':({ draft: 'Черновик', submitted: 'Отправлено на проверку', returned: 'Нужно доработать', accepted: 'Проверено' })[submission?.status] || 'Новое задание'}</span></header>
       <nav class="account-assignment-tabs" data-assignment-tabs aria-label="Разделы задания" hidden><button type="button" data-assignment-tab="condition" aria-pressed="false">Условие</button><button type="button" data-assignment-tab="code" aria-pressed="true">Код</button><button type="button" data-assignment-tab="result" aria-pressed="false">Результат</button></nav>
       <iframe hidden aria-hidden="true" tabindex="-1" data-check-frame sandbox="allow-same-origin" title="Изолированная самопроверка"></iframe>
-      <div class="account-assignment-condition" data-assignment-pane="condition">${submission?.teacher_comment ? `<section class="account-panel account-teacher-feedback"><div class="account-eyebrow">ОТВЕТ УЧИТЕЛЯ</div><p>${esc(submission.teacher_comment)}</p>${submission.score != null ? `<strong>Оценка: ${submission.score} / ${assignment.max_score}</strong>` : ''}</section>` : ''}${lineCommentsMarkup}</div>
       <div class="account-message" data-editor-message role="status" aria-live="polite" hidden></div>
-      <div class="account-editor-toolbar" data-assignment-pane="code"><div><strong>Рабочее место</strong><span data-save-status>${statusText}</span></div><div class="account-actions"><div class="editor-font-controls" role="group" aria-label="Размер текста редактора"><button type="button" data-font-minus aria-label="Уменьшить шрифт редактора">−</button><output data-font-label>15 px</output><button type="button" data-font-plus aria-label="Увеличить шрифт редактора">+</button></div><button type="button" class="account-small-button" data-fullscreen>Предпросмотр на весь экран</button>${editable ? '<button type="button" class="account-small-button" data-save>Сохранить сейчас</button>' : ''}</div></div>
-      <div class="account-assignment-condition" data-assignment-pane="condition">${assignment.no_hints ? '<p class="account-warning" data-hints-warning>Учитель отключил подсказки редактора. Номера строк и форматирование остаются доступными.</p>' : ''}${hintsMarkup}${modelMarkup}${quizMarkup}${questionMarkup}${assignment.checks?.length ? '<section class="account-check-results" data-check-results aria-live="polite"></section>' : ''}</div>
-      <section class="account-editor-layout"><div class="account-editor-column" data-assignment-pane="code">
-        <div class="account-editor-label"><span>01</span>HTML <small>Структура страницы</small><div class="editor-touch-tools">${editable && hasHints ? '<button type="button" class="editor-touch-button" data-editor-command="suggestions" data-editor-language="html">✦ Подсказки</button><button type="button" class="editor-touch-button" data-editor-command="indent" data-editor-language="html">↦ Отступ</button>' : ''}</div><button type="button" class="account-small-button" data-format="html" ${editable ? '' : 'hidden'}>Форматировать</button></div><div data-editor-host="html"></div>
-        <div class="account-editor-label"><span>02</span>CSS <small>Внешний вид</small><div class="editor-touch-tools">${editable && hasHints ? '<button type="button" class="editor-touch-button" data-editor-command="suggestions" data-editor-language="css">✦ Подсказки</button><button type="button" class="editor-touch-button" data-editor-command="indent" data-editor-language="css">↦ Отступ</button>' : ''}</div><button type="button" class="account-small-button" data-format="css" ${editable ? '' : 'hidden'}>Форматировать</button></div><div data-editor-host="css"></div>
-        <p class="account-muted account-editor-help">${hasHints ? 'Подсказки появляются при вводе. Enter или Tab вставляют выбранный вариант; Tab без списка делает отступ. Ctrl+Space открывает список вручную; на телефоне используй кнопки рядом с редактором.' : 'Подсказки отключены учителем. Tab делает отступ, Shift+Tab уменьшает его. Форматирование остаётся доступным.'}</p>
-        ${editable ? '<div class="account-actions account-editor-actions"><button type="button" class="account-small-button" data-format-both>Форматировать HTML и CSS</button><button type="button" class="account-small-button" data-reset-starter>Сбросить к стартовому коду</button></div>' : ''}
-      </div><div class="account-preview-column" data-assignment-pane="result"><div class="account-editor-label"><span>03</span>Предпросмотр <small>Скрипты и внешние запросы отключены</small></div><iframe class="account-preview" title="Предпросмотр задания" sandbox="" referrerpolicy="no-referrer"></iframe><p class="account-muted account-preview-help">Измени HTML или CSS слева — результат появится здесь. Это безопасная изолированная область.</p></div></section>
-      ${editable ? `<section class="account-submit-panel"><div><h2>${submission?.status === 'returned' ? 'Исправь работу и отправь ещё раз' : 'Когда работа будет готова'}</h2><p class="account-muted">Перед отправкой проверь предпросмотр. После отправки редактирование временно закроется до ответа учителя.</p></div><button class="v3-button" data-submit>Отправить работу учителю <span aria-hidden="true">→</span></button></section>` : submission?.status === 'returned' ? '<section class="account-submit-panel"><div><h2>Учитель пока не разрешил пересдачу</h2><p class="account-muted">Обратись к учителю, если хочешь внести исправления.</p></div></section>' : `<section class="account-submit-panel"><div><h2>${Number(assignment.archived)?'Учебный год закрыт':submission?.status === 'accepted' ? 'Работа проверена' : 'Работа отправлена'}</h2><p class="account-muted">${Number(assignment.archived)?'Работа и оценки сохранены в архиве. Новая отправка в этом учебном году отключена.':submission?.status === 'accepted' ? 'Учитель принял работу.' : 'Учитель скоро проверит её и оставит комментарий.'}</p></div><a class="v3-button v3-button-secondary" href="profile.html">Моя история</a></section>`}
+      <section class="account-assignment-workspace" aria-label="Рабочее место задания">
+        <aside class="account-assignment-condition" data-assignment-pane="condition" aria-label="Условие и подсказки">
+          <section class="account-panel account-teacher-feedback" data-teacher-feedback ${submission?.teacher_comment ? '' : 'hidden'}><div class="account-eyebrow">ОТВЕТ УЧИТЕЛЯ</div><p>${esc(submission?.teacher_comment||'')}</p>${submission?.score != null ? `<strong>Оценка: ${submission.score} / ${assignment.max_score}</strong>` : ''}</section>
+          <div class="account-assignment-condition-content">${lineCommentsMarkup}${assignment.no_hints ? '<p class="account-warning" data-hints-warning>Учитель отключил подсказки редактора. Номера строк и форматирование остаются доступными.</p>' : ''}${hintsMarkup}${modelMarkup}${quizMarkup}${questionMarkup}${assignment.checks?.length ? '<section class="account-check-results" data-check-results aria-live="polite"></section>' : ''}</div>
+        </aside>
+        <section class="account-assignment-ide" aria-label="Редактор и результат">
+          <div class="account-editor-toolbar" data-assignment-pane="code"><div><strong>Рабочее место</strong><span data-save-status>${statusText}</span></div><div class="account-actions"><div class="editor-font-controls" role="group" aria-label="Размер текста редактора"><button type="button" data-font-minus aria-label="Уменьшить шрифт редактора">−</button><output data-font-label>15 px</output><button type="button" data-font-plus aria-label="Увеличить шрифт редактора">+</button></div><button type="button" class="account-small-button" data-fullscreen>Предпросмотр на весь экран</button>${editable ? '<button type="button" class="account-small-button" data-save>Сохранить сейчас</button>' : ''}</div></div>
+          <section class="account-editor-layout"><div class="account-editor-column" data-assignment-pane="code">
+            <div class="account-editor-label"><span class="account-editor-step">01</span><strong class="account-editor-title">HTML</strong><small>Структура страницы</small><div class="editor-touch-tools">${editable && hasHints ? '<button type="button" class="editor-touch-button" data-editor-command="suggestions" data-editor-language="html">✦ Подсказки</button><button type="button" class="editor-touch-button" data-editor-command="indent" data-editor-language="html">↦ Отступ</button>' : ''}</div><button type="button" class="account-small-button" data-format="html" ${editable ? '' : 'hidden'}>Форматировать</button></div><div data-editor-host="html"></div>
+            <div class="account-editor-label"><span class="account-editor-step">02</span><strong class="account-editor-title">CSS</strong><small>Внешний вид</small><div class="editor-touch-tools">${editable && hasHints ? '<button type="button" class="editor-touch-button" data-editor-command="suggestions" data-editor-language="css">✦ Подсказки</button><button type="button" class="editor-touch-button" data-editor-command="indent" data-editor-language="css">↦ Отступ</button>' : ''}</div><button type="button" class="account-small-button" data-format="css" ${editable ? '' : 'hidden'}>Форматировать</button></div><div data-editor-host="css"></div>
+            <p class="account-muted account-editor-help">${hasHints ? 'Подсказки появляются при вводе. Enter или Tab вставляют выбранный вариант; Tab без списка делает отступ. Ctrl+Space открывает список вручную; на телефоне используй кнопки рядом с редактором.' : 'Подсказки отключены учителем. Tab делает отступ, Shift+Tab уменьшает его. Форматирование остаётся доступным.'}</p>
+            ${editable ? '<div class="account-actions account-editor-actions"><button type="button" class="account-small-button" data-format-both>Форматировать HTML и CSS</button><button type="button" class="account-small-button" data-reset-starter>Сбросить к стартовому коду</button></div>' : ''}
+          </div><div class="account-preview-column" data-assignment-pane="result"><div class="account-editor-label"><span class="account-editor-step">03</span><strong class="account-editor-title">Предпросмотр</strong><small>Скрипты и внешние запросы отключены</small></div><iframe class="account-preview" title="Предпросмотр задания" sandbox="" referrerpolicy="no-referrer"></iframe><p class="account-muted account-preview-help">Измени HTML или CSS слева — результат появится здесь. Это безопасная изолированная область.</p></div></section>
+        </section>
+      </section>
+      ${editable ? `<section class="account-submit-panel"><div><h2>${submission?.status === 'returned' ? 'Исправь работу и отправь ещё раз' : 'Когда работа будет готова'}</h2><p class="account-muted">Перед отправкой проверь предпросмотр. После отправки редактирование временно закроется до ответа учителя.</p></div><button class="account-button" data-submit>Отправить работу учителю <span aria-hidden="true">→</span></button></section>` : submission?.status === 'returned' ? '<section class="account-submit-panel"><div><h2>Учитель пока не разрешил пересдачу</h2><p class="account-muted">Обратись к учителю, если хочешь внести исправления.</p></div></section>' : `<section class="account-submit-panel"><div><h2>${Number(assignment.archived)?'Учебный год закрыт':submission?.status === 'accepted' ? 'Работа проверена' : 'Работа отправлена'}</h2><p class="account-muted">${Number(assignment.archived)?'Работа и оценки сохранены в архиве. Новая отправка в этом учебном году отключена.':submission?.status === 'accepted' ? 'Учитель принял работу.' : 'Учитель скоро проверит её и оставит комментарий.'}</p></div><a class="account-button account-button-secondary" href="profile.html">Моя история</a></section>`}
       ${historyMarkup(versions)}`;
 
     const assignmentTabs = $('[data-assignment-tabs]');
@@ -186,7 +194,7 @@
     $$('[data-resolve-comment]').forEach(button=>button.addEventListener('click',async()=>{try{await A.api(`/api/student/line-comments/${button.dataset.resolveComment}/resolve`,{method:'PATCH',body:JSON.stringify({resolved:true})});button.replaceWith(Object.assign(document.createElement('span'),{className:'account-status',textContent:'Отмечено как исправленное'}));}catch(error){message(error.message);}}));
     const questionList=$('[data-question-list]'),questionForm=$('[data-question-form]');async function loadQuestions(){if(!questionList)return;try{const response=await A.api(`/api/student/assignments/${id}/questions`);questionList.innerHTML=response.questions.length?`<ol class="account-question-list">${response.questions.map(item=>`<li><p><strong>Твой вопрос</strong><br>${esc(item.question)}</p>${item.teacher_reply?`<div class="account-question-reply"><strong>Ответ учителя</strong><p>${esc(item.teacher_reply)}</p></div>`:'<span class="account-muted">Ждёт ответа учителя</span>'}</li>`).join('')}</ol>`:'<p class="account-muted">Вопросов пока нет.</p>';}catch(error){questionList.textContent=error.message;}}void loadQuestions();questionForm?.addEventListener('submit',async event=>{event.preventDefault();try{await A.api(`/api/student/assignments/${id}/questions`,{method:'POST',body:JSON.stringify({question:questionForm.elements.question.value})});questionForm.reset();await loadQuestions();message('Вопрос отправлен учителю.','success');}catch(error){message(error.message);}});
     preview();
-    window.loadCourseCodeEditor().then((api) => {
+    (editorLoadPromise || window.loadCourseCodeEditor()).then((api) => {
       htmlEditor?.destroy();
       cssEditor?.destroy();
       const change = () => scheduleSave();
@@ -266,7 +274,7 @@
     }
     const modal = document.createElement('dialog');
     modal.className = 'account-dialog';
-    modal.innerHTML = `<div class="account-dialog-inner"><h2>${version.kind === 'backup' ? 'Копия перед сбросом' : 'Отправленная версия'} · ${A.formatDate(version.created_at)}</h2><h3>HTML</h3><pre class="account-code-view"><code>${esc(version.html)}</code></pre><h3>CSS</h3><pre class="account-code-view"><code>${esc(version.css)}</code></pre><div class="account-dialog-actions"><button class="v3-button" type="button">Закрыть</button></div></div>`;
+    modal.innerHTML = `<div class="account-dialog-inner"><h2>${version.kind === 'backup' ? 'Копия перед сбросом' : 'Отправленная версия'} · ${A.formatDate(version.created_at)}</h2><h3>HTML</h3><pre class="account-code-view"><code>${esc(version.html)}</code></pre><h3>CSS</h3><pre class="account-code-view"><code>${esc(version.css)}</code></pre><div class="account-dialog-actions"><button class="account-button" type="button">Закрыть</button></div></div>`;
     document.body.append(modal);
     modal.showModal();
     modal.querySelector('button').addEventListener('click', () => { modal.close(); modal.remove(); });
@@ -314,12 +322,13 @@
   document.addEventListener('visibilitychange',()=>{if(!document.hidden&&navigator.onLine){if(pendingSubmit)void transmitPendingSubmit();else if(dirty)void saveDraft();}});
 
   async function load() {
+    const editorSettings = window.loadCourseEditorFontSize?.() ?? Promise.resolve(15);
     const local=await localDraft();let assignment;
     try{assignment=await A.api(`/api/student/assignments/${id}`);cachedAssignmentData=assignment;draftRevision=Number(assignment.draft_revision||0);}
     catch(error){if(!local?.assignmentData)throw error;assignment=local.assignmentData;cachedAssignmentData=assignment;draftRevision=Number(local.serverRevision||0);pendingSubmit=Boolean(local.pendingSubmit);submitClickedAt=local.clientSubmittedAt||null;}
-    const savedFontSize=await (window.loadCourseEditorFontSize?.()??Promise.resolve(15));
-    fontSize = savedFontSize;
-    if(navigator.onLine){await A.api(`/api/student/assignments/${id}/read`, { method: 'POST', body: JSON.stringify({}) });void A.api('/api/student/journey', { method: 'PUT', body: JSON.stringify({ kind: 'assignment', assignment_id: id }) }).catch(() => {});}
+    fontSize = 15;
+    void editorSettings.then(changeFontSize).catch(() => {});
+    if(navigator.onLine){void A.api(`/api/student/assignments/${id}/read`, { method: 'POST', body: JSON.stringify({}) }).catch(() => {});void A.api('/api/student/journey', { method: 'PUT', body: JSON.stringify({ kind: 'assignment', assignment_id: id }) }).catch(() => {});}
     const serverDraft=assignment.draft||assignment.versions?.find(item=>item.kind==='draft'),serverCode={html:serverDraft?.html??assignment.assignment?.starter_html??'',css:serverDraft?.css??assignment.assignment?.starter_css??''};lastSent=JSON.stringify(serverCode);
     if(local){pendingSubmit=Boolean(local.pendingSubmit);submitClickedAt=local.clientSubmittedAt||null;queuedQuizAnswers=local.quizAnswers||null;if(local.html!==serverCode.html||local.css!==serverCode.css){assignment.draft={html:local.html,css:local.css,created_at:local.updatedAt,kind:'draft'};dirty=true;}}
     render(assignment);
@@ -332,9 +341,10 @@
     user = await A.guard('student');
     if (!user) return;
     if (!Number.isInteger(id) || id < 1) {
-      root.innerHTML = '<section class="account-empty"><h1>Задание не найдено</h1><a class="v3-button" href="index.html">К списку заданий</a></section>';
+      root.innerHTML = '<section class="account-empty"><h1>Задание не найдено</h1><a class="account-button" href="index.html">К списку заданий</a></section>';
       return;
     }
+    editorLoadPromise = window.loadCourseCodeEditor?.() || Promise.resolve(null);
     try { await load(); } catch (error) { A.showLoadError(root, error, load); }
   }
   init();

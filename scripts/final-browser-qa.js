@@ -47,7 +47,7 @@ async function main() {
     const themes = ['light', 'dark'];
     const widths = [1280, 375];
 
-    const checkPage = async ({ label, url, context = guest, expectedText, expectedContact = false }) => {
+    const checkPage = async ({ label, url, context = guest, expectedText, expectedSelector, expectedContact = false }) => {
       for (const theme of themes) for (const width of widths) {
         const page = await context.newPage({ viewport: { width, height: 900 } });
         const pageErrors = [], warnings = [], failedRequests = [], externalRequests = [];
@@ -64,7 +64,8 @@ async function main() {
         await page.addInitScript(value => { if (window === window.top) localStorage.setItem('course-color-theme', value); }, theme);
         await page.setViewportSize({ width, height: 900 });
         await page.goto(`${base}${url}`, { waitUntil: 'load', timeout: 30000 });
-        if (expectedText) await page.getByText(expectedText, { exact: false }).first().waitFor({ state: 'visible', timeout: 10000 });
+        if (expectedSelector) await page.locator(expectedSelector).first().waitFor({ state: 'visible', timeout: 10000 });
+        else if (expectedText) await page.locator('main h1, main h2, main h3').filter({ hasText: expectedText }).first().waitFor({ state: 'visible', timeout: 10000 });
         if (expectedContact) await page.waitForFunction(value => document.querySelector('[data-teacher-contact]')?.textContent === value, contact, { timeout: 10000 });
         await page.waitForTimeout(80);
         const state = await page.evaluate(() => ({
@@ -96,7 +97,7 @@ async function main() {
     const teacherId = (await db.query("INSERT INTO users(role,login,password_hash,full_name,is_owner,created_at) VALUES('teacher','stage7.teacher',$1,'Учитель выпуска',1,$2) RETURNING id", [teacherHash, stamp])).rows[0].id;
     const classId = (await db.query('INSERT INTO classes(teacher_id,name,school_year,created_at) VALUES($1,$2,$3,$4) RETURNING id', [teacherId, 'Демонстрационный класс', '2026–2027', stamp])).rows[0].id;
     const studentId = (await db.query("INSERT INTO users(role,login,password_hash,full_name,class_id,must_change_password,created_at) VALUES('student','stage7.student',$1,'Ученик выпуска',$2,0,$3) RETURNING id", [studentHash, classId, stamp])).rows[0].id;
-    const assignmentId = (await db.query("INSERT INTO assignments(class_id,title,description,status,task_type,checks_json,created_at,updated_at) VALUES($1,'Проверочная карточка','Собери небольшую карточку.','published','build','[]',$2,$2) RETURNING id", [classId, stamp])).rows[0].id;
+    const assignmentId = (await db.query("INSERT INTO assignments(class_id,title,description,status,task_type,checks_json,hints_json,created_at,updated_at) VALUES($1,'Проверочная карточка','Собери небольшую карточку.','published','build','[]','[\"Начни с контейнера страницы.\"]'::jsonb,$2,$2) RETURNING id", [classId, stamp])).rows[0].id;
     const teacherCookie = await login(base, 'stage7.teacher', 'Stage7Teacher#2026');
     const studentCookie = await login(base, 'stage7.student', 'Stage7Student#2026');
     const teacherContext = await browser.newContext();
@@ -106,7 +107,7 @@ async function main() {
 
     const basicPages = [
       { label: 'главная курса', url: '/', expectedText: 'Понятный путь от первой страницы' },
-      { label: 'устаревший адрес урока', url: '/lesson-01.html', expectedText: 'Урок' },
+      { label: 'устаревший адрес урока', url: '/lesson-01.html', expectedSelector: 'main h1' },
       { label: 'справочник', url: '/reference.html', expectedText: 'Справочник' },
       { label: 'проверка курса', url: '/check.html', expectedText: 'Проверка структуры и содержания' },
       { label: 'страница данных', url: '/privacy.html', expectedText: 'Какие данные мы храним', expectedContact: true },
@@ -166,8 +167,8 @@ async function main() {
     const lessonFiles = (await fs.readdir(path.join(root, 'outputs', 'assets', 'lessons'))).filter(file => /^lesson-\d+\.js$/.test(file));
     const lessonIds = lessonFiles.map(file => Number(file.match(/^lesson-(\d+)\.js$/)[1])).sort((a, b) => a - b);
     for (const id of (smoke ? lessonIds.slice(0, 1) : lessonIds)) {
-      await checkPage({ label: `урок ${id}`, url: `/lesson-view.html?lesson=${id}`, expectedText: 'Урок' });
-      for (const project of (smoke ? [0] : [0, 1])) await checkPage({ label: `урок ${id} · проект ${project + 1}`, url: `/examples/view.html?lesson=${id}&project=${project}`, expectedText: 'Проект' });
+      await checkPage({ label: `урок ${id}`, url: `/lesson-view.html?lesson=${id}`, expectedSelector: 'main h1' });
+      for (const project of (smoke ? [0] : [0, 1])) await checkPage({ label: `урок ${id} · проект ${project + 1}`, url: `/examples/view.html?lesson=${id}&project=${project}`, expectedSelector: 'main h1' });
     }
 
     const teacherPage = await teacherContext.newPage({ viewport: { width: 1280, height: 900 } });

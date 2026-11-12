@@ -22,7 +22,7 @@
       form.hidden = true;
       A.setMessage(message, 'Аккаунт создан. Теперь войдите с выбранными логином и паролем.', 'success');
       const link = document.createElement('a');
-      link.className = 'v3-button';
+      link.className = 'account-button';
       link.href = '/login.html';
       link.textContent = 'Перейти ко входу';
       message.after(link);
