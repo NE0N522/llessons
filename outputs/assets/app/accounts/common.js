@@ -163,12 +163,32 @@
   }
   installMobileNav();installAuthThemeControl();installOfflineBanner();installOverflowMenus();bindTables();installInitialSkeletons();
   async function currentUser(){return (await api('/api/auth/me')).user;}
+  function paintProfileAvatar(user){
+    document.querySelectorAll('[data-user-avatar]').forEach(node=>{
+      node.replaceChildren();
+      if(user?.avatar_url){const image=document.createElement('img');let imageSource=user.avatar_url;try{const parsed=new URL(imageSource);if(parsed.hostname==='res.cloudinary.com')imageSource=imageSource.replace('/image/upload/','/image/upload/c_fill,g_face,w_240,h_240,f_auto,q_auto/');}catch{}image.src=imageSource;image.alt='';image.loading='lazy';image.referrerPolicy='no-referrer';image.onerror=()=>{node.replaceChildren();node.textContent=initials(user.full_name);};node.append(image);}
+      else node.textContent=initials(user?.full_name||'');
+      node.dataset.theme=user?.profile_theme||'ocean';
+    });
+  }
+  function setupProfileTrigger(user){
+    document.querySelectorAll('[data-user-name]').forEach(name=>{
+      if(!name.closest('[data-profile-settings]')){
+        const button=document.createElement('button');button.type='button';button.className='account-profile-trigger';button.dataset.profileSettings='';button.setAttribute('aria-label','Настроить фото и оформление профиля');
+        const avatar=document.createElement('span');avatar.className='account-topbar-avatar';avatar.dataset.userAvatar='';
+        const label=document.createElement('span');label.className='account-user-name';label.dataset.userName='';label.textContent=user.full_name;
+        button.append(avatar,label);name.replaceWith(button);
+      } else name.textContent=user.full_name;
+    });
+    paintProfileAvatar(user);
+  }
   async function guard(role){
     if(fileMode){location.replace('/login.html');return null;}
-    try{const user=await currentUser();if(user.must_change_password){location.replace('/change-password.html');return null;}if(role&&user.role!==role){location.replace(redirectFor(user));return null;}try{localStorage.setItem('course-offline-user-v1',JSON.stringify({id:user.id,role:user.role,full_name:user.full_name,is_owner:user.is_owner,must_change_password:false,cached_at:Date.now()}));}catch{}document.querySelectorAll('[data-user-name]').forEach(el=>el.textContent=user.full_name);document.querySelectorAll('[data-logout]').forEach(button=>button.addEventListener('click',logout));document.querySelectorAll('[data-owner-backup]').forEach(button=>{button.hidden=!user.is_owner;if(user.is_owner)button.addEventListener('click',()=>{toast('Резервная копия содержит персональные данные. Храни её в защищённом месте.','error');location.href='/api/teacher/backup';});});return user;}
+    try{const user=await currentUser();if(user.must_change_password){location.replace('/change-password.html');return null;}if(role&&user.role!==role){location.replace(redirectFor(user));return null;}try{localStorage.setItem('course-offline-user-v1',JSON.stringify({id:user.id,role:user.role,full_name:user.full_name,is_owner:user.is_owner,must_change_password:false,cached_at:Date.now()}));}catch{}setupProfileTrigger(user);document.querySelectorAll('[data-logout]').forEach(button=>button.addEventListener('click',logout));document.querySelectorAll('[data-owner-backup]').forEach(button=>{button.hidden=!user.is_owner;if(user.is_owner)button.addEventListener('click',()=>{toast('Резервная копия содержит персональные данные. Храни её в защищённом месте.','error');location.href='/api/teacher/backup';});});return user;}
     catch{if(!navigator.onLine){try{const cached=JSON.parse(localStorage.getItem('course-offline-user-v1')||'null');if(cached?.id&&(!role||cached.role===role)){document.querySelectorAll('[data-user-name]').forEach(el=>el.textContent=cached.full_name||'Ученик');toast('Офлайн-режим: доступен сохранённый черновик.','error');return cached;}}catch{}}location.replace('/login.html');return null;}
   }
   async function logout(){try{localStorage.removeItem('course-offline-user-v1');await api('/api/auth/logout',{method:'POST',body:JSON.stringify({})});}finally{location.replace('/login.html');}}
-  window.CourseAccounts={api,escapeHtml,formatDate,formatDueDate,formatDescription,setMessage,redirectFor,previewDocument,showPreview,evaluateChecks,currentUser,guard,logout,fileMode,toast,downloadCsv,printCredentials,confirmDialog,showLoadError,initials,skeletonMarkup,strings:window.CourseAccountStrings||{}};
+  window.CourseAccounts={api,escapeHtml,formatDate,formatDueDate,formatDescription,setMessage,redirectFor,previewDocument,showPreview,evaluateChecks,currentUser,guard,logout,fileMode,toast,downloadCsv,printCredentials,confirmDialog,showLoadError,initials,paintProfileAvatar,skeletonMarkup,strings:window.CourseAccountStrings||{}};
+  const profileSettingsScript=document.createElement('script');profileSettingsScript.src='/assets/app/accounts/profile-settings.js';document.head.append(profileSettingsScript);
   document.querySelectorAll('[data-logout]').forEach(button=>button.addEventListener('click',logout));
 })();

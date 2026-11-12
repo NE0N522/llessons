@@ -59,6 +59,48 @@ function createAuthRouter(db, config) {
       }
     });
   });
+  router.post('/cloudinary-avatar-signature', (req, res) => {
+    assert(req.user, 401, 'Войди в аккаунт.');
+    assert(!req.user.must_change_password, 403, 'Сначала задай новый пароль.');
+    const cloudName = config.cloudinaryCloudName;
+    const apiKey = config.cloudinaryApiKey;
+    const apiSecret = config.cloudinaryApiSecret;
+    assert(cloudName && apiKey && apiSecret, 503, 'Загрузка фото пока не настроена. Можно вставить ссылку на изображение.');
+    assert(/^[a-z0-9-]{1,100}$/i.test(cloudName) && /^[a-z0-9]{5,100}$/i.test(apiKey), 503, 'Настройки Cloudinary заполнены неверно.');
+    const timestamp = String(Math.floor(Date.now() / 1000));
+    const fields = {
+      overwrite: 'true',
+      public_id: `kod-po-polochkam/users/${req.user.id}/avatar`,
+      timestamp
+    };
+    const toSign = Object.keys(fields).sort().map(key => `${key}=${fields[key]}`).join('&');
+    const signature = crypto.createHash('sha1').update(`${toSign}${apiSecret}`).digest('hex');
+    res.json({ cloud_name: cloudName, api_key: apiKey, signature, ...fields });
+  });
+  router.patch('/profile', async (req, res) => {
+    assert(req.user, 401, 'Войди в аккаунт.');
+    assert(!req.user.must_change_password, 403, 'Сначала задай новый пароль.');
+    const avatarUrl = String(req.body?.avatar_url ?? '').trim();
+    const avatarPublicId = String(req.body?.avatar_public_id ?? '').trim();
+    const profileStatus = String(req.body?.profile_status ?? '').trim();
+    const profileTheme = String(req.body?.profile_theme ?? 'ocean').trim();
+    assert(avatarUrl.length <= 2048, 400, 'Ссылка на изображение слишком длинная.');
+    assert(profileStatus.length <= 80, 400, 'Статус должен быть не длиннее 80 символов.');
+    assert(['ocean', 'lavender', 'sunset', 'forest', 'graphite'].includes(profileTheme), 400, 'Выбери оформление из списка.');
+    if (avatarUrl) {
+      let parsed;
+      try { parsed = new URL(avatarUrl); } catch { assert(false, 400, 'Вставь полную ссылку на изображение.'); }
+      assert(parsed.protocol === 'https:' && !parsed.username && !parsed.password, 400, 'Ссылка должна начинаться с https://.');
+    }
+    const expectedPublicId = `kod-po-polochkam/users/${req.user.id}/avatar`;
+    if (avatarPublicId) {
+      let parsed;
+      try { parsed = new URL(avatarUrl); } catch { assert(false, 400, 'После загрузки фото обнови профиль ещё раз.'); }
+      assert(avatarPublicId === expectedPublicId && parsed.hostname === 'res.cloudinary.com' && parsed.pathname.includes(`/${expectedPublicId}.`), 400, 'Не удалось проверить загруженное фото.');
+    }
+    await db.prepare('UPDATE users SET avatar_url=$1,avatar_public_id=$2,profile_theme=$3,profile_status=$4 WHERE id=$5').run(avatarUrl, avatarPublicId, profileTheme, profileStatus, req.user.id);
+    res.json({ avatar_url: avatarUrl, avatar_public_id: avatarPublicId, profile_theme: profileTheme, profile_status: profileStatus });
+  });
   router.get('/status', (req, res) => {
     if (!req.user) return res.json({ user: null });
     res.json({

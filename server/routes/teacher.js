@@ -281,7 +281,7 @@ function createTeacherRouter(db) {
   router.get('/classes/:classId/students', async (req, res) => {
     const classId = asId(req.params.classId);
     await ownedClass(db, req.user.id, classId);
-    const rows = await db.prepare(`SELECT u.id,u.full_name,u.login,u.active,u.created_at,u.last_login_at,
+    const rows = await db.prepare(`SELECT u.id,u.full_name,u.login,u.active,u.created_at,u.last_login_at,u.avatar_url,
       (SELECT COUNT(*) FROM submissions s JOIN assignments a ON a.id=s.assignment_id WHERE a.class_id=$1 AND s.student_id=u.id AND s.status IN ('submitted','returned','accepted')) AS completed,
       (SELECT COUNT(*) FROM assignments a WHERE a.class_id=$2 AND a.status='published' AND (a.target_all=1 OR EXISTS(SELECT 1 FROM assignment_targets t WHERE t.assignment_id=a.id AND t.student_id=u.id))) AS total,
       (SELECT ROUND(AVG(s.score),1) FROM submissions s WHERE s.student_id=u.id AND s.status='accepted' AND s.score IS NOT NULL) AS average_score,
@@ -461,19 +461,28 @@ function createTeacherRouter(db) {
       db.prepare('SELECT kind,title,details,assignment_id,created_at FROM activity_events WHERE user_id=$1 ORDER BY created_at DESC,id DESC LIMIT 40').all(studentId),
       db.prepare(`SELECT COUNT(*) AS total, SUM(CASE WHEN s.status IN ('submitted','returned','accepted') THEN 1 ELSE 0 END) AS completed,
         ROUND(AVG(CASE WHEN s.status='accepted' THEN s.score END),1) AS average,
-        SUM(CASE WHEN s.status='accepted' THEN 1 ELSE 0 END) AS accepted_count
+        SUM(CASE WHEN s.status='accepted' THEN 1 ELSE 0 END) AS accepted_count,
+        SUM(CASE WHEN s.submitted_at IS NOT NULL AND (a.due_at IS NULL OR s.submitted_at<=a.due_at) THEN 1 ELSE 0 END) AS on_time
         FROM assignments a LEFT JOIN submissions s ON s.assignment_id=a.id AND s.student_id=$1
         WHERE a.class_id=$2 AND a.status='published' AND (a.target_all=1 OR EXISTS(SELECT 1 FROM assignment_targets t WHERE t.assignment_id=a.id AND t.student_id=$3))`).get(studentId, student.class_id, studentId),
       db.prepare('SELECT weekly_goal,last_course_location FROM user_settings WHERE user_id=$1').get(studentId),
       db.prepare("SELECT COUNT(*) AS count FROM submissions WHERE student_id=$1 AND submitted_at >= $2 AND status IN ('submitted','returned','accepted')").get(studentId, monday.toISOString())
     ]);
     const metrics = streakMetrics(days.map(day => day.active_on));
-    const badges = [];
-    if (Number(totals.completed) > 0) badges.push({ id: 'first-work', title: 'Первая работа', description: 'Отправлена первая работа.' });
-    if (Number(totals.accepted_count) >= 5) badges.push({ id: 'five-accepted', title: 'Пять работ принято', description: 'Учитель принял пять работ.' });
-    if (metrics.current >= 5) badges.push({ id: 'five-day-streak', title: 'Пять активных дней', description: 'Учился пять дней подряд.' });
+    const lessonsDone=new Set(progress.filter(item=>item.step_id==='lesson-complete').map(item=>Number(item.lesson_id))).size;
+    const achievements=[
+      {id:'first-work',title:'Первая работа',description:'Отправь первую работу учителю.',progress:Math.min(1,Number(totals.completed)||0),target:1},
+      {id:'five-lessons',title:'Пять уроков',description:'Заверши пять уроков курса.',progress:lessonsDone,target:5},
+      {id:'ten-lessons',title:'Десять уроков',description:'Заверши десять уроков курса.',progress:lessonsDone,target:10},
+      {id:'first-accepted',title:'Принято учителем',description:'Получи первую принятую работу.',progress:Math.min(1,Number(totals.accepted_count)||0),target:1},
+      {id:'five-accepted',title:'Пять готовых работ',description:'Получи пять принятых работ.',progress:Number(totals.accepted_count)||0,target:5},
+      {id:'five-day-streak',title:'Пять активных дней',description:'Учись пять дней подряд.',progress:metrics.best_streak,target:5},
+      {id:'ten-day-streak',title:'Десять активных дней',description:'Удерживай учебную серию десять дней.',progress:metrics.best_streak,target:10},
+      {id:'on-time-three',title:'Всё вовремя',description:'Сдай три работы до срока.',progress:Number(totals.on_time)||0,target:3}
+    ].map(item=>({...item,unlocked:item.progress>=item.target,progress:Math.min(item.progress,item.target),progress_label:`${Math.min(item.progress,item.target)} из ${item.target}`}));
+    const badges=achievements.filter(item=>item.unlocked);
     const klass = await ownedClass(db, req.user.id, student.class_id);
-    res.json({ student: { id: student.id, full_name: student.full_name, login: student.login, active: Boolean(student.active), class_name: student.class_name, school_year: klass.school_year }, stats: { ...totals, total: Number(totals.total) || 0, completed: Number(totals.completed) || 0, weekly_goal: Number(settings?.weekly_goal) || 3, weekly_done: Number(weeklyDone.count) || 0, ...metrics }, badges, active_days: days.map(day => dateOnly(day.active_on)), grades, progress, history, last_course_location: settings?.last_course_location || '' });
+    res.json({ student: { id: student.id, full_name: student.full_name, login: student.login, avatar_url: student.avatar_url || '', active: Boolean(student.active), class_name: student.class_name, school_year: klass.school_year }, stats: { ...totals, total: Number(totals.total) || 0, completed: Number(totals.completed) || 0, weekly_goal: Number(settings?.weekly_goal) || 3, weekly_done: Number(weeklyDone.count) || 0, ...metrics }, badges, achievements, active_days: days.map(day => dateOnly(day.active_on)), grades, progress, history, last_course_location: settings?.last_course_location || '' });
   });
   router.patch('/students/:studentId', async (req, res) => {
     const studentId = asId(req.params.studentId),
@@ -690,6 +699,100 @@ function createTeacherRouter(db) {
   router.get('/classes/:classId/announcements',async(req,res)=>{const classId=asId(req.params.classId);await ownedClass(db,req.user.id,classId);const announcements=await db.prepare('SELECT id,title,body,pinned,created_at FROM class_announcements WHERE class_id=$1 ORDER BY pinned DESC,created_at DESC').all(classId);res.json({announcements});});
   router.post('/classes/:classId/announcements',async(req,res)=>{const classId=asId(req.params.classId);await ownedClass(db,req.user.id,classId);const title=text(req.body?.title,'заголовок объявления',120),body=text(req.body?.body,'текст объявления',4000),pinned=req.body?.pinned?1:0,timestamp=now();const saved=await db.prepare('INSERT INTO class_announcements(class_id,teacher_id,title,body,pinned,created_at) VALUES($1,$2,$3,$4,$5,$6)').run(classId,req.user.id,title,body,pinned,timestamp);const students=await db.prepare("SELECT id FROM users WHERE class_id=$1 AND role='student' AND active=1").all(classId);for(const student of students)await db.prepare('INSERT INTO activity_events(user_id,kind,title,details,created_at) VALUES($1,$2,$3,$4,$5)').run(student.id,'announcement','Новое объявление',title,timestamp);res.status(201).json({id:Number(saved.lastInsertRowid),title,body,pinned,created_at:timestamp});});
   router.delete('/announcements/:announcementId',async(req,res)=>{const announcementId=asId(req.params.announcementId),row=await db.prepare('SELECT a.id,a.class_id,c.teacher_id FROM class_announcements a JOIN classes c ON c.id=a.class_id WHERE a.id=$1').get(announcementId);assert(row&&row.teacher_id===req.user.id,404,'Объявление не найдено.');await db.prepare('DELETE FROM class_announcements WHERE id=$1').run(announcementId);res.json({ok:true});});
+  router.get('/classes/:classId/gallery', async (req, res) => {
+    const classId = asId(req.params.classId); await ownedClass(db, req.user.id, classId);
+    const projects = await db.prepare(`SELECT g.id,g.title,g.description,g.created_at,u.full_name,a.title AS assignment_title
+      FROM class_gallery_projects g JOIN users u ON u.id=g.student_id JOIN assignments a ON a.id=g.assignment_id
+      WHERE g.class_id=$1 ORDER BY g.created_at DESC`).all(classId);
+    res.json({ projects });
+  });
+  router.post('/submissions/:submissionId/gallery', async (req, res) => {
+    const submissionId = asId(req.params.submissionId);
+    const row = await db.prepare(`SELECT s.id,s.student_id,s.assignment_id,a.class_id,a.title AS assignment_title,u.full_name,c.teacher_id,v.html,v.css
+      FROM submissions s JOIN assignments a ON a.id=s.assignment_id JOIN users u ON u.id=s.student_id JOIN classes c ON c.id=a.class_id
+      JOIN submission_versions v ON v.id=(SELECT MAX(v2.id) FROM submission_versions v2 WHERE v2.submission_id=s.id AND v2.kind='submitted')
+      WHERE s.id=$1 AND s.status='accepted'`).get(submissionId);
+    assert(row && Number(row.teacher_id) === Number(req.user.id), 404, 'Принятая работа не найдена.');
+    const title = text(req.body?.title || row.assignment_title, 'название работы в галерее', 120);
+    const description = optionalText(String(req.body?.description || ''), 'описание работы', 500);
+    const timestamp = now();
+    const saved = await db.prepare(`INSERT INTO class_gallery_projects(class_id,student_id,assignment_id,submission_id,title,description,html,css,created_at)
+      VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9) ON CONFLICT(submission_id) DO UPDATE SET title=excluded.title,description=excluded.description,html=excluded.html,css=excluded.css,created_at=excluded.created_at RETURNING id`)
+      .run(row.class_id,row.student_id,row.assignment_id,submissionId,title,description,row.html||'',row.css||'',timestamp);
+    res.status(201).json({ id:Number(saved.lastInsertRowid),title,description });
+  });
+  router.delete('/gallery/:projectId', async (req, res) => {
+    const projectId = asId(req.params.projectId);
+    const project = await db.prepare('SELECT g.id,c.teacher_id FROM class_gallery_projects g JOIN classes c ON c.id=g.class_id WHERE g.id=$1').get(projectId);
+    assert(project && Number(project.teacher_id) === Number(req.user.id), 404, 'Работа в галерее не найдена.');
+    await db.prepare('DELETE FROM class_gallery_projects WHERE id=$1').run(projectId);
+    res.json({ ok: true });
+  });
+  router.get('/assignment-templates', async (req, res) => {
+    const templates = await db.prepare('SELECT id,title,updated_at FROM teacher_assignment_templates WHERE teacher_id=$1 ORDER BY title').all(req.user.id);
+    res.json({ templates });
+  });
+  router.get('/assignment-templates/:templateId', async (req, res) => {
+    const templateId = asId(req.params.templateId);
+    const row = await db.prepare('SELECT id,title,config_json FROM teacher_assignment_templates WHERE id=$1 AND teacher_id=$2').get(templateId, req.user.id);
+    assert(row, 404, 'Шаблон задания не найден.');
+    res.json({ id: Number(row.id), title: row.title, config: safeJson(row.config_json, {}) });
+  });
+  router.post('/assignments/:assignmentId/templates', async (req, res) => {
+    const assignment = await ownedAssignment(db, req.user.id, asId(req.params.assignmentId));
+    const title = text(req.body?.title || assignment.title, 'название шаблона', 100);
+    const config = {
+      title: assignment.title,
+      description: assignment.description,
+      lesson_id: assignment.lesson_id,
+      max_score: assignment.max_score,
+      allow_resubmit: Boolean(Number(assignment.allow_resubmit)),
+      no_hints: Boolean(Number(assignment.no_hints)),
+      starter_html: assignment.starter_html,
+      starter_css: assignment.starter_css,
+      checks: safeJson(assignment.checks_json, []),
+      task_type: assignment.task_type,
+      model_html: assignment.model_html,
+      model_css: assignment.model_css,
+      model_preview: assignment.model_preview,
+      quiz: safeJson(assignment.quiz_json, []),
+      hints: safeJson(assignment.hints_json, []),
+      checklist_autograde: Boolean(Number(assignment.checklist_autograde)),
+      late_penalty_percent_per_day: assignment.late_penalty_percent_per_day,
+      late_penalty_max_percent: assignment.late_penalty_max_percent
+    };
+    const timestamp = now();
+    const result = await db.prepare(`INSERT INTO teacher_assignment_templates(teacher_id,title,config_json,created_at,updated_at)
+      VALUES($1,$2,$3,$4,$4) ON CONFLICT(teacher_id,title) DO UPDATE SET config_json=excluded.config_json,updated_at=excluded.updated_at RETURNING id`).run(req.user.id, title, JSON.stringify(config), timestamp);
+    res.status(201).json({ id: Number(result.lastInsertRowid), title, updated_at: timestamp });
+  });
+  router.delete('/assignment-templates/:templateId', async (req, res) => {
+    await db.prepare('DELETE FROM teacher_assignment_templates WHERE id=$1 AND teacher_id=$2').run(asId(req.params.templateId), req.user.id);
+    res.json({ ok: true });
+  });
+  router.get('/rubric-templates', async (req, res) => {
+    const rows = await db.prepare('SELECT id,title,criteria_json,updated_at FROM teacher_rubric_templates WHERE teacher_id=$1 ORDER BY title').all(req.user.id);
+    res.json({ templates: rows.map(row => ({ ...row, criteria: safeJson(row.criteria_json, []) })) });
+  });
+  router.post('/rubric-templates', async (req, res) => {
+    const title = text(req.body?.title, 'название критериев', 80);
+    assert(Array.isArray(req.body?.criteria) && req.body.criteria.length > 0 && req.body.criteria.length <= 8, 400, 'Добавь от одного до восьми критериев.');
+    const criteria = req.body.criteria.map(item => ({
+      title: text(item?.title, 'название критерия', 100),
+      max_points: Number(item?.max_points),
+      description: optionalText(String(item?.description || ''), 'описание критерия', 240)
+    }));
+    assert(criteria.every(item => Number.isInteger(item.max_points) && item.max_points >= 1 && item.max_points <= 100), 400, 'Для каждого критерия задай целое число баллов от 1 до 100.');
+    assert(criteria.reduce((sum, item) => sum + item.max_points, 0) <= 100, 400, 'Сумма критериев не должна превышать 100 баллов.');
+    const timestamp = now();
+    const saved = await db.prepare(`INSERT INTO teacher_rubric_templates(teacher_id,title,criteria_json,created_at,updated_at)
+      VALUES($1,$2,$3,$4,$4) ON CONFLICT(teacher_id,title) DO UPDATE SET criteria_json=excluded.criteria_json,updated_at=excluded.updated_at RETURNING id`).run(req.user.id, title, JSON.stringify(criteria), timestamp);
+    res.status(201).json({ id: Number(saved.lastInsertRowid), title, criteria, updated_at: timestamp });
+  });
+  router.delete('/rubric-templates/:templateId', async (req, res) => {
+    await db.prepare('DELETE FROM teacher_rubric_templates WHERE id=$1 AND teacher_id=$2').run(asId(req.params.templateId), req.user.id);
+    res.json({ ok: true });
+  });
   router.put('/assignments/:assignmentId/students/:studentId/due',async(req,res)=>{const assignmentId=asId(req.params.assignmentId),studentId=asId(req.params.studentId),assignment=await ownedAssignment(db,req.user.id,assignmentId);await ownedStudent(db,req.user.id,studentId);assert((await db.prepare('SELECT 1 FROM assignment_targets WHERE assignment_id=$1 AND student_id=$2').get(assignmentId,studentId))||Number(assignment.target_all),404,'Задание не назначено этому ученику.');const dueAt=isoDate(req.body?.due_at,false),timestamp=now();await db.prepare('INSERT INTO assignment_due_extensions(assignment_id,student_id,due_at,updated_at) VALUES($1,$2,$3,$4) ON CONFLICT(assignment_id,student_id) DO UPDATE SET due_at=excluded.due_at,updated_at=excluded.updated_at').run(assignmentId,studentId,dueAt,timestamp);res.json({due_at:dueAt});});
   router.get('/assignments/:assignmentId/questions',async(req,res)=>{const assignmentId=asId(req.params.assignmentId);await ownedAssignment(db,req.user.id,assignmentId);const questions=await db.prepare(`SELECT q.*,u.full_name FROM assignment_questions q JOIN users u ON u.id=q.student_id WHERE q.assignment_id=$1 ORDER BY q.teacher_read_at IS NULL DESC,q.created_at DESC`).all(assignmentId);await db.prepare('UPDATE assignment_questions SET teacher_read_at=$1 WHERE assignment_id=$2 AND teacher_read_at IS NULL').run(now(),assignmentId);res.json({questions});});
   router.post('/questions/:questionId/reply',async(req,res)=>{const questionId=asId(req.params.questionId),row=await db.prepare('SELECT q.*,a.class_id,c.teacher_id FROM assignment_questions q JOIN assignments a ON a.id=q.assignment_id JOIN classes c ON c.id=a.class_id WHERE q.id=$1').get(questionId);assert(row&&row.teacher_id===req.user.id,404,'Вопрос не найден.');const reply=text(req.body?.reply,'ответ',2000),replyPublic=Boolean(req.body?.reply_public),timestamp=now();await db.prepare('UPDATE assignment_questions SET teacher_reply=$1,reply_public=$2,replied_at=$3,student_read_at=NULL WHERE id=$4').run(reply,replyPublic?1:0,timestamp,questionId);await db.prepare('INSERT INTO activity_events(user_id,kind,title,details,assignment_id,created_at) VALUES($1,$2,$3,$4,$5,$6)').run(row.student_id,'question_reply','Ответ учителя на вопрос',reply,row.assignment_id,timestamp);res.json({ok:true,replied_at:timestamp,reply_public:replyPublic});});

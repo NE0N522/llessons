@@ -65,9 +65,9 @@ async function createApp(options = {}) {
         objectSrc: ["'none'"],
         scriptSrc: ["'self'"],
         styleSrc: ["'self'", "'unsafe-inline'"],
-        imgSrc: ["'self'", 'data:', 'blob:'],
+        imgSrc: ["'self'", 'data:', 'blob:', 'https:'],
         fontSrc: ["'self'", 'data:'],
-        connectSrc: ["'self'"],
+        connectSrc: ["'self'", 'https://api.cloudinary.com'],
         frameSrc: ["'self'"],
         frameAncestors: ["'self'"],
         formAction: ["'self'"]

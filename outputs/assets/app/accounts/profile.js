@@ -33,6 +33,29 @@
       <section class="account-panel"><div class="account-panel-heading"><div><h2>Динамика оценок</h2><p class="account-muted">Как менялся результат по проверенным работам.</p></div></div>${gradeChart(data.grades)}${data.grades.length ? `<details><summary>Таблица значений графика</summary><div class="account-table-wrap"><table class="account-table"><thead><tr><th>Задание</th><th>Баллы</th><th>Дата проверки</th></tr></thead><tbody>${data.grades.map(grade => `<tr><td>${esc(grade.title)}</td><td>${grade.score ?? '—'} / ${grade.max_score}</td><td>${A.formatDate(grade.graded_at)}</td></tr>`).join('')}</tbody></table></div></details>` : ''}</section></div>
       <section class="account-panel"><div class="account-panel-heading"><div><h2>Прогресс по урокам</h2><p class="account-muted">Отмечай шаги и возвращайся к ним позже.</p></div></div><div class="account-progress-list">${lessons.map(lesson => `<a href="/lesson-view.html?lesson=${lesson.id}" class="account-progress-item"><span class="account-progress-number">${String(lesson.number).padStart(2, '0')}</span><span><strong>${esc(lesson.title)}</strong><small>${done.has(lesson.id) ? 'Урок завершён' : 'Есть отмеченные шаги или можно продолжить'}</small></span><span class="account-progress-mark" aria-label="${done.has(lesson.id) ? 'Урок завершён' : 'В процессе'}">${done.has(lesson.id) ? '✓' : '→'}</span></a>`).join('')}</div></section>
       <section class="account-panel account-history-panel"><div class="account-panel-heading"><div><h2>История активности</h2><p class="account-muted">Задания, сохранения, отправки и отзывы учителя.</p></div></div>${data.history.length ? `<ol class="account-timeline">${data.history.map(event => `<li><span class="account-event-icon" aria-hidden="true">${eventIcon[event.kind] || '·'}</span><div><strong>${esc(event.title)}</strong>${event.details ? `<p>${esc(event.details)}</p>` : ''}${event.assignment_id ? `<a href="assignment.html?id=${event.assignment_id}">Перейти к заданию →</a>` : ''}<time datetime="${esc(event.created_at)}">${A.formatDate(event.created_at)}</time></div></li>`).join('')}</ol>` : '<div class="account-empty"><h3>История пока пуста</h3><p>Когда ты начнёшь задание или получишь отзыв, здесь появится запись.</p></div>'}</section>`;
+    const header = root.querySelector('.account-profile-header');
+    if (header) {
+      header.dataset.profileTheme = profile.profile_theme || 'ocean';
+      const avatar = header.querySelector('.account-avatar');
+      if (profile.avatar_url && avatar) {
+        const image = document.createElement('img'); image.src = profile.avatar_url; try { if (new URL(profile.avatar_url).hostname === 'res.cloudinary.com') image.src = profile.avatar_url.replace('/image/upload/', '/image/upload/c_fill,g_face,w_320,h_320,f_auto,q_auto/'); } catch {} image.alt = `Фото профиля: ${profile.full_name}`; image.loading = 'lazy'; image.referrerPolicy = 'no-referrer';
+        image.onerror = () => { avatar.textContent = initials(profile.full_name); };
+        avatar.replaceChildren(image);
+      }
+      if (profile.profile_status) { const status = document.createElement('p'); status.className = 'account-profile-status'; status.textContent = profile.profile_status; header.querySelector('h1')?.after(status); }
+      const settings = document.createElement('button'); settings.type = 'button'; settings.className = 'account-small-button'; settings.dataset.profileSettings = ''; settings.textContent = 'Фото и оформление'; header.append(settings);
+    }
+    const achievementPanel = [...root.querySelectorAll('.account-panel')].find(section => section.querySelector('h2')?.textContent.includes('значки'));
+    if (achievementPanel) {
+      const heading = achievementPanel.querySelector('h2'); if (heading) heading.textContent = 'Достижения';
+      const intro = achievementPanel.querySelector('.account-panel-heading p'); if (intro) intro.textContent = 'Отмечай свой прогресс. Значки видишь ты и учитель — здесь нет рейтинга и сравнения с классом.';
+      const oldGrid = achievementPanel.querySelector('.account-badge-list'); oldGrid?.remove();
+      const emptyMessage = achievementPanel.querySelector('.account-panel-heading')?.nextElementSibling;
+      if (emptyMessage?.classList.contains('account-muted')) emptyMessage.remove();
+      const grid = document.createElement('div'); grid.className = 'account-achievement-grid';
+      grid.innerHTML = (data.achievements || data.badges || []).map(item => { const earned = item.unlocked ?? true; return `<article class="account-achievement-card" data-unlocked="${Boolean(earned)}"><span class="account-achievement-mark" aria-hidden="true">${earned ? '✓' : '·'}</span><div><strong>${esc(item.title)}</strong><p>${esc(item.description)}</p><div class="account-achievement-progress" role="progressbar" aria-label="${esc(item.title)}" aria-valuemin="0" aria-valuemax="${Number(item.target) || 1}" aria-valuenow="${Number(item.progress) || 0}"><span style="width:${Math.round(Math.min(1, (Number(item.progress) || 0) / Math.max(1, Number(item.target) || 1)) * 100)}%"></span></div><small>${esc(earned ? 'Получено' : (item.progress_label || 'Продолжай учиться'))}</small></div></article>`; }).join('');
+      achievementPanel.append(grid);
+    }
     root.querySelector('[data-profile-goal]').addEventListener('submit', async event => { event.preventDefault(); const status = root.querySelector('[data-profile-goal-status]'); status.textContent = 'Сохраняю…'; try { const saved = await A.api('/api/student/settings/learning', { method: 'PUT', body: JSON.stringify({ weekly_goal: Number(event.target.elements.weekly_goal.value) }) }); stats.weekly_goal = saved.weekly_goal; render(data); root.querySelector('[data-profile-goal-status]').textContent = 'Цель сохранена.'; } catch (error) { status.textContent = error.message; } });
     const signOut = document.createElement('button'); signOut.type = 'button'; signOut.className = 'account-small-button'; signOut.textContent = 'Выйти на всех устройствах'; root.querySelector('.account-profile-header').append(signOut);
     signOut.addEventListener('click', async () => { signOut.disabled = true; try { await A.api('/api/auth/logout-all', { method: 'POST', body: JSON.stringify({}) }); location.replace('/login.html'); } catch (error) { signOut.disabled = false; A.toast(error.message, 'error'); } });
@@ -45,5 +68,6 @@
   }
 
   async function init() { if (!(await A.guard('student'))) return; try { render(await A.api('/api/student/profile')); } catch (error) { A.showLoadError(root, error, init); } }
+  window.addEventListener('profile-updated', async () => { try { render(await A.api('/api/student/profile')); } catch (error) { A.toast(error.message, 'error'); } });
   init();
 })();

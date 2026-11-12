@@ -89,7 +89,7 @@ function attachSession(db, sessionSecret) {
       if (!sessionId) return next();
       const hash = tokenHash(token, sessionSecret);
       const row = await db.prepare(`SELECT s.id,s.token_hash,s.expires_at,s.remember,u.id AS user_id,u.role,u.login,u.full_name,
-          u.class_id,u.active,u.must_change_password,u.is_owner
+          u.class_id,u.active,u.must_change_password,u.is_owner,u.avatar_url,u.avatar_public_id,u.profile_theme,u.profile_status
         FROM sessions s JOIN users u ON u.id=s.user_id WHERE s.id=$1 AND s.token_hash=$2`).get(sessionId, hash);
       if (!row) return next();
       if (!row.active || Date.parse(row.expires_at) <= Date.now()) {
@@ -110,7 +110,11 @@ function attachSession(db, sessionSecret) {
         class_id: row.class_id,
         active: Boolean(row.active),
         is_owner: Boolean(row.is_owner),
-        must_change_password: Boolean(row.must_change_password)
+        must_change_password: Boolean(row.must_change_password),
+        avatar_url: row.avatar_url || '',
+        avatar_public_id: row.avatar_public_id || '',
+        profile_theme: row.profile_theme || 'ocean',
+        profile_status: row.profile_status || ''
       };
       return next();
     } catch (error) {

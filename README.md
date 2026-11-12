@@ -80,6 +80,9 @@ npm start
 | `SETUP_TOKEN` | Одноразовый ключ для создания первого учителя в production |
 | `ALLOWED_ORIGINS` | Дополнительные origin через запятую; собственный origin разрешён всегда |
 | `PRIVACY_CONTACT` | Публичный контакт учителя для страницы о данных; email или другой способ связи |
+| `CLOUDINARY_CLOUD_NAME` | Облачное имя Cloudinary для загрузки фото профиля (необязательно) |
+| `CLOUDINARY_API_KEY` | API key Cloudinary для подписанной загрузки (необязательно) |
+| `CLOUDINARY_API_SECRET` | API secret Cloudinary; хранить только в переменных окружения сервера |
 
 Образец настроек лежит в [.env.example](.env.example). Не добавляй `.env`, базу и резервные копии в Git или архив для распространения.
 

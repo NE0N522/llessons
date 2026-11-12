@@ -47,6 +47,9 @@ function getConfig(overrides = {}) {
     sessionSecret,
     setupToken: overrides.setupToken ?? process.env.SETUP_TOKEN ?? '',
     privacyContact: String(overrides.privacyContact ?? process.env.PRIVACY_CONTACT ?? '').trim().slice(0, 240),
+    cloudinaryCloudName: String(overrides.cloudinaryCloudName ?? process.env.CLOUDINARY_CLOUD_NAME ?? '').trim(),
+    cloudinaryApiKey: String(overrides.cloudinaryApiKey ?? process.env.CLOUDINARY_API_KEY ?? '').trim(),
+    cloudinaryApiSecret: String(overrides.cloudinaryApiSecret ?? process.env.CLOUDINARY_API_SECRET ?? '').trim(),
     allowedOrigins: String(overrides.allowedOrigins ?? process.env.ALLOWED_ORIGINS ?? '').split(',').map((value) => value.trim()).filter(Boolean),
     trustProxy: String(overrides.trustProxy ?? process.env.TRUST_PROXY ?? '0') === '1'
   };

@@ -179,6 +179,9 @@ function createStudentRouter(db) {
       AND (a.target_all=1 OR EXISTS(SELECT 1 FROM assignment_targets t WHERE t.assignment_id=a.id AND t.student_id=$4))
       ORDER BY a.due_at IS NULL,a.due_at,a.created_at DESC`).all(req.user.id, req.user.id, klass.class_id, req.user.id, req.user.id, req.user.id);
     const announcements = await db.prepare('SELECT id,title,body,pinned,created_at FROM class_announcements WHERE class_id=$1 ORDER BY pinned DESC,created_at DESC LIMIT 10').all(klass.class_id);
+    const gallery = await db.prepare(`SELECT g.id,g.title,g.description,g.created_at,u.full_name,a.title AS assignment_title
+      FROM class_gallery_projects g JOIN users u ON u.id=g.student_id JOIN assignments a ON a.id=g.assignment_id
+      WHERE g.class_id=$1 ORDER BY g.created_at DESC LIMIT 60`).all(klass.class_id);
     const unreadQuestions=(await db.prepare("SELECT COUNT(*) AS n FROM assignment_questions WHERE student_id=$1 AND teacher_reply<>'' AND student_read_at IS NULL").get(req.user.id)).n;
     const assignments = rows.map(row => ({
       ...row,
@@ -191,6 +194,7 @@ function createStudentRouter(db) {
       class: klass,
       assignments,
       announcements,
+      gallery,
       unread_questions:unreadQuestions,
       unread_reviews: assignments.reduce((n, a) => n + a.unread_review, 0)
     });
@@ -223,6 +227,14 @@ function createStudentRouter(db) {
       opened_hints: (await db.prepare('SELECT hint_index,opened_at FROM assignment_hint_opens WHERE assignment_id=$1 AND student_id=$2 ORDER BY hint_index').all(assignmentId, req.user.id)).map(item=>({ ...item, text: safeJson(assignment.hints_json,[])[Number(item.hint_index)] || '' })),
       line_comments: submission ? await db.prepare(`SELECT c.*,v.kind,v.revision_number FROM assignment_line_comments c JOIN submission_versions v ON v.id=c.version_id WHERE v.submission_id=$1 ORDER BY c.line_number,c.id`).all(submission.id) : []
     });
+  });
+  router.get('/gallery/:projectId', async (req, res) => {
+    const klass = await studentClass(req), projectId = asId(req.params.projectId);
+    const project = await db.prepare(`SELECT g.id,g.title,g.description,g.html,g.css,g.created_at,u.full_name,a.title AS assignment_title
+      FROM class_gallery_projects g JOIN users u ON u.id=g.student_id JOIN assignments a ON a.id=g.assignment_id
+      WHERE g.id=$1 AND g.class_id=$2`).get(projectId, klass.class_id);
+    assert(project, 404, 'Работа не найдена в галерее класса.');
+    res.json({ project });
   });
   router.post('/assignments/:assignmentId/read', async (req, res) => {
     const assignmentId = asId(req.params.assignmentId);
@@ -389,15 +401,26 @@ function createStudentRouter(db) {
       db.prepare("SELECT COUNT(*) AS count FROM submissions WHERE student_id=$1 AND submitted_at >= date_trunc('week', now()) AND status IN ('submitted','returned','accepted')").get(req.user.id)
     ]);
     const streak = streakMetrics(days.map(day => day.active_on));
-    const badges = [];
-    if (Number(totals.completed) > 0) badges.push({ id: 'first-work', title: 'Первая работа', description: 'Отправлена первая работа.' });
-    if (Number(totals.accepted_count) >= 5) badges.push({ id: 'five-accepted', title: 'Пять работ принято', description: 'Учитель принял пять работ.' });
-    if (streak.current_streak >= 5) badges.push({ id: 'five-day-streak', title: 'Пять активных дней', description: 'Учился пять дней подряд.' });
+    const completedLessons = new Set(progress.filter(item => item.step_id === 'lesson-complete').map(item => Number(item.lesson_id))).size;
+    const achievements = [
+      { id: 'first-work', title: 'Первая работа', description: 'Отправь первую работу учителю.', progress: Math.min(1, Number(totals.completed) || 0), target: 1 },
+      { id: 'five-lessons', title: 'Пять уроков', description: 'Заверши пять уроков курса.', progress: completedLessons, target: 5 },
+      { id: 'ten-lessons', title: 'Десять уроков', description: 'Заверши десять уроков курса.', progress: completedLessons, target: 10 },
+      { id: 'first-accepted', title: 'Принято учителем', description: 'Получи первую принятую работу.', progress: Math.min(1, Number(totals.accepted_count) || 0), target: 1 },
+      { id: 'five-accepted', title: 'Пять готовых работ', description: 'Получи пять принятых работ.', progress: Number(totals.accepted_count) || 0, target: 5 },
+      { id: 'five-day-streak', title: 'Пять активных дней', description: 'Учись пять дней подряд.', progress: streak.best_streak, target: 5 },
+      { id: 'ten-day-streak', title: 'Десять активных дней', description: 'Удерживай учебную серию десять дней.', progress: streak.best_streak, target: 10 },
+      { id: 'on-time-three', title: 'Всё вовремя', description: 'Сдай три работы до срока.', progress: Number(totals.on_time) || 0, target: 3 }
+    ].map(item => ({ ...item, unlocked: item.progress >= item.target, progress: Math.min(item.progress, item.target), progress_label: `${Math.min(item.progress, item.target)} из ${item.target}` }));
     res.json({
       profile: {
         id: req.user.id,
         full_name: req.user.full_name,
         login: req.user.login,
+        avatar_url: req.user.avatar_url || '',
+        avatar_public_id: req.user.avatar_public_id || '',
+        profile_theme: req.user.profile_theme || 'ocean',
+        profile_status: req.user.profile_status || '',
         class_name: klass.class_name,
         school_year: klass.school_year,
         stats: {
@@ -415,7 +438,8 @@ function createStudentRouter(db) {
       progress,
       login_events,
       active_days: days.map(day => dateOnly(day.active_on)),
-      badges,
+      badges: achievements.filter(item => item.unlocked),
+      achievements,
       last_course_location: settings?.last_course_location || '',
       last_location_at: settings?.last_location_at || null
     });
