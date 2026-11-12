@@ -1,4 +1,4 @@
-const CACHE_NAME='kod-student-assignment-shell-v3';
+const CACHE_NAME='kod-student-assignment-shell-v4';
 const SHELL_FILES=[
   'assignment.html',
   '../assets/course.js',
@@ -8,13 +8,13 @@ const SHELL_FILES=[
   '../assets/app/accounts/theme.css',
   '../assets/app/accounts/accounts.css',
   '../assets/app/accounts/stage5.css',
-  '../assets/app/editor-loader.js',
+  '../assets/app/editor-loader.js?v=editor-shortcuts-20261112',
   '../assets/app/code-format.js',
   '../assets/app/accounts/ui-utils.js',
   '../assets/app/accounts/ui-strings.js',
   '../assets/app/accounts/common.js',
   '../assets/app/accounts/assignment.js',
-  '../assets/vendor/code-editor.js'
+  '../assets/vendor/code-editor.js?v=editor-shortcuts-20261112'
 ];
 self.addEventListener('install',event=>event.waitUntil((async()=>{const cache=await caches.open(CACHE_NAME);await cache.addAll(SHELL_FILES.map(file=>new URL(file,self.registration.scope)));await self.skipWaiting();})()));
 self.addEventListener('activate',event=>event.waitUntil((async()=>{const keys=await caches.keys();await Promise.all(keys.filter(key=>key.startsWith('kod-student-assignment-shell-')&&key!==CACHE_NAME).map(key=>caches.delete(key)));await self.clients.claim();})()));

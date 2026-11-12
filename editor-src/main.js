@@ -1,7 +1,7 @@
-import { EditorState, Compartment, Prec } from '@codemirror/state';
+import { EditorState, Compartment } from '@codemirror/state';
 import { EditorView, keymap, lineNumbers, highlightActiveLine, highlightActiveLineGutter, drawSelection } from '@codemirror/view';
 import { defaultKeymap, history, historyKeymap, indentLess, indentMore, insertNewlineAndIndent, isolateHistory, toggleComment } from '@codemirror/commands';
-import { acceptCompletion, autocompletion, closeBrackets, closeBracketsKeymap, completionStatus } from '@codemirror/autocomplete';
+import { acceptCompletion, autocompletion, closeBrackets, closeBracketsKeymap, completionStatus, startCompletion } from '@codemirror/autocomplete';
 import { bracketMatching, defaultHighlightStyle, indentOnInput, syntaxHighlighting, HighlightStyle, syntaxTree } from '@codemirror/language';
 import { linter } from '@codemirror/lint';
 import { html, htmlCompletionSource as baseHtmlCompletionSource } from '@codemirror/lang-html';
@@ -29,6 +29,9 @@ const themeStyles = {
   '.cm-activeLineGutter': { color: 'var(--v3-blue-dark, #2d467f)', backgroundColor: 'color-mix(in srgb, var(--v3-blue, #3f5ea8) 9%, transparent)' },
   '.cm-selectionBackground, &.cm-focused .cm-selectionBackground': { backgroundColor: 'color-mix(in srgb, var(--v3-blue, #3f5ea8) 30%, transparent)' },
   '.cm-tooltip': { color: 'var(--v3-ink, #20283a)', backgroundColor: 'var(--v3-paper, #fff)', border: '1px solid var(--v3-line, #dfe4ec)', borderRadius: '8px', boxShadow: '0 8px 24px rgb(20 30 50 / 16%)' },
+  '.cm-tooltip-autocomplete': { maxWidth: 'min(90vw, 32rem)' },
+  '.cm-tooltip-autocomplete ul': { maxHeight: 'min(38vh, 18rem)', overflowY: 'auto', overscrollBehavior: 'contain' },
+  '.cm-tooltip-autocomplete ul li': { minHeight: '36px', touchAction: 'manipulation' },
   '.cm-tooltip-autocomplete ul li[aria-selected]': { color: 'var(--v3-ink, #20283a)', backgroundColor: 'var(--v3-blue-soft, #edf2ff)' },
   '.cm-completionDetail': { color: 'var(--v3-muted, #5e6879)' },
   '.cm-lintRange-error': { textDecoration: 'underline wavy color-mix(in srgb, #b65b45 65%, var(--v3-paper, white))', textUnderlineOffset: '3px' },
@@ -201,7 +204,7 @@ function makeEditor(container, options = {}) {
   const codeLanguage = () => language === 'html' ? html({ autoCloseTags: hints }) : css();
   const hintExtensions = () => hints ? [
     closeBrackets(),
-    autocompletion({ override: [language === 'css' ? completionSource : htmlAttributeCompletionSource], activateOnTyping: true, activateOnTypingDelay: 30, interactionDelay: 0, defaultKeymap: false }),
+    autocompletion({ override: [language === 'css' ? completionSource : htmlAttributeCompletionSource], activateOnTyping: true, activateOnTypingDelay: 60, interactionDelay: 0, defaultKeymap: true }),
     abbreviationTracker(),
     emmetConfig.of({ syntax: language }),
     linter((view) => diagnosticsFor(language, view), { delay: 300 }),
@@ -214,13 +217,13 @@ function makeEditor(container, options = {}) {
       EditorState.tabSize.of(2), EditorState.readOnly.of(Boolean(options.readOnly)), EditorView.editable.of(!options.readOnly),
       themeCompartment.of(themeExtension()), fontCompartment.of(sizeTheme(fontSize)),
       EditorView.contentAttributes.of({ 'aria-label': options.ariaLabel || `Редактор ${language.toUpperCase()}`, spellcheck: 'false', autocapitalize: 'off', autocomplete: 'off' }),
-      ...(options.readOnly ? [] : [Prec.highest(keymap.of([
+      ...(options.readOnly ? [] : [keymap.of([
         { key: 'Mod-/', run: toggleComment },
         { key: 'Enter', run: (view) => hints && completionStatus(view.state) === 'active' && acceptCompletion(view) || hints && expandEmptyPair(view) || insertNewlineAndIndent(view) },
         { key: 'Escape', run: (view) => { exitTab.armed = true; window.setTimeout(() => { exitTab.armed = false; }, 1800); return exitHint(view, options.onStatus); } },
         { key: 'Tab', run: (view) => tabCommand(view, hints, exitTab, language) },
         { key: 'Shift-Tab', run: indentLess },
-      ])), ...(hints ? [keymap.of(closeBracketsKeymap)] : []), keymap.of(defaultKeymap), keymap.of(historyKeymap)]),
+      ]), ...(hints ? [keymap.of(closeBracketsKeymap)] : []), keymap.of(defaultKeymap), keymap.of(historyKeymap)]),
       EditorView.updateListener.of((update) => {
         if (update.docChanged && !silent) callback?.(update.state.doc.toString());
       }),
@@ -239,6 +242,8 @@ function makeEditor(container, options = {}) {
     },
     focus: () => view.focus(),
     refresh: () => view.requestMeasure(),
+    showCompletions() { view.focus(); return hints && startCompletion(view); },
+    indent() { view.focus(); return tabCommand(view, hints, exitTab, language); },
     format() {
       const formatter = window.courseCodeFormat?.[language];
       if (!formatter) return false;

@@ -153,6 +153,13 @@
 :root[data-theme="dark"] .v3-header .v3-header-nav > a.v3-login-link { color: #fff; background: linear-gradient(135deg,#5273c5 0%,#3e5cae 100%); border-color: #718bd8; }
 @media (prefers-reduced-motion: reduce) { .v3-header .v3-header-nav > a.v3-login-link { transition: none; } }
 
+.editor-touch-tools { display: none; align-items: center; flex-wrap: wrap; gap: 6px; }
+.editor-touch-button { min-height: 36px; display: inline-flex; align-items: center; justify-content: center; gap: 5px; padding: 0 10px; border: 1px solid #c7d3ef; border-radius: 9px; color: #334f8b; background: #f2f5ff; font: inherit; font-size: 11px; font-weight: 700; line-height: 1.2; cursor: pointer; touch-action: manipulation; }
+.editor-touch-button:hover { border-color: #8ea5de; background: #e7edff; }
+.editor-touch-button:focus-visible { outline: 3px solid #8da7ec; outline-offset: 2px; }
+:root[data-theme="dark"] .editor-touch-button { border-color: #4b5f86; color: #dce5ff; background: #243451; }
+@media (max-width: 760px), (pointer: coarse) { .editor-touch-tools { display: inline-flex; } .editor-touch-button { min-height: 42px; padding-inline: 12px; font-size: 12px; } }
+
 @media (max-width: 620px) {
   .v3-header-inner { gap: 8px; }
   .v3-brand { gap: 6px; font-size: 12px; }

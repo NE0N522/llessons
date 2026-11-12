@@ -1,6 +1,6 @@
 (() => {
   const loaderSource = document.currentScript?.src;
-  const editorSource = loaderSource ? new URL('../vendor/code-editor.js', loaderSource).href : 'assets/vendor/code-editor.js';
+  const editorSource = loaderSource ? new URL('../vendor/code-editor.js?v=editor-shortcuts-20261112', loaderSource).href : 'assets/vendor/code-editor.js?v=editor-shortcuts-20261112';
   const fontKey = 'course-code-editor-font-size';
   let modulePromise;
   let userPromise;

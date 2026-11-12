@@ -52,6 +52,7 @@
       let htmlEditor = null;
       let cssEditor = null;
       let mounted = false;
+      let mountPromise = null;
       let observer = null;
       let editorApi = null;
       let currentFontSize = 15;
@@ -67,8 +68,8 @@
       host.innerHTML = `<div class="playground-toolbar"><div><strong>Попробуй сам</strong><span data-example-title>${escapeHtml(activeExample.title)} · измени код и сравни</span></div><div class="playground-actions"><div class="editor-font-controls" role="group" aria-label="Размер текста редактора"><button type="button" data-font-minus aria-label="Уменьшить шрифт редактора">−</button><output data-font-label>15 px</output><button type="button" data-font-plus aria-label="Увеличить шрифт редактора">+</button></div><button type="button" class="quiet-button" data-reset>Сбросить</button><button type="button" class="quiet-button" data-copy>Копировать</button></div></div>
         <div class="playground-example-switcher" role="group" aria-label="Два примера к шагу">${exampleControls}</div>
         <div class="playground-tabs" role="tablist" aria-label="Редактор кода"><button type="button" role="tab" id="${uid}-tab-html" aria-controls="${uid}-panel-html" aria-selected="true" data-tab="html">HTML</button><button type="button" role="tab" id="${uid}-tab-css" aria-controls="${uid}-panel-css" aria-selected="false" data-tab="css">CSS</button></div>
-        <div class="playground-grid"><section class="playground-editor" role="tabpanel" id="${uid}-panel-html" aria-labelledby="${uid}-tab-html" data-panel="html"><label>HTML-код</label><div class="code-editor-host" data-editor-host="html"></div><p class="editor-hint">Редактор работает с клавиатуры. Нажми Esc, затем Tab, чтобы перейти дальше. Скрипты в образце не запускаются.</p></section>
-        <section class="playground-editor" role="tabpanel" id="${uid}-panel-css" aria-labelledby="${uid}-tab-css" data-panel="css" hidden><label>CSS-код</label><div class="code-editor-host" data-editor-host="css"></div><p class="editor-hint">CSS меняет оформление HTML в изолированной песочнице.</p></section>
+         <div class="playground-grid"><section class="playground-editor" role="tabpanel" id="${uid}-panel-html" aria-labelledby="${uid}-tab-html" data-panel="html"><div class="editor-panel-heading"><label>HTML-код</label><div class="editor-touch-tools"><button type="button" class="editor-touch-button" data-editor-command="suggestions" data-editor-language="html">✦ Подсказки</button><button type="button" class="editor-touch-button" data-editor-command="indent" data-editor-language="html">↦ Отступ</button></div></div><div class="code-editor-host" data-editor-host="html"></div><p class="editor-hint">Начни вводить тег или атрибут. Enter/Tab — принять вариант; Tab без списка — отступ. Скрипты в образце не запускаются.</p></section>
+         <section class="playground-editor" role="tabpanel" id="${uid}-panel-css" aria-labelledby="${uid}-tab-css" data-panel="css" hidden><div class="editor-panel-heading"><label>CSS-код</label><div class="editor-touch-tools"><button type="button" class="editor-touch-button" data-editor-command="suggestions" data-editor-language="css">✦ Подсказки</button><button type="button" class="editor-touch-button" data-editor-command="indent" data-editor-language="css">↦ Отступ</button></div></div><div class="code-editor-host" data-editor-host="css"></div><p class="editor-hint">Вводи CSS-свойство или значение. Enter/Tab — принять вариант; Tab без списка — отступ.</p></section>
         <div class="playground-result"><div class="result-heading"><span>Результат</span><span class="safe-label">изолированная песочница</span></div><iframe title="Живой результат примера" sandbox="allow-same-origin" referrerpolicy="no-referrer" style="height:${height}px" data-result></iframe></div></div><p class="playground-status" aria-live="polite" data-status></p>`;
       const htmlHost = host.querySelector('[data-editor-host="html"]');
       const cssHost = host.querySelector('[data-editor-host="css"]');
@@ -76,6 +77,12 @@
       const status = host.querySelector('[data-status]');
       const tabs = [...host.querySelectorAll('[role="tab"]')];
       const panels = [...host.querySelectorAll('[role="tabpanel"]')];
+      host.querySelectorAll('[data-editor-command]').forEach((button) => button.addEventListener('click', async () => {
+        await mount();
+        const editor = button.dataset.editorLanguage === 'css' ? cssEditor : htmlEditor;
+        if (button.dataset.editorCommand === 'suggestions') editor?.showCompletions();
+        else editor?.indent();
+      }));
       const render = () => {
         const html = htmlEditor?.getValue() ?? activeExample.html;
         const css = cssEditor?.getValue() ?? activeExample.css;
@@ -108,25 +115,28 @@
         if (announce) status.textContent = `Открыт пример ${nextIndex + 1}: ${activeExample.title}.`;
         render();
       };
-      const mount = async () => {
-        if (mounted) return;
+      const mount = () => {
+        if (mountPromise) return mountPromise;
         mounted = true;
         observer?.disconnect();
-        try {
-          [editorApi, currentFontSize] = await Promise.all([window.loadCourseCodeEditor(), fontSize()]);
-          if (!host.isConnected) return;
-          const handleChange = () => {
-            window.clearTimeout(debounce);
-            debounce = window.setTimeout(render, 180);
-          };
-          htmlEditor = editorApi.createEditor(htmlHost, { value: activeExample.html, language: 'html', fontSize: currentFontSize, onChange: handleChange, onStatus: (message) => { status.textContent = message; } });
-          cssEditor = editorApi.createEditor(cssHost, { value: activeExample.css, language: 'css', fontSize: currentFontSize, onChange: handleChange, onStatus: (message) => { status.textContent = message; } });
-          updateFontControls();
-          render();
-        } catch (error) {
-          status.textContent = error.message || 'Не удалось загрузить редактор.';
-          htmlHost.textContent = 'Редактор сейчас недоступен. Обнови страницу.';
-        }
+        mountPromise = (async () => {
+          try {
+            [editorApi, currentFontSize] = await Promise.all([window.loadCourseCodeEditor(), fontSize()]);
+            if (!host.isConnected) return;
+            const handleChange = () => {
+              window.clearTimeout(debounce);
+              debounce = window.setTimeout(render, 180);
+            };
+            htmlEditor = editorApi.createEditor(htmlHost, { value: activeExample.html, language: 'html', fontSize: currentFontSize, onChange: handleChange, onStatus: (message) => { status.textContent = message; } });
+            cssEditor = editorApi.createEditor(cssHost, { value: activeExample.css, language: 'css', fontSize: currentFontSize, onChange: handleChange, onStatus: (message) => { status.textContent = message; } });
+            updateFontControls();
+            render();
+          } catch (error) {
+            status.textContent = error.message || 'Не удалось загрузить редактор.';
+            htmlHost.textContent = 'Редактор сейчас недоступен. Обнови страницу.';
+          }
+        })();
+        return mountPromise;
       };
 
       if (!activeExample.css) {
