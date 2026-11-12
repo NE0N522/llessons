@@ -189,6 +189,5 @@
   }
   async function logout(){try{localStorage.removeItem('course-offline-user-v1');await api('/api/auth/logout',{method:'POST',body:JSON.stringify({})});}finally{location.replace('/login.html');}}
   window.CourseAccounts={api,escapeHtml,formatDate,formatDueDate,formatDescription,setMessage,redirectFor,previewDocument,showPreview,evaluateChecks,currentUser,guard,logout,fileMode,toast,downloadCsv,printCredentials,confirmDialog,showLoadError,initials,paintProfileAvatar,skeletonMarkup,strings:window.CourseAccountStrings||{}};
-  const profileSettingsScript=document.createElement('script');profileSettingsScript.src='/assets/app/accounts/profile-settings.js';document.head.append(profileSettingsScript);
   document.querySelectorAll('[data-logout]').forEach(button=>button.addEventListener('click',logout));
 })();

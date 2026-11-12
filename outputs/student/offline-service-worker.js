@@ -1,4 +1,4 @@
-const CACHE_NAME='kod-student-assignment-shell-v4';
+const CACHE_NAME='kod-student-assignment-shell-v5';
 const SHELL_FILES=[
   'assignment.html',
   '../assets/course.js',
@@ -13,6 +13,7 @@ const SHELL_FILES=[
   '../assets/app/accounts/ui-utils.js',
   '../assets/app/accounts/ui-strings.js',
   '../assets/app/accounts/common.js',
+  '../assets/app/accounts/profile-settings.js',
   '../assets/app/accounts/assignment.js',
   '../assets/vendor/code-editor.js?v=editor-shortcuts-20261112'
 ];

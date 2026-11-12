@@ -1,4 +1,6 @@
 (() => {
+  if (window.CourseProfileSettingsLoaded) return;
+  window.CourseProfileSettingsLoaded = true;
   const A = window.CourseAccounts;
   if (!A) return;
   const esc = A.escapeHtml;
