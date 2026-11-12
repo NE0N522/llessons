@@ -145,6 +145,11 @@
 :root[data-theme="dark"] .v3-step-number { border-color: #435678; color: #d0dbff; background: #283956; }
 :root[data-theme="dark"] .v3-step-number::before { background: #9ab1ff; }
 
+/* Keep the account action visible on narrow home-page headers. */
+.v3-header .v3-header-nav > a.v3-login-link { display: inline-flex; flex: 0 0 auto; align-items: center; justify-content: center; min-height: 42px; padding: 0 14px; border: 1px solid var(--v3-blue); border-radius: 9px; color: #fff; background: var(--v3-blue); font-size: 12px; font-weight: 800; line-height: 1; text-decoration: none; white-space: nowrap; visibility: visible; opacity: 1; }
+.v3-header .v3-header-nav > a.v3-login-link:hover { color: #fff; background: var(--v3-blue-dark); }
+:root[data-theme="dark"] .v3-header .v3-header-nav > a.v3-login-link { color: #fff; background: #5273c5; border-color: #5273c5; }
+
 @media (max-width: 620px) {
   .v3-header-inner { gap: 8px; }
   .v3-brand { gap: 6px; font-size: 12px; }
