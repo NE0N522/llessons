@@ -38,7 +38,7 @@
       header.dataset.profileTheme = profile.profile_theme || 'ocean';
       const avatar = header.querySelector('.account-avatar');
       if (profile.avatar_url && avatar) {
-        const image = document.createElement('img'); image.src = profile.avatar_url; try { if (new URL(profile.avatar_url).hostname === 'res.cloudinary.com') image.src = profile.avatar_url.replace('/image/upload/', '/image/upload/c_fill,g_face,w_320,h_320,f_auto,q_auto/'); } catch {} image.alt = `Фото профиля: ${profile.full_name}`; image.loading = 'lazy'; image.referrerPolicy = 'no-referrer';
+        const image = document.createElement('img'); image.width = 84; image.height = 84; image.src = profile.avatar_url; try { if (new URL(profile.avatar_url).hostname === 'res.cloudinary.com') image.src = profile.avatar_url.replace('/image/upload/', '/image/upload/c_fill,g_face,w_320,h_320,f_auto,q_auto/'); } catch {} image.alt = `Фото профиля: ${profile.full_name}`; image.loading = 'lazy'; image.referrerPolicy = 'no-referrer';
         image.onerror = () => { avatar.textContent = initials(profile.full_name); };
         avatar.replaceChildren(image);
       }

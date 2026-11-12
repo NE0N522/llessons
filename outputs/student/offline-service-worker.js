@@ -1,4 +1,4 @@
-const CACHE_NAME='kod-student-assignment-shell-v5';
+const CACHE_NAME='kod-student-assignment-shell-v6';
 const SHELL_FILES=[
   'assignment.html',
   '../assets/course.js',

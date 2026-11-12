@@ -1,4 +1,4 @@
-const SHELL_CACHE='kod-course-offline-shell-v6';
+const SHELL_CACHE='kod-course-offline-shell-v7';
 const APP_SHELL=[
   '/lesson-view.html','/student/assignment.html',
   '/assets/course.js','/assets/app/theme.js','/assets/app/accounts/nav.js','/assets/app/editor-loader.js?v=editor-shortcuts-20261112',

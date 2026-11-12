@@ -166,7 +166,7 @@
   function paintProfileAvatar(user){
     document.querySelectorAll('[data-user-avatar]').forEach(node=>{
       node.replaceChildren();
-      if(user?.avatar_url){const image=document.createElement('img');let imageSource=user.avatar_url;try{const parsed=new URL(imageSource);if(parsed.hostname==='res.cloudinary.com')imageSource=imageSource.replace('/image/upload/','/image/upload/c_fill,g_face,w_240,h_240,f_auto,q_auto/');}catch{}image.src=imageSource;image.alt='';image.loading='lazy';image.referrerPolicy='no-referrer';image.onerror=()=>{node.replaceChildren();node.textContent=initials(user.full_name);};node.append(image);}
+      if(user?.avatar_url){const image=document.createElement('img');image.width=36;image.height=36;let imageSource=user.avatar_url;try{const parsed=new URL(imageSource);if(parsed.hostname==='res.cloudinary.com')imageSource=imageSource.replace('/image/upload/','/image/upload/c_fill,g_face,w_240,h_240,f_auto,q_auto/');}catch{}image.src=imageSource;image.alt='';image.loading='lazy';image.referrerPolicy='no-referrer';image.onerror=()=>{node.replaceChildren();node.textContent=initials(user.full_name);};node.append(image);}
       else node.textContent=initials(user?.full_name||'');
       node.dataset.theme=user?.profile_theme||'ocean';
     });

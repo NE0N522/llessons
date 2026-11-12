@@ -47,7 +47,7 @@
     const initialImage=preview.querySelector('img');if(initialImage){imageOkay=false;status.textContent='Проверяю сохранённую ссылку…';initialImage.onload=()=>{imageOkay=true;status.textContent='Предпросмотр готов. Изображение открывается.';};initialImage.onerror=()=>{imageOkay=false;status.textContent='Сохранённая ссылка больше не открывает изображение.';};}
     const showImage = (url) => {
       preview.replaceChildren();
-      const image = document.createElement('img'); image.src = url; image.alt = ''; image.referrerPolicy = 'no-referrer'; preview.append(image);
+      const image = document.createElement('img'); image.width = 56; image.height = 56; image.src = url; image.alt = ''; image.referrerPolicy = 'no-referrer'; preview.append(image);
       image.onload = () => { imageOkay = true; status.textContent = 'Предпросмотр готов. Изображение открывается.'; };
       image.onerror = () => { imageOkay = false; status.textContent = 'Не удалось открыть изображение. Проверь ссылку.'; };
     };
