@@ -150,9 +150,18 @@
   .v3-brand { gap: 6px; font-size: 12px; }
   .v3-brand-mark { width: 28px; height: 28px; }
   .v3-header-nav { gap: 6px; }
+  .v3-header-nav a[href="#lessons"] { display: none; }
+  .v3-header-nav a[data-account-nav] { display: inline-flex; min-height: 42px; padding: 0 10px; border: 1px solid var(--v3-blue); border-radius: 9px; color: #fff; background: var(--v3-blue); font-size: 12px; font-weight: 800; }
+  .v3-header-nav a[data-account-nav]:hover { color: #fff; background: var(--v3-blue-dark); }
   .theme-toggle { min-height: 44px; gap: 5px; padding: 0 8px; font-size: 10px; }
   .theme-toggle-icon { width: 15px; height: 15px; }
+  .v3-header-nav .theme-toggle [data-theme-label] { display: none; }
   .v3-step { margin-bottom: 17px; border-left-width: 4px; }
+}
+
+@media (max-width: 380px) {
+  .v3-header-nav .v3-reference { display: none; }
+  .v3-header-nav a[data-account-nav] { padding-inline: 8px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

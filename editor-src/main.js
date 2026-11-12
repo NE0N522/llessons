@@ -1,7 +1,7 @@
-import { EditorState, Compartment } from '@codemirror/state';
+import { EditorState, Compartment, Prec } from '@codemirror/state';
 import { EditorView, keymap, lineNumbers, highlightActiveLine, highlightActiveLineGutter, drawSelection } from '@codemirror/view';
 import { defaultKeymap, history, historyKeymap, indentLess, indentMore, insertNewlineAndIndent, isolateHistory, toggleComment } from '@codemirror/commands';
-import { acceptCompletion, autocompletion, closeBrackets, closeBracketsKeymap, completionKeymap, completionStatus } from '@codemirror/autocomplete';
+import { acceptCompletion, autocompletion, closeBrackets, closeBracketsKeymap, completionStatus } from '@codemirror/autocomplete';
 import { bracketMatching, defaultHighlightStyle, indentOnInput, syntaxHighlighting, HighlightStyle, syntaxTree } from '@codemirror/language';
 import { linter } from '@codemirror/lint';
 import { html, htmlCompletionSource as baseHtmlCompletionSource } from '@codemirror/lang-html';
@@ -201,7 +201,7 @@ function makeEditor(container, options = {}) {
   const codeLanguage = () => language === 'html' ? html({ autoCloseTags: hints }) : css();
   const hintExtensions = () => hints ? [
     closeBrackets(),
-    autocompletion({ override: [language === 'css' ? completionSource : htmlAttributeCompletionSource], activateOnTyping: true, activateOnTypingDelay: 80 }),
+    autocompletion({ override: [language === 'css' ? completionSource : htmlAttributeCompletionSource], activateOnTyping: true, activateOnTypingDelay: 30, interactionDelay: 0, defaultKeymap: false }),
     abbreviationTracker(),
     emmetConfig.of({ syntax: language }),
     linter((view) => diagnosticsFor(language, view), { delay: 300 }),
@@ -214,13 +214,13 @@ function makeEditor(container, options = {}) {
       EditorState.tabSize.of(2), EditorState.readOnly.of(Boolean(options.readOnly)), EditorView.editable.of(!options.readOnly),
       themeCompartment.of(themeExtension()), fontCompartment.of(sizeTheme(fontSize)),
       EditorView.contentAttributes.of({ 'aria-label': options.ariaLabel || `Редактор ${language.toUpperCase()}`, spellcheck: 'false', autocapitalize: 'off', autocomplete: 'off' }),
-      ...(options.readOnly ? [] : [keymap.of([
+      ...(options.readOnly ? [] : [Prec.highest(keymap.of([
         { key: 'Mod-/', run: toggleComment },
         { key: 'Enter', run: (view) => hints && completionStatus(view.state) === 'active' && acceptCompletion(view) || hints && expandEmptyPair(view) || insertNewlineAndIndent(view) },
         { key: 'Escape', run: (view) => { exitTab.armed = true; window.setTimeout(() => { exitTab.armed = false; }, 1800); return exitHint(view, options.onStatus); } },
         { key: 'Tab', run: (view) => tabCommand(view, hints, exitTab, language) },
         { key: 'Shift-Tab', run: indentLess },
-      ]), ...(hints ? [keymap.of(completionKeymap), keymap.of(closeBracketsKeymap)] : []), keymap.of(defaultKeymap), keymap.of(historyKeymap)]),
+      ])), ...(hints ? [keymap.of(closeBracketsKeymap)] : []), keymap.of(defaultKeymap), keymap.of(historyKeymap)]),
       EditorView.updateListener.of((update) => {
         if (update.docChanged && !silent) callback?.(update.state.doc.toString());
       }),

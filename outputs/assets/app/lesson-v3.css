@@ -188,3 +188,14 @@ a:focus-visible, button:focus-visible, textarea:focus-visible, summary:focus-vis
 pre{max-width:100%;overflow-x:auto}.v3-step,.v3-step-copy,.v3-info-section,.v3-teacher-body,.playground,.playground-grid,.playground-editor,.playground-result,.v3-code-panel,.v3-sample-panel,.v3-sample-frame-wrap{min-width:0}.v3-step-copy pre,.v3-step-copy pre.code-block{max-width:100%;overflow-x:auto}
 @media(max-width:620px){.playground-toolbar{display:grid;grid-template-columns:minmax(0,1fr);gap:8px}.playground-toolbar>div:first-child{width:100%}.playground-toolbar strong{font-size:13px}.playground-toolbar span{max-width:none}.playground-actions{flex-wrap:wrap;justify-content:flex-start}}
 .account-lesson-notes{width:min(100% - 40px,1180px);margin:0 auto 16px;padding:13px 16px;border:1px solid var(--v3-line);border-radius:13px;background:var(--v3-paper);box-shadow:0 5px 18px rgb(27 39 58 / 5%)}.account-lesson-notes details>summary{min-height:42px;display:flex;align-items:center;justify-content:space-between;color:var(--v3-ink);font-weight:800;cursor:pointer}.account-lesson-notes p{margin:3px 0 9px}.account-lesson-notes textarea{width:100%;min-height:105px;padding:11px;border:1px solid var(--v3-line);border-radius:9px;background:var(--v3-canvas);color:var(--v3-ink);font:inherit;line-height:1.55;resize:vertical}.account-lesson-notes textarea:focus-visible{outline:3px solid var(--v3-blue-soft);border-color:var(--v3-blue)}.account-lesson-notes-status{display:block;min-height:1.35em;margin-top:4px;color:var(--v3-muted);font-size:.8rem}@media(max-width:620px){.account-lesson-notes{width:calc(100% - 32px);padding:11px 12px}}
+
+@media(max-width:620px){
+  .playground-toolbar button,.quiet-button,.playground-actions button{min-height:42px}
+  .playground-actions{gap:7px}
+  .playground-grid,.playground-editor,.playground-result{min-width:0}
+  .playground-editor .cm-editor{font-size:14px}
+  .v3-sample-frame{height:min(66dvh,560px);min-height:340px}
+  .v3-sample-actions .v3-button,.v3-sample-switch{min-height:44px}
+  .v3-code-source{font-size:12px;line-height:1.55;overflow-wrap:anywhere}
+  .account-lesson-notes textarea{font-size:16px}
+}

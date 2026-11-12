@@ -156,6 +156,44 @@
 .account-user-name,.account-status,.account-count-pill{white-space:nowrap}
 .account-code-editor,.account-code-view{background:var(--account-code-canvas);color:var(--account-code-ink);white-space:pre-wrap}
 .account-code-editor{white-space:pre}
+@media(max-width:620px){
+  .account-body{min-height:100svh;min-height:100dvh}
+  .account-login-wrap{min-height:100svh;min-height:100dvh;justify-content:flex-start;padding:calc(22px + env(safe-area-inset-top)) 0 calc(22px + env(safe-area-inset-bottom));gap:18px}
+  .account-card{padding:clamp(18px,5vw,24px);border-radius:16px}
+  .account-login-card h1{font-size:clamp(1.55rem,7vw,2rem)}
+  .account-form{gap:14px;margin-top:18px}
+  .account-form input:not([type=checkbox]),.account-form select,.account-form textarea{min-height:48px;font-size:16px}
+  .account-submit{min-height:52px}
+  .account-password-field button{min-height:40px;right:4px}
+  .account-topbar{padding-top:calc(8px + env(safe-area-inset-top))}
+  .account-topbar nav{min-width:0;gap:4px}
+  .account-topbar nav>a,.account-topbar .account-quiet-button,.account-topbar .theme-toggle{min-width:42px;min-height:44px;justify-content:center}
+  .account-shell{width:calc(100% - 24px);padding-top:18px}
+  .account-page-heading{gap:12px;margin-bottom:16px}
+  .account-page-heading h1{font-size:clamp(1.55rem,7vw,2.1rem)}
+  .account-panel,.account-class-card,.account-assignment-card,.account-stat-card{padding:15px;border-radius:13px}
+  .account-tabs,.account-filter-row{gap:7px;margin:12px 0 16px}
+  .account-tab,.account-filter{min-height:44px;padding:9px 11px}
+  .account-dialog{width:calc(100% - 16px);max-width:none;max-height:calc(100dvh - 16px - env(safe-area-inset-top) - env(safe-area-inset-bottom));margin:auto;border-radius:16px}
+  .account-dialog-inner{max-height:calc(100dvh - 16px - env(safe-area-inset-top) - env(safe-area-inset-bottom));overflow:auto;padding:18px}
+  .account-dialog-actions{flex-wrap:wrap;justify-content:stretch}
+  .account-dialog-actions>*{flex:1 1 140px;min-height:44px}
+  .account-offline-banner{bottom:calc(76px + env(safe-area-inset-bottom))}
+  .account-toast{right:10px;bottom:calc(76px + env(safe-area-inset-bottom));left:10px;max-width:none}
+  .account-mobile-nav{padding-top:6px;padding-bottom:calc(6px + env(safe-area-inset-bottom))}
+  .account-mobile-nav a{min-width:0;min-height:54px;flex:1;padding-inline:5px;font-size:.74rem}
+  .account-teacher-mobile-tabs{padding-bottom:calc(7px + env(safe-area-inset-bottom))}
+  .account-teacher-mobile-tabs button{min-height:48px}
+  .account-code-editor{font-size:16px}
+  .account-preview{min-height:220px}
+}
+@media(max-width:380px){
+  .account-topbar{padding-inline:9px}
+  .account-shell{width:calc(100% - 20px)}
+  .account-mobile-nav a{font-size:.68rem}
+  .account-table td{grid-template-columns:minmax(74px,32%) minmax(0,1fr);gap:7px}
+  .account-teacher-mobile-tabs button{font-size:.66rem}
+}
 .account-preview{background:var(--account-surface)}
 
 /* Stage 4: class workspace and learner home */
