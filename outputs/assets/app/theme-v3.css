@@ -146,9 +146,12 @@
 :root[data-theme="dark"] .v3-step-number::before { background: #9ab1ff; }
 
 /* Keep the account action visible on narrow home-page headers. */
-.v3-header .v3-header-nav > a.v3-login-link { display: inline-flex; flex: 0 0 auto; align-items: center; justify-content: center; min-height: 42px; padding: 0 14px; border: 1px solid var(--v3-blue); border-radius: 9px; color: #fff; background: var(--v3-blue); font-size: 12px; font-weight: 800; line-height: 1; text-decoration: none; white-space: nowrap; visibility: visible; opacity: 1; }
-.v3-header .v3-header-nav > a.v3-login-link:hover { color: #fff; background: var(--v3-blue-dark); }
-:root[data-theme="dark"] .v3-header .v3-header-nav > a.v3-login-link { color: #fff; background: #5273c5; border-color: #5273c5; }
+.v3-header .v3-header-nav > a.v3-login-link { position: relative; display: inline-flex; flex: 0 0 auto; align-items: center; justify-content: center; min-height: 44px; padding: 0 13px 0 16px; border: 1px solid #5978d0; border-radius: 12px; color: #fff; background: linear-gradient(135deg,#4f6fc7 0%,#334f9e 100%); box-shadow: 0 5px 14px rgba(48,74,148,.27), inset 0 1px 0 rgba(255,255,255,.2); font-size: 12px; font-weight: 850; line-height: 1; text-decoration: none; white-space: nowrap; visibility: visible; opacity: 1; transition: transform .18s ease, box-shadow .18s ease, filter .18s ease; }
+.v3-header .v3-header-nav > a.v3-login-link::after { width: 22px; height: 22px; display: inline-grid; place-items: center; margin-left: 8px; border-radius: 50%; color: #fff; background: rgba(255,255,255,.19); content: '→'; font-size: 15px; line-height: 1; }
+.v3-header .v3-header-nav > a.v3-login-link:hover { color: #fff; background: linear-gradient(135deg,#6281db 0%,#3c5cad 100%); box-shadow: 0 8px 18px rgba(48,74,148,.34), inset 0 1px 0 rgba(255,255,255,.24); transform: translateY(-1px); }
+.v3-header .v3-header-nav > a.v3-login-link:active { transform: translateY(0); }
+:root[data-theme="dark"] .v3-header .v3-header-nav > a.v3-login-link { color: #fff; background: linear-gradient(135deg,#5273c5 0%,#3e5cae 100%); border-color: #718bd8; }
+@media (prefers-reduced-motion: reduce) { .v3-header .v3-header-nav > a.v3-login-link { transition: none; } }
 
 @media (max-width: 620px) {
   .v3-header-inner { gap: 8px; }
