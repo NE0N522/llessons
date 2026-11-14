@@ -97,8 +97,6 @@ test('Stage 4: teacher workflow, roster imports and QR cards work across desktop
     teacher.on('pageerror', error => errors.push(error.message));
     teacher.on('console', message => { if (message.type() === 'error') errors.push(message.text()); });
     teacher.on('request', request => { if (new URL(request.url()).origin !== base) errors.push(`external request: ${request.url()}`); });
-    let importedResponse;
-    teacher.on('response', async response => { if (new URL(response.url()).pathname.endsWith('/students/import')) importedResponse = await response.json(); });
     await signIn(teacher, base, teacherLogin, teacherPassword);
     await teacher.locator('[data-open-class]').first().click();
     await teacher.waitForURL(url => url.searchParams.get('class') === String(classId));
@@ -123,7 +121,9 @@ test('Stage 4: teacher workflow, roster imports and QR cards work across desktop
     await teacher.locator('[data-import-row]').waitFor();
     assert.equal(await teacher.locator('[data-import-login]').inputValue(), 'csv.student');
     await teacher.locator('[data-import-status]').getByText(/Проверено строк/).waitFor();
+    const importResponsePromise = teacher.waitForResponse(response => new URL(response.url()).pathname.endsWith('/students/import'));
     await teacher.locator('[data-dialog] button[type="submit"]').click();
+    const importedResponse = await (await importResponsePromise).json();
     await teacher.waitForFunction(() => document.querySelector('[data-credential-qr]')?.complete && document.querySelector('[data-credential-qr]')?.naturalWidth > 0);
     assert.equal(importedResponse.credentials[0].login, 'csv.student');
     await teacher.locator('[data-credential-qr]').waitFor();

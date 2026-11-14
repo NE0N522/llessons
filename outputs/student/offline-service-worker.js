@@ -1,9 +1,12 @@
-const CACHE_NAME='kod-student-assignment-shell-v7';
+const CACHE_NAME='kod-student-assignment-shell-v10';
 const SHELL_FILES=[
   'assignment.html',
   '../assets/course.js?v=account-ui-20261112',
   '../assets/app/theme.js?v=account-ui-20261112',
   '../assets/app/accounts/accounts.css?v=account-ui-20261112',
+  '../assets/app/design-tokens.css?v=course-design-20261114-flex-pilot-a11y',
+  '../assets/fonts/noto-sans-cyrillic-ext.woff2','../assets/fonts/noto-sans-cyrillic.woff2','../assets/fonts/noto-sans-latin.woff2',
+  '../assets/fonts/noto-sans-mono-cyrillic-ext.woff2','../assets/fonts/noto-sans-mono-cyrillic.woff2','../assets/fonts/noto-sans-mono-latin.woff2',
   '../assets/app/editor-loader.js?v=account-ui-20261112',
   '../assets/app/code-format.js?v=account-ui-20261112',
   '../assets/app/accounts/ui-utils.js?v=account-ui-20261112',

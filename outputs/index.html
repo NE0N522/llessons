@@ -13,8 +13,10 @@
   <link rel="stylesheet" href="assets/app/theme-v3.css?v=mobile-nav-20261112">
   <script src="assets/course.js" defer></script>
   <script src="assets/app/progress.js" defer></script>
+  <script src="assets/app/reference.js" defer></script>
   <script src="assets/app/home.js" defer></script>
   <link rel="stylesheet" href="assets/app/privacy.css">
+  <link rel="stylesheet" href="assets/app/design-tokens.css?v=course-design-20261114-flex-pilot-a11y">
 </head>
 <body>
   <a class="v3-skip-link" href="#lessons">Перейти к программе</a>
@@ -24,16 +26,17 @@
   </div></header>
   <main>
     <section class="home-hero"><div class="home-wrap home-hero-grid">
-      <div><span class="v3-block-label">HTML &amp; CSS · С НУЛЯ</span><h1>Понятный путь от первой страницы до готового сайта</h1><p>Разбирай код небольшими шагами, пробуй изменения сразу в браузере и собирай проекты, которыми можно поделиться.</p><div class="home-hero-actions"><a class="v3-button" href="lesson-view.html?lesson=1">Начать обучение <span aria-hidden="true">→</span></a><a class="home-secondary" href="#lessons">Посмотреть программу</a></div><div class="home-stats"><span><strong>11</strong> уроков</span><span><strong>3</strong> учебных блока</span><span><strong>22</strong> образца проектов</span></div></div>
-      <aside class="home-progress-card" aria-labelledby="progress-title"><div class="home-progress-top"><span class="home-progress-icon" aria-hidden="true">↗</span><span>ТВОЙ МАРШРУТ</span></div><h2 id="progress-title">Продолжить обучение</h2><p data-progress-copy>Выбери урок, чтобы начать. Отметки о прохождении хранятся в этом браузере.</p><a class="v3-button home-continue" data-continue-link href="lesson-view.html?lesson=1">Открыть первый урок <span aria-hidden="true">→</span></a><div class="home-progress-track" aria-label="Общий прогресс"><span data-progress-bar></span></div><small data-progress-count>0 из 11 уроков пройдено</small></aside>
+      <div><span class="v3-block-label">HTML &amp; CSS · С НУЛЯ</span><h1>Понятный путь от первой страницы до готового сайта</h1><p>Разбирай код небольшими шагами, пробуй изменения сразу в браузере и собирай проекты, которыми можно поделиться.</p><div class="home-hero-actions"><a class="v3-button" href="lesson-view.html?lesson=1">Начать обучение <span aria-hidden="true">→</span></a><a class="home-secondary" href="#lessons">Посмотреть программу</a></div><div class="home-stats"><span><strong data-course-lessons>12</strong> уроков</span><span><strong data-course-blocks>3</strong> учебных блока</span><span><strong>HTML + CSS</strong> практика в браузере</span></div></div>
+      <aside class="home-progress-card" aria-labelledby="progress-title"><div class="home-shelves" aria-hidden="true"><i></i><i></i><i></i></div><div class="home-progress-top"><span class="home-progress-icon" aria-hidden="true">↗</span><span>ТВОЙ МАРШРУТ</span></div><h2 id="progress-title">Продолжить обучение</h2><p data-progress-copy>Выбери урок, чтобы начать. Отметки о прохождении хранятся в этом браузере.</p><a class="v3-button home-continue" data-continue-link href="lesson-view.html?lesson=1">Открыть первый урок <span aria-hidden="true">→</span></a><div class="home-progress-track" role="progressbar" aria-label="Общий прогресс курса" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span data-progress-bar></span></div><small data-progress-count>0 из 12 уроков пройдено</small></aside>
     </div></section>
     <section class="home-program" id="lessons"><div class="home-wrap">
       <div class="home-section-heading"><div><span class="v3-block-label">ПОШАГОВАЯ ПРОГРАММА</span><h2>Выбери, что изучать</h2></div><p>Иди по порядку или найди конкретную тему. На каждой карточке указаны цель урока и основные теги или CSS-свойства.</p></div>
-      <div class="home-tools"><label class="home-search"><span class="sr-only">Поиск по программе курса</span><span aria-hidden="true">⌕</span><input type="search" placeholder="Найти урок или тему…" data-home-search></label><span class="home-course-count">8 тем · 3 больших проекта</span></div>
+      <div class="home-tools"><label class="home-search"><span class="sr-only">Поиск по программе курса</span><span aria-hidden="true">⌕</span><input type="search" placeholder="Найти урок или тему…" data-home-search></label><button type="button" class="home-shortcut" data-open-quick-search><kbd>Ctrl K</kbd><span>Быстрый поиск</span></button></div>
       <div class="home-block-list" data-course-root></div><p class="home-empty" data-home-empty hidden>По этому запросу уроков нет. Попробуй другое слово.</p>
     </div></section>
     <section class="home-help"><div class="home-wrap home-help-inner"><div><span class="v3-block-label">ПОД РУКОЙ</span><h2>Нужен быстрый ответ?</h2><p>В справочнике собраны теги, атрибуты, CSS-свойства и понятия курса. Найди их по названию или отфильтруй по частоте.</p></div><a class="v3-button v3-button-secondary" href="reference.html">Открыть справочник →</a></div></section>
   </main>
+  <dialog class="home-search-dialog" data-quick-search aria-labelledby="quick-search-title"><div class="home-search-dialog-head"><label for="quick-search-input"><span class="v3-block-label">БЫСТРАЯ НАВИГАЦИЯ</span><strong id="quick-search-title">Найти в курсе</strong></label><button type="button" class="home-search-close" data-close-quick-search aria-label="Закрыть поиск">×</button><input id="quick-search-input" type="search" placeholder="Урок, шаг, тег или CSS-свойство…" autocomplete="off" data-quick-search-input></div><p class="home-search-hint" data-quick-search-hint role="status" aria-live="polite">Ищу в уроках, шагах и справочнике.</p><ul class="home-search-results" data-quick-search-results aria-label="Результаты поиска"></ul><div class="home-search-dialog-foot"><span>Перейти: <kbd>Enter</kbd></span><span>Закрыть: <kbd>Esc</kbd></span></div></dialog>
   <footer class="v3-footer"><div class="home-wrap v3-footer-inner"><span>Код по полочкам · HTML и CSS для начинающих</span><a href="#lessons">К программе курса ↑</a><a class="site-privacy-link" href="privacy.html">Конфиденциальность</a></div></footer>
 </body>
 </html>

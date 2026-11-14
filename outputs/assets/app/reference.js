@@ -1102,6 +1102,8 @@
   const sort = document.querySelector('[data-reference-sort]');
   const count = document.querySelector('[data-reference-count]');
   const empty = document.querySelector('[data-reference-empty]');
+  const requestedSearch = new URLSearchParams(window.location.search).get('search');
+  if (requestedSearch && search) search.value = requestedSearch;
   const courseLesson = (id) => window.COURSE.lessons.find((item) => item.id === id);
   const frequencyText = (entry) => entry.notCovered ? 'Вне текущих уроков' : entry.frequency >= 8 ? `Часто · ${entry.frequency} уроков` : entry.frequency >= 3 ? `Несколько · ${entry.frequency} уроков` : `В ${entry.frequency} ${entry.frequency === 1 ? 'уроке' : 'уроках'}`;
   const frequencyClass = (entry) => entry.notCovered ? 'unused' : entry.frequency >= 8 ? 'frequent' : entry.frequency >= 3 ? 'several' : 'occasional';

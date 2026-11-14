@@ -6,81 +6,11 @@ window.LESSONS[7] = {
     "Научишься размещать элемент относительно страницы или родительского блока.",
     "Разберёшь fixed, sticky и порядок наложения элементов."
   ],
-  "teacher": {
-    "plan": [
-      {
-        "title": "Старт: Block, inline и inline-block",
-        "minutes": 10,
-        "steps": [
-          1
-        ]
-      },
-      {
-        "title": "Разбор шагов 1–4: Block, inline и inline-block · Карточки в строке · Поток и координаты · Контейнер relative",
-        "minutes": 40,
-        "steps": [
-          1,
-          2,
-          3,
-          4
-        ]
-      },
-      {
-        "title": "Разбор шагов 5–7: Absolute и четыре стороны · Fixed и sticky · z-index и контекст наложения",
-        "minutes": 35,
-        "steps": [
-          5,
-          6,
-          7
-        ]
-      },
-      {
-        "title": "Практика и самостоятельная сборка",
-        "minutes": 25,
-        "steps": []
-      },
-      {
-        "title": "Повторение и вопросы",
-        "minutes": 10,
-        "steps": []
-      }
-    ],
-    "review": [
-      {
-        "q": "Какое правило нужно вспомнить для шага «Block, inline и inline-block»?",
-        "a": "Block начинает новую строку, inline течёт в тексте, inline-block сохраняет строчное расположение и принимает размеры."
-      },
-      {
-        "q": "Какое правило нужно вспомнить для шага «Поток и координаты»?",
-        "a": "Без специальных правил блоки читаются в том же порядке, в каком записаны в HTML."
-      },
-      {
-        "q": "Какое правило нужно вспомнить для шага «Absolute и четыре стороны»?",
-        "a": "Absolute-позиция опирается на ближайший предок с position, отличный от static."
-      },
-      {
-        "q": "Какое правило нужно вспомнить для шага «z-index и контекст наложения»?",
-        "a": "Сначала найди контекст наложения предков, затем сравни z-index внутри него."
-      }
-    ],
-    "tips": [
-      "Начни с вопроса о теме «Block, inline и inline-block»: пусть ученик назовёт роль свойства своими словами, затем покажи пример.",
-      "После шага «Контейнер relative» предложи восстановить небольшой фрагмент без подсказки и объяснить каждую строку.",
-      "Заверши занятие карточкой события с меткой даты: сначала попроси спланировать структуру, затем сравните результат с образцом."
-    ],
-    "answers": "<p><strong>Образец для разбора:</strong> сравни с практикой урока. Ученик объясняет, какие части относятся к HTML, какие правила задают внешний вид и как метка связана с родительским блоком.</p><h4>Фрагмент HTML</h4><pre><code>&lt;!doctype html&gt;\n&lt;html lang=\"ru\"&gt;&lt;head&gt;&lt;meta charset=\"utf-8\"&gt;&lt;meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"&gt;&lt;title&gt;Position и клетки&lt;/title&gt;&lt;/head&gt;&lt;body&gt;\n  &lt;main class=\"page\"&gt;&lt;h1&gt;Проба абсолютных координат&lt;/h1&gt;&lt;p&gt;Четыре на четыре: упражнение для понимания position.&lt;/p&gt;&lt;div class=\"board\"&gt;\n      &lt;span class=\"light\" style=\"top:0%;left:0%\" aria-hidden=\"true\"&gt;&lt;/span&gt;\n      &lt;span class=\"dark\" style=\"top:0%;left:25%\" aria-hidden=\"true\"&gt;&lt;/span&gt;\n      &lt;span class=\"light\" style=\"top:0%;left:50%\" aria-hidden=\"true\"&gt;&lt;/span&gt;\n      &lt;span class=\"dark\" style=\"top:0%;left:75%\" aria-hidden=\"true\"&gt;&lt;/span&gt;\n      &lt;span class=\"dark\" style=\"top:25%;left:0%\" aria-hidden=\"true\"&gt;&lt;/span&gt;\n      &lt;span class=\"light\" style=\"top:25%;left:25%\" aria-hidden=\"true\"&gt;&lt;/span&gt;\n      &lt;span class=\"dark\" style=\"top:25%;left:50%\" aria-hidden=\"true\"&gt;&lt;/span&gt;\n      &lt;span class=\"light\" style=\"top:25%;left:75%\" aria-hidden=\"true\"&gt;&lt;/span&gt;\n      &lt;span class=\"light\" style=\"top:50%;left:0%\" aria-hidden=\"true\"&gt;&lt;/span&gt;\n      &lt;span class=\"dark\" style=\"top:50%;left:25%\" aria-hidden=\"true\"&gt;&lt;/span&gt;\n      &lt;span class=\"light\" style=\"top:50%;left:50%\" aria-hidden=\"true\"&gt;&lt;/span&gt;\n      &lt;span class=\"dark\" style=\"top:50%;left:75%\" aria-hidden=\"true\"&gt;&lt;/span&gt;\n      &lt;span class=\"dark\" style=\"top:75%;left:0%\" aria-hidden=\"true\"&gt;&lt;/span&gt;\n      &lt;span class=\"light\" style=\"top:75%;left:25%\" aria-hidden=\"true\"&gt;&lt;/span&gt;\n      &lt;span class=\"dark\" style=\"top:75%;left:50%\" aria-hidden=\"true\"&gt;&lt;/span&gt;</code></pre><h4>Фрагмент CSS</h4><pre><code>*{box-sizing:border-box}\nbody{margin:0;padding:24px;background:#f4f5f1;color:#2e3b31;font:16px/1.5 Arial,sans-serif}\n.page{max-width:520px;margin:auto}\n.board{position:relative;width:min(100%,320px);aspect-ratio:1;border:4px solid #52685a}\n.board span{position:absolute;width:25%;height:25%}\n.light{background:#f4ead7}.dark{background:#7c967f}</code></pre>"
-  },
   "steps": [
     {
       "id": "display-inline-block-block",
       "title": "Block, inline и inline-block",
       "text": "<p><strong>display задаёт, как коробка элемента участвует в потоке.</strong> Блочный абзац занимает свою строку; обычный span остаётся внутри строки; inline-block позволяет строчному бейджу получить padding и скругление. В примерах сравни эти формы на реальном тексте, чтобы увидеть разницу между переносом строки и коробкой внутри строки.</p><p>Проверь, что ссылка внутри абзаца не разрывает его на отдельный блок, а метка остаётся рядом с текстом. Не меняй все элементы на block автоматически: это может растянуть каждую ссылку и разрушить короткую фразу. Если нужна ширина и высота при сохранении соседства, inline-block может подойти.</p>",
-      "try": {
-        "title": "1. Block, inline и inline-block",
-        "html": "<p>Блочный абзац занимает <a href=\"#more\">свою строку</a>.</p>\n<span class=\"badge\">inline-block</span> <span>можно поставить рядом.</span>",
-        "css": ".badge { display: inline-block; padding: .3rem .6rem; border-radius: 999px; background: #e7f1e8; }\np { max-width: 34rem; }",
-        "height": 275
-      },
       "remember": "Block начинает новую строку, inline течёт в тексте, inline-block сохраняет строчное расположение и принимает размеры.",
       "examples": [
         {
@@ -106,12 +36,6 @@ window.LESSONS[7] = {
       "id": "inline-block-flex-cards",
       "title": "Карточки в строке",
       "text": "<p><strong>Несколько карточек можно поставить рядом разными способами.</strong> В первом образце inline-block делает article строчными коробками, задаёт им ширину и выравнивает верхние края. Во втором контейнер .cards использует flex, а дочерним карточкам задаёт гибкую основу 12rem и перенос на новую строку.</p><p>Сожми область просмотра: второй вариант перестраивается за счёт flex-wrap, первый может потребовать подбора ширины и отступов. Здесь сравнивается поведение display, а подробные оси и выравнивание будут изучаться позже. Не рассчитывай, что обычный inline-элемент получит width и height так же, как inline-block.</p>",
-      "try": {
-        "title": "1. Карточки рядом через inline-block",
-        "html": "<section class=\"cards\"><article><h2>Озеро</h2><p>Маршрут на выходной.</p></article><article><h2>Лес</h2><p>Прогулка в тени.</p></article></section>",
-        "css": ".cards article { display: inline-block; vertical-align: top; width: min(42%, 14rem); margin: .4rem; padding: 1rem; background: #eef3ed; }",
-        "height": 275
-      },
       "remember": "Inline-block удобен для небольших соседних коробок; Flexbox даёт контейнеру управление строкой и переносом.",
       "examples": [
         {
@@ -137,12 +61,6 @@ window.LESSONS[7] = {
       "id": "normal-flow-document-order",
       "title": "Поток и координаты",
       "text": "<p><strong>Обычный поток размещает элементы согласно их типу и порядку в HTML.</strong> Заголовок и абзацы обычно начинают новую строку, поэтому план экскурсии читается сверху вниз. Inline-элементы, например слова внутри текста, располагаются в строке. Во втором фрагменте flex специально меняет расположение детей; это уже отдельное правило раскладки, не поведение обычного потока.</p><p>Поменяй порядок двух абзацев в HTML и посмотри на тот же порядок в предпросмотре. Затем сравни его с карточками, где порядок задаёт display:flex. Не двигай блоки абсолютными координатами, если достаточно обычного потока: так текст может перестать занимать нужное место и перекрыть соседей.</p>",
-      "try": {
-        "title": "1. Обычный поток сверху вниз",
-        "html": "<h2>План экскурсии</h2><p>Сбор у входа.</p><p>Посещение оранжереи.</p>",
-        "css": "h2 { margin-bottom: 1rem; }\np { padding: .6rem; border-bottom: 1px solid #dce3e8; }",
-        "height": 275
-      },
       "remember": "Без специальных правил блоки читаются в том же порядке, в каком записаны в HTML.",
       "examples": [
         {
@@ -168,12 +86,6 @@ window.LESSONS[7] = {
       "id": "relative-offsets-container",
       "title": "Контейнер relative",
       "text": "<p><strong>position: relative имеет два полезных применения.</strong> Сдвиг top и left перемещает элемент от исходного места, но его первоначальная область остаётся зарезервированной. Второй образец использует карточку с position:relative как систему координат для метки position:absolute, чтобы бейдж стоял в углу именно этой карточки.</p><p>Сравни положение следующего абзаца: после относительного сдвига он не занимает оставленное место. Меняй координаты .badge и наблюдай, что она остаётся внутри .card. Не назначай relative случайному дальнему предку: тогда абсолютный элемент будет считать координаты не от нужной коробки. После пробы нажми сброс.</p>",
-      "try": {
-        "title": "1. Сдвиг без потери исходного места",
-        "html": "<p>До карточки</p>\n<article class=\"note\"><strong>Наблюдение</strong><p>Элемент сдвинулся, но его место сохранено.</p></article>\n<p>Следующий блок не поднялся на это место.</p>",
-        "css": ".note { position: relative; top: 10px; left: 14px; max-width: 25rem; padding: 1rem; background: #eaf1e8; }",
-        "height": 275
-      },
       "remember": "Relative сдвигает от исходного места и задаёт ближайшую систему координат для absolute-потомка.",
       "examples": [
         {
@@ -199,12 +111,6 @@ window.LESSONS[7] = {
       "id": "absolute-inset-position",
       "title": "Absolute и четыре стороны",
       "text": "<p><strong>position:absolute выводит элемент из обычного потока и размещает его относительно ближайшего позиционированного предка.</strong> В бейдже значения top и right задают отступ от двух краёв карточки. Второй вариант центрирует метку на карте с помощью left и top в процентах, а также transform, который сдвигает её на половину собственного размера.</p><p>Проверь, что .card или .map получили position:relative: иначе элемент может привязаться к окну. Используй inset, когда нужно указать сразу несколько сторон, и оставляй понятный родитель. Не задавай все координаты сразу без нужды — содержимое меняется, и такой элемент может перекрыть текст.</p>",
-      "try": {
-        "title": "1. Бейдж в углу карточки",
-        "html": "<article class=\"card\"><span class=\"badge\">Новое</span><h2>Лесная прогулка</h2><p>3,5 км · 90 минут</p></article>",
-        "css": ".card { position: relative; padding: 1.3rem; border: 1px solid #dce3e8; }\n.badge { position: absolute; top: .5rem; right: .5rem; padding: .3rem .5rem; background: #ffe29b; }",
-        "height": 275
-      },
       "remember": "Absolute-позиция опирается на ближайший предок с position, отличный от static.",
       "examples": [
         {
@@ -230,12 +136,6 @@ window.LESSONS[7] = {
       "id": "fixed-sticky-position",
       "title": "Fixed и sticky",
       "text": "<p><strong>fixed привязывает элемент к окну, sticky — удерживает его у края при прокрутке в пределах контейнера.</strong> Кнопка «Наверх» остаётся в одном месте экрана независимо от страницы, а липкая шапка сначала занимает обычное место и прилипает, когда достигает top:0.</p><p>Прокрути длинный образец и сравни поведение обоих элементов. У fixed-кнопки оставь свободное место, чтобы она не закрывала текст; у sticky-панели проверь высоту её родителя и направление прокрутки. Не забывай, что sticky часто не сработает, если у предка стоит неподходящий overflow или контейнер слишком короткий.</p>",
-      "try": {
-        "title": "1. Кнопка fixed у окна",
-        "html": "<main><h1>Длинная статья</h1><p>Прокрути страницу вниз.</p></main><a class=\"top\" href=\"#top\">Наверх</a>",
-        "css": ".top { position: fixed; right: 1rem; bottom: 1rem; padding: .7rem; background: #315f47; color: white; }\nmain { min-height: 80vh; }",
-        "height": 275
-      },
       "remember": "Fixed связан с окном, sticky удерживается у края своего прокручиваемого контейнера.",
       "examples": [
         {
@@ -261,12 +161,6 @@ window.LESSONS[7] = {
       "id": "z-index-stacking-context",
       "title": "z-index и контекст наложения",
       "text": "<p><strong>z-index управляет порядком наложения, но сравнивается внутри контекстов.</strong> В первом примере isolation:isolate создаёт локальную сцену, а backdrop и badge получают разные уровни. Во втором метка располагается поверх карточки, если находится в том же контексте и имеет подходящий z-index.</p><p>Изменяй числа по одному и наблюдай, какой объект перекрывает другой. Очень большое число не поднимет элемент выше отдельного контекста предка: сначала найди ближайшие stacking context, которые могут появиться из-за transform или opacity. Не ставь z-index всем элементам; используй уровни только там, где интерфейсу действительно нужно наложение.</p>",
-      "try": {
-        "title": "1. Контекст наложения",
-        "html": "<div class=\"scene\">\n  <div class=\"backdrop\">Фон карточки</div>\n  <div class=\"badge\">Подсказка</div>\n</div>",
-        "css": ".scene { position: relative; isolation: isolate; min-height: 130px; }\n.backdrop { position: absolute; inset: 20px 30px; z-index: -1; background: #eef2ff; }\n.badge { position: absolute; top: 0; right: 0; padding: .5rem; background: #ffd77b; }",
-        "height": 275
-      },
       "remember": "Сначала найди контекст наложения предков, затем сравни z-index внутри него.",
       "examples": [
         {

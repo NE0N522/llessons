@@ -88,8 +88,8 @@ test('Stage 3: CodeMirror works offline with Emmet, no-hints mode, saved prefere
     await course.waitForFunction(() => document.querySelector('.playground [data-font-label]')?.textContent === '16 px');
     await course.locator('[data-theme-toggle]').click();
     await course.waitForFunction(() => document.documentElement.dataset.theme === 'dark');
-    await course.waitForFunction(() => getComputedStyle(document.querySelector('.playground .cm-editor')).backgroundColor === 'rgb(27, 38, 56)');
-    assert.equal(await editor.evaluate((node) => getComputedStyle(node).backgroundColor), 'rgb(27, 38, 56)');
+    await course.waitForFunction(() => getComputedStyle(document.querySelector('.playground .cm-editor')).backgroundColor === 'rgb(29, 42, 52)');
+    assert.equal(await editor.evaluate((node) => getComputedStyle(node).backgroundColor), 'rgb(29, 42, 52)');
     await htmlContent.click();
     await course.keyboard.press('Control+A');
     await course.keyboard.type('<div><p></div>');

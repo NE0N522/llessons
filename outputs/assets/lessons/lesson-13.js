@@ -6,79 +6,11 @@ window.LESSONS[13] = {
     "Добавишь hover и transition для мягкого изменения состояния.",
     "Создашь декоративную деталь через ::before или ::after."
   ],
-  "teacher": {
-    "plan": [
-      {
-        "title": "Старт и цель: Комбинаторы",
-        "minutes": 10,
-        "steps": [
-          1
-        ]
-      },
-      {
-        "title": "Разбор шагов 1–3: Комбинаторы · Transition между состояниями · Transform без сдвига потока",
-        "minutes": 40,
-        "steps": [
-          1,
-          2,
-          3
-        ]
-      },
-      {
-        "title": "Разбор шагов 4–5: Наведение и фокус · before, after и content",
-        "minutes": 35,
-        "steps": [
-          4,
-          5
-        ]
-      },
-      {
-        "title": "Практика и самостоятельная сборка",
-        "minutes": 25,
-        "steps": []
-      },
-      {
-        "title": "Повторение и вопросы",
-        "minutes": 10,
-        "steps": []
-      }
-    ],
-    "review": [
-      {
-        "q": "Какое правило нужно вспомнить для шага «Комбинаторы»?",
-        "a": "Пробел означает любого потомка, > — прямого ребёнка, + — следующего соседа."
-      },
-      {
-        "q": "Какое правило нужно вспомнить для шага «Transition между состояниями»?",
-        "a": "Перечисляй конкретные свойства и делай переход коротким, понятным и обратимым."
-      },
-      {
-        "q": "Какое правило нужно вспомнить для шага «Transform без сдвига потока»?",
-        "a": "Origin задаёт точку трансформации; translate и rotate задают само перемещение и поворот."
-      },
-      {
-        "q": "Какое правило нужно вспомнить для шага «before, after и content»?",
-        "a": "Псевдоэлементу нужен content; важный смысл оставляй в HTML."
-      }
-    ],
-    "tips": [
-      "Начни с вопроса о теме «Комбинаторы»: пусть ученик назовёт роль элемента или свойства своими словами, затем покажи пример.",
-      "После шага «Transform без сдвига потока» предложи закрыть код и восстановить небольшой фрагмент по памяти, объясняя каждую строку.",
-      "Заверши занятиe практикой «Добавь ссылке и кнопке ясное состояние при наведении, а декоративную линию собери через псевдоэлемент.»: сначала попроси спланировать структуру, затем сравните результат с образцом."
-    ],
-    "answers": "<p><strong>Образец для разбора:</strong> сравни с практикой урока. Ученик объясняет, какие части относятся к HTML, какие правила задают внешний вид и где элементы связываются между собой.</p><h4>Фрагмент HTML</h4><pre><code>&lt;!doctype html&gt;\n&lt;html lang=\"ru\"&gt;\n&lt;head&gt;\n  &lt;meta charset=\"utf-8\"&gt;\n  &lt;meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"&gt;\n  &lt;title&gt;Переходы и анимации — практика&lt;/title&gt;\n&lt;/head&gt;\n&lt;body&gt;\n  &lt;main class=\"page\"&gt;\n    &lt;header class=\"hero\"&gt;&lt;p class=\"eyebrow\"&gt;УЧЕБНЫЙ ПРОЕКТ&lt;/p&gt;&lt;h1&gt;Небольшую страницу по теме «Переходы и анимации»&lt;/h1&gt;&lt;p&gt;Небольшой макет, который можно улучшать по шагам.&lt;/p&gt;&lt;a class=\"action\" href=\"#details\"&gt;Посмотреть содержание&lt;/a&gt;&lt;/header&gt;\n    &lt;section class=\"cards\" id=\"details\"&gt;&lt;article class=\"card\"&gt;&lt;h2&gt;Основная часть&lt;/h2&gt;&lt;p&gt;Добавь полезное описание и подпись.&lt;/p&gt;&lt;/article&gt;&lt;article class=\"card\"&gt;&lt;h2&gt;Следующий шаг&lt;/h2&gt;&lt;p&gt;Проверь поведение при длинном тексте.&lt;/p&gt;&lt;/article&gt;&lt;/section&gt;\n  &lt;/main&gt;\n&lt;/body&gt;\n&lt;/html&gt;</code></pre><h4>Фрагмент CSS</h4><pre><code>*{box-sizing:border-box}\nbody{margin:0;padding:24px;background:#f2f5f2;color:#29372f;font:16px/1.6 Arial,sans-serif}\n.page{max-width:900px;margin:auto}\n.hero{padding:clamp(22px,5vw,48px);border-radius:22px;background:#e4efe7}\n.eyebrow{color:#52755d;font-size:.75rem;font-weight:700;letter-spacing:.12em}\nh1{max-width:18ch;font-size:clamp(2rem,6vw,3.6rem);line-height:1.1}\n.action{display:inline-block;padding:10px 14px;border-radius:8px;background:#326649;color:white;text-decoration:none}\n.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:14px;margin-top:18px}\n.card{padding:18px;border:1px solid #d7e0d9;border-radius:14px;background:white}\n@media(max-width:520px){body{padding:14px}}</code></pre>"
-  },
   "steps": [
     {
       "id": "selector-combinators",
       "title": "Комбинаторы",
       "text": "<p><strong>Комбинатор связывает селекторы отношением между элементами.</strong> Пробел выбирает любого потомка, знак > — только непосредственного ребёнка, а + — соседний элемент сразу после выбранного. В примерах отношение помогает оформить список внутри карточки и добавить промежуток между соседними пунктами.</p><p>Измени вложенность HTML и наблюдай, какое правило перестало подходить. Сложный селектор зависит от структуры, поэтому для независимого компонента часто понятнее класс. Не используй пробел там, где нужен прямой ребёнок: стиль может неожиданно примениться к вложенному списку второго уровня. Сначала нарисуй дерево элементов, чтобы увидеть, какой узел совпадает.</p>",
-      "try": {
-        "title": "1. Потомок, ребёнок и сосед",
-        "html": "<article class=\"card\"><h2>Мастерская</h2><p>Открыта для всех.</p><footer><a href=\"#signup\">Регистрация</a></footer></article>",
-        "css": ".card p { color: #596779; }\n.card > h2 { margin-top: 0; }\nh2 + p { font-size: 1.1rem; }\nfooter ~ a { color: #315f47; }",
-        "height": 275
-      },
       "remember": "Пробел означает любого потомка, > — прямого ребёнка, + — следующего соседа.",
       "examples": [
         {
@@ -104,12 +36,6 @@ window.LESSONS[13] = {
       "id": "transition-state-change",
       "title": "Transition между состояниями",
       "text": "<p><strong>transition плавно меняет значение между двумя состояниями.</strong> В карточке перечислены только transform и box-shadow; :hover задаёт конечные значения. У кнопки меняется background-color, поэтому анимируется только цвет, а не все возможные свойства. У transition должны быть длительность и функция плавности, иначе браузер переключит вид сразу.</p><p>Наведи курсор и убери его: переход должен работать в обе стороны и оставаться коротким. Проверь, что действие понятно без движения — цвет или подпись по-прежнему показывают состояние. Не применяй transition:all ко всему элементу без нужды, потому что случайные свойства могут начать анимироваться неожиданно.</p>",
-      "try": {
-        "title": "1. Плавная смена состояния",
-        "html": "<a class=\"card\" href=\"#event\"><strong>Лекция о космосе</strong><span>В четверг в 18:30</span></a>",
-        "css": ".card { display: grid; gap: .5rem; padding: 1rem; border: 1px solid #dce2ea; transition: transform .2s ease, box-shadow .2s ease; }\n.card:hover { transform: translateY(-3px); box-shadow: 0 8px 20px #17233a20; }",
-        "height": 275
-      },
       "remember": "Перечисляй конкретные свойства и делай переход коротким, понятным и обратимым.",
       "examples": [
         {
@@ -135,12 +61,6 @@ window.LESSONS[13] = {
       "id": "transform-origin-coordinate",
       "title": "Transform без сдвига потока",
       "text": "<p><strong>transform-origin задаёт точку, вокруг которой вращается или масштабируется элемент.</strong> Если не менять её, вращение идёт около центра. В примере с карточкой установи origin у левого края и проверь, как поворот начинает открываться от этого места; второй вариант сдвигает элемент translate без перестройки потока.</p><p>Сравни движение при разных значениях top, left и transform-origin: эти свойства управляют разными вещами. Transform меняет визуальное положение, но исходное место остаётся занятым. Не исправляй ось движения случайными координатами, если проблема в точке вращения; сначала выбери origin, затем сам transform.</p>",
-      "try": {
-        "title": "1. Поворот вокруг origin",
-        "html": "<div class=\"badge\">ОТКРЫТО</div>",
-        "css": ".badge { display: inline-block; margin: 1rem; padding: .6rem; background: #ffe29b; transform: rotate(-5deg); transform-origin: left center; }",
-        "height": 275
-      },
       "remember": "Origin задаёт точку трансформации; translate и rotate задают само перемещение и поворот.",
       "examples": [
         {
@@ -166,12 +86,6 @@ window.LESSONS[13] = {
       "id": "pseudo-classes-states",
       "title": "Наведение и фокус",
       "text": "<p><strong>Псевдокласс выбирает временное состояние существующего элемента.</strong> :hover срабатывает при наведении, :focus-visible — при видимом клавиатурном фокусе, а :checked — у отмеченного checkbox или radio. В образцах кнопка меняет вид в фокусе, а выбранный переключатель открывает связанное оформление без добавления нового класса JavaScript.</p><p>Нажми Tab, кликни флажок и сравни состояния; если правило не сработало, проверь тип элемента и позицию двоеточия. Не ставь hover единственным сигналом выбранного пункта: на телефоне наведения нет, а после ухода курсора состояние пропадает. Проверь каждый способ отдельно.</p>",
-      "try": {
-        "title": "1. Hover и focus-visible",
-        "html": "<a class=\"card\" href=\"#details\">\n  <span>ОТКРЫТЫЙ УРОК</span>\n  <strong>Основы фотографии</strong>\n</a>",
-        "css": ".card { display: grid; gap: .4rem; padding: 1rem; border: 1px solid #dbe2e8; text-decoration: none; }\n.card:hover { border-color: #4e6caa; }\n.card:focus-visible { outline: 3px solid #e2aa47; }",
-        "height": 275
-      },
       "remember": "Псевдоклассы начинаются с двоеточия и выбирают состояние, а не создают новый элемент.",
       "examples": [
         {
@@ -197,12 +111,6 @@ window.LESSONS[13] = {
       "id": "pseudo-elements-content",
       "title": "before, after и content",
       "text": "<p><strong>::before и ::after создают декоративные коробки внутри выбранного элемента.</strong> Для отображения текста в псевдоэлементе нужно свойство content; его можно использовать для знака до предупреждения или счётчика списка. В примере счётчик добавляет номер, а CSS управляет цветом и расстоянием.</p><p>Проверь содержимое без CSS: важная информация не должна пропасть вместе с декоративным элементом. Экранные дикторы могут по-разному обрабатывать generated content, поэтому не помещай туда единственную инструкцию или название кнопки. Не забудь content:\"\" даже для чисто декоративной полосы. Оставь основной текст в HTML, чтобы его можно было найти и перевести.</p>",
-      "try": {
-        "title": "1. Декоративный знак до текста",
-        "html": "<p class=\"new\">Новое занятие</p>\n<p class=\"required\">Нужно записаться</p>",
-        "css": ".new::before { content: \"✦\"; margin-right: .5rem; color: #c17b24; }\n.required::after { content: \" · обязательно\"; color: #a13d38; font-size: .8em; }",
-        "height": 275
-      },
       "remember": "Псевдоэлементу нужен content; важный смысл оставляй в HTML.",
       "examples": [
         {

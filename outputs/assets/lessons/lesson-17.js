@@ -6,80 +6,11 @@ window.LESSONS[17] = {
     "Используешь container, row и col для адаптивной сетки.",
     "Сочетаешь готовые классы с собственным CSS без борьбы каскадов."
   ],
-  "teacher": {
-    "plan": [
-      {
-        "title": "Старт и цель: Подключение CDN",
-        "minutes": 10,
-        "steps": [
-          1
-        ]
-      },
-      {
-        "title": "Разбор шагов 1–3: Подключение CDN · container, row и col · Адаптивные breakpoint-классы",
-        "minutes": 40,
-        "steps": [
-          1,
-          2,
-          3
-        ]
-      },
-      {
-        "title": "Разбор шагов 4–6: Утилиты отступов и текста · Navbar и сворачиваемое меню · Свои стили после библиотеки",
-        "minutes": 35,
-        "steps": [
-          4,
-          5,
-          6
-        ]
-      },
-      {
-        "title": "Практика и самостоятельная сборка",
-        "minutes": 25,
-        "steps": []
-      },
-      {
-        "title": "Повторение и вопросы",
-        "minutes": 10,
-        "steps": []
-      }
-    ],
-    "review": [
-      {
-        "q": "Какое правило нужно вспомнить для шага «Подключение CDN»?",
-        "a": "Подключай одну версию Bootstrap до собственных правил и учитывай, нужен ли доступ к сети."
-      },
-      {
-        "q": "Какое правило нужно вспомнить для шага «container, row и col»?",
-        "a": "В сетке Bootstrap соблюдай вложенность container → row → col."
-      },
-      {
-        "q": "Какое правило нужно вспомнить для шага «Утилиты отступов и текста»?",
-        "a": "Используй utility для частой небольшой операции, а повторяющееся оформление собирай в компонент."
-      },
-      {
-        "q": "Какое правило нужно вспомнить для шага «Свои стили после библиотеки»?",
-        "a": "Расширяй Bootstrap своим классом и подключай переопределения после библиотеки."
-      }
-    ],
-    "tips": [
-      "Начни с вопроса о теме «Подключение CDN»: пусть ученик назовёт роль элемента или свойства своими словами, затем покажи пример.",
-      "После шага «Адаптивные breakpoint-классы» предложи закрыть код и восстановить небольшой фрагмент по памяти, объясняя каждую строку.",
-      "Заверши занятиe практикой «Собери каталог событий на Bootstrap»: сначала попроси спланировать структуру, затем сравните результат с образцом."
-    ],
-    "answers": "<p><strong>Образец для разбора:</strong> сравни с практикой урока. Ученик объясняет, какие части относятся к HTML, какие правила задают внешний вид и где элементы связываются между собой.</p><h4>Фрагмент HTML</h4><pre><code>&lt;!doctype html&gt;\n&lt;html lang=\"ru\"&gt;\n&lt;head&gt;\n  &lt;meta charset=\"utf-8\"&gt;\n  &lt;meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"&gt;\n  &lt;title&gt;Знакомство с Bootstrap — практика&lt;/title&gt;\n&lt;/head&gt;\n&lt;body&gt;\n  &lt;main class=\"page\"&gt;\n    &lt;header class=\"hero\"&gt;&lt;p class=\"eyebrow\"&gt;УЧЕБНЫЙ ПРОЕКТ&lt;/p&gt;&lt;h1&gt;Небольшую страницу по теме «Знакомство с Bootstrap»&lt;/h1&gt;&lt;p&gt;Небольшой макет, который можно улучшать по шагам.&lt;/p&gt;&lt;a class=\"action\" href=\"#details\"&gt;Посмотреть содержание&lt;/a&gt;&lt;/header&gt;\n    &lt;section class=\"cards\" id=\"details\"&gt;&lt;article class=\"card\"&gt;&lt;h2&gt;Основная часть&lt;/h2&gt;&lt;p&gt;Добавь полезное описание и подпись.&lt;/p&gt;&lt;/article&gt;&lt;article class=\"card\"&gt;&lt;h2&gt;Следующий шаг&lt;/h2&gt;&lt;p&gt;Проверь поведение при длинном тексте.&lt;/p&gt;&lt;/article&gt;&lt;/section&gt;\n  &lt;/main&gt;\n&lt;/body&gt;\n&lt;/html&gt;</code></pre><h4>Фрагмент CSS</h4><pre><code>*{box-sizing:border-box}\nbody{margin:0;padding:24px;background:#f2f5f2;color:#29372f;font:16px/1.6 Arial,sans-serif}\n.page{max-width:900px;margin:auto}\n.hero{padding:clamp(22px,5vw,48px);border-radius:22px;background:#e4efe7}\n.eyebrow{color:#52755d;font-size:.75rem;font-weight:700;letter-spacing:.12em}\nh1{max-width:18ch;font-size:clamp(2rem,6vw,3.6rem);line-height:1.1}\n.action{display:inline-block;padding:10px 14px;border-radius:8px;background:#326649;color:white;text-decoration:none}\n.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:14px;margin-top:18px}\n.card{padding:18px;border:1px solid #d7e0d9;border-radius:14px;background:white}\n@media(max-width:520px){body{padding:14px}}</code></pre>"
-  },
   "steps": [
     {
       "id": "bootstrap-cdn-stylesheet",
       "title": "Подключение CDN",
       "text": "<p><strong>Bootstrap — готовая таблица CSS-классов и компонентов.</strong> На настоящем сайте Bootstrap часто подключают через CDN, после чего класс btn btn-primary задаёт базовый вид кнопки. В этом курсе используется локальная копия Bootstrap: она загружается из папки проекта и работает без сети. Во втором варианте показан порядок подключения файлов: собственный site.css должен идти после Bootstrap, чтобы его правила могли переопределить библиотеку.</p><p>Сравни внешний вид кнопки и посмотри, какое правило задаёт её цвет. Не подключай два разных выпуска Bootstrap одновременно: одинаковые классы могут конфликтовать, и разобраться в итоговом стиле станет труднее.</p>",
-      "try": {
-        "title": "1. Подключить Bootstrap CSS",
-        "html": "<head>\n  <link href=\"/assets/vendor/bootstrap.min.css\" rel=\"stylesheet\" integrity=\"sha384-vt87vjrIEEfJX9vGHpIbioSQQd3ud5HqwGyQHSsaDskGhAqu+OkhhJ74Hn+PQilp\" crossorigin=\"anonymous\">\n</head>\n<body><button class=\"btn btn-primary\">Продолжить</button></body>",
-        "css": "/* Локальная таблица Bootstrap доступна без сети. */",
-        "height": 275
-      },
       "remember": "Подключай одну версию Bootstrap до собственных правил и учитывай, нужен ли доступ к сети.",
       "examples": [
         {
@@ -105,12 +36,6 @@ window.LESSONS[17] = {
       "id": "bootstrap-container-grid",
       "title": "container, row и col",
       "text": "<p><strong>Сетка Bootstrap строится из container, row и колонок.</strong> Container ограничивает ширину и центрирует область, row создаёт строку, а классы col задают доли. В примерах основная статья получает больше места, чем aside; карточки используют одинаковые колонки и складываются на малом экране.</p><p>Проследи разметку: col должен быть ребёнком row, иначе отступы и выравнивание могут вести себя неожиданно. Измени класс col-lg-8 и проверь распределение ширины. Не помещай каждую колонку в новую row без причины — сначала определи, какие блоки действительно составляют одну строку.</p>",
-      "try": {
-        "title": "1. Bootstrap container, row, col",
-        "html": "<div class=\"container\">\n  <div class=\"row g-3\">\n    <div class=\"col-12 col-md-8\"><main>Основная статья</main></div>\n    <div class=\"col-12 col-md-4\"><aside>Боковая заметка</aside></div>\n  </div>\n</div>",
-        "css": "/* Для примера подключи Bootstrap CSS перед своими стилями. */\nmain, aside { min-height: 8rem; padding: 1rem; background: #eef2f7; }",
-        "height": 275
-      },
       "remember": "В сетке Bootstrap соблюдай вложенность container → row → col.",
       "examples": [
         {
@@ -136,12 +61,6 @@ window.LESSONS[17] = {
       "id": "bootstrap-breakpoints",
       "title": "Адаптивные breakpoint-классы",
       "text": "<p><strong>Breakpoint-классы Bootstrap включают стиль с заданной ширины и выше.</strong> В примере col-12 занимает всю строку на узком экране, а col-lg-8 и col-lg-4 делят её на широком. Классы d-none и d-md-flex прячут мобильную навигацию до порога md, после которого она становится строкой ссылок.</p><p>Сузь превью и найди момент переключения. В отличие от обычного медиазапроса, имя класса говорит, на каком пороге начинает действовать правило. Не путай направление: d-none d-md-flex означает скрыто до md и flex от md, а не скрыто после md.</p>",
-      "try": {
-        "title": "1. Breakpoint меняет колонки",
-        "html": "<div class=\"row\"><main class=\"col-12 col-lg-8\">Статья</main><aside class=\"col-12 col-lg-4\">Навигация</aside></div>",
-        "css": "/* На узком экране блоки стоят один под другим. */\nmain, aside { padding: 1rem; }",
-        "height": 275
-      },
       "remember": "В responsive-классах Bootstrap сначала укажи узкое базовое состояние, затем breakpoint.",
       "examples": [
         {
@@ -167,12 +86,6 @@ window.LESSONS[17] = {
       "id": "bootstrap-utility-classes",
       "title": "Утилиты отступов и текста",
       "text": "<p><strong>Utility-классы Bootstrap применяют небольшое оформление прямо в class.</strong> В первом примере p-3 добавляет внутренний отступ, text-success меняет цвет заголовка, а mb-0 убирает нижний margin у текста. Во втором d-flex, align-items-center и justify-content-between собирают строку действий без отдельного CSS-селектора.</p><p>Такие классы ускоряют простую сборку, но длинная последовательность может стать трудной для чтения. Если одинаковая комбинация повторяется в нескольких карточках, создай свой компонентный класс. Не добавляй utility «на всякий случай»: оставь только те, которые реально меняют вид или выравнивание. Перед сдачей проверь страницу и в светлой, и в тёмной теме.</p>",
-      "try": {
-        "title": "1. Утилиты текста и отступов",
-        "html": "<article class=\"p-3 rounded border\"><h2 class=\"h4 text-success\">Курс открыт</h2><p class=\"mb-0 text-secondary\">Начало в сентябре.</p></article>",
-        "css": "",
-        "height": 275
-      },
       "remember": "Используй utility для частой небольшой операции, а повторяющееся оформление собирай в компонент.",
       "examples": [
         {
@@ -198,12 +111,6 @@ window.LESSONS[17] = {
       "id": "bootstrap-navbar-collapse",
       "title": "Navbar и сворачиваемое меню",
       "text": "<p><strong>Компонент navbar объединяет бренд, навигацию и кнопку меню.</strong> Классы navbar-expand-md задают порог раскрытия, а collapse и navbar-collapse скрывают часть меню в компактном виде. Кнопка с data-bs-toggle и data-bs-target сообщает Bootstrap JavaScript, какую панель открывать.</p><p>В статическом примере CSS покажет структуру, но сворачивание не заработает без Bootstrap JavaScript Bundle. Это не ошибка HTML: атрибуты только описывают связь, а обработчик должен быть подключён. Не забывай дать кнопке type=\"button\", aria-label и ссылку на корректный id панели. Проверь также доступное состояние при закрытом меню и после открытия навигации.</p>",
-      "try": {
-        "title": "1. Готовая адаптивная навигация",
-        "html": "<nav class=\"navbar navbar-expand-md bg-light\"><div class=\"container\"><a class=\"navbar-brand\" href=\"#\">Парк</a><button class=\"navbar-toggler\" data-bs-toggle=\"collapse\" data-bs-target=\"#menu\">Меню</button><div class=\"collapse navbar-collapse\" id=\"menu\"><a class=\"nav-link\" href=\"#events\">События</a></div></div></nav>",
-        "css": "/* Кнопка collapse требует Bootstrap JavaScript Bundle. */",
-        "height": 275
-      },
       "remember": "Для интерактивного collapse нужны и CSS, и Bootstrap JavaScript Bundle, а цель кнопки должна совпадать с id.",
       "examples": [
         {
@@ -229,12 +136,6 @@ window.LESSONS[17] = {
       "id": "bootstrap-overrides-components",
       "title": "Свои стили после библиотеки",
       "text": "<p><strong>Собственные стили позволяют адаптировать компонент Bootstrap под проект.</strong> В первом примере переменные кнопки меняют цвет темы, а подключённый после библиотеки site.css переопределяет её параметры. Во втором к стандартной card добавлен класс route-card, поэтому особый радиус и цвет относятся только к карточке маршрута.</p><p>Проверь, что стиль находится после Bootstrap и селектор имеет достаточный, но не избыточный вес. Удобнее добавить собственный класс, чем переписать глобальную card для одного места. Не копируй весь компонент Bootstrap в свой CSS, если требуется изменить только акцентный цвет.</p>",
-      "try": {
-        "title": "1. Переопределить после Bootstrap",
-        "html": "<button class=\"btn btn-primary\">Забронировать</button>",
-        "css": "/* site.css подключён после Bootstrap */\n.btn-primary { --bs-btn-bg: #356b4b; --bs-btn-hover-bg: #28563b; }",
-        "height": 275
-      },
       "remember": "Расширяй Bootstrap своим классом и подключай переопределения после библиотеки.",
       "examples": [
         {

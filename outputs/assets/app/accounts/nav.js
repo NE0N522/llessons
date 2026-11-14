@@ -1,4 +1,9 @@
 (() => {
+  const updateHeaderDepth = () => {
+    document.querySelectorAll('.v3-header, .account-topbar').forEach((header) => header.classList.toggle('is-scrolled', window.scrollY > 8));
+  };
+  window.addEventListener('scroll', updateHeaderDepth, { passive: true });
+  updateHeaderDepth();
   const link=document.querySelector('[data-account-nav]');
   if(!link||location.protocol==='file:')return;
   link.hidden=false;

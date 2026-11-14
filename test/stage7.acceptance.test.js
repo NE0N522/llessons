@@ -6,6 +6,43 @@ const { createApp, isPublicPath } = require('../server/app');
 const { hashPassword } = require('../server/auth');
 const { chromium } = require('playwright');
 
+test('Stage 7: teacher lesson guides are returned to teachers only', async () => {
+  const app = await createApp({ pgliteDir: ':memory:', sessionSecret: 'stage7-guide-test-secret-with-more-than-32-chars', nodeEnv: 'development', skipEnv: true });
+  const server = app.listen(0, '127.0.0.1');
+  await new Promise(resolve => server.once('listening', resolve));
+  const base = `http://127.0.0.1:${server.address().port}`;
+  try {
+    const stamp = new Date().toISOString();
+    const teacherHash = await hashPassword('Stage7GuideTeacher#2026');
+    const studentHash = await hashPassword('Stage7GuideStudent#2026');
+    const teacherId = (await app.locals.db.query("INSERT INTO users(role,login,password_hash,full_name,created_at) VALUES('teacher','stage7.guide.teacher',$1,'Учитель материалов',$2) RETURNING id", [teacherHash, stamp])).rows[0].id;
+    const classId = (await app.locals.db.query('INSERT INTO classes(teacher_id,name,created_at) VALUES($1,$2,$3) RETURNING id', [teacherId, 'Класс материалов', stamp])).rows[0].id;
+    await app.locals.db.query("INSERT INTO users(role,login,password_hash,full_name,class_id,must_change_password,created_at) VALUES('student','stage7.guide.student',$1,'Ученик материалов',$2,0,$3)", [studentHash, classId, stamp]);
+    const login = async (name, password) => {
+      const response = await fetch(`${base}/api/auth/login`, { method: 'POST', headers: { origin: base, 'content-type': 'application/json' }, body: JSON.stringify({ login: name, password }) });
+      assert.equal(response.status, 200);
+      return response.headers.get('set-cookie')?.split(';')[0];
+    };
+    const [teacherCookie, studentCookie] = await Promise.all([login('stage7.guide.teacher', 'Stage7GuideTeacher#2026'), login('stage7.guide.student', 'Stage7GuideStudent#2026')]);
+    assert.equal((await fetch(`${base}/api/teacher/lessons/29/guide`)).status, 401, 'anonymous requests cannot read answers');
+    const denied = await fetch(`${base}/api/teacher/lessons/29/guide`, { headers: { cookie: studentCookie } });
+    assert.equal(denied.status, 403, 'students cannot read answers');
+    const allowed = await fetch(`${base}/api/teacher/lessons/29/guide`, { headers: { cookie: teacherCookie } });
+    assert.equal(allowed.status, 200);
+    assert.equal(allowed.headers.get('cache-control'), 'no-store');
+    const guide = await allowed.json();
+    assert.ok(guide.plan?.length && guide.review?.length && guide.answers, 'teacher lesson materials are present');
+    const publicLesson = await fetch(`${base}/assets/lessons/lesson-29.js`);
+    assert.equal(publicLesson.status, 200);
+    assert.doesNotMatch(await publicLesson.text(), /"teacher"\s*:/, 'public lesson data does not contain teacher-only answers');
+    assert.equal((await fetch(`${base}/server/lesson-guides/lesson-29.json`)).status, 404, 'guide files are not public static assets');
+  } finally {
+    clearInterval(app.locals.maintenanceTimer);
+    await new Promise(resolve => server.close(resolve));
+    await app.locals.db.close();
+  }
+});
+
 test('Stage 7: privacy page and contact are public and linked from every page', async () => {
   const contact = '<img src=x onerror=alert(1)> · teacher@example.invalid';
   const app = await createApp({ pgliteDir: ':memory:', sessionSecret: 'stage7-privacy-test-secret-with-more-than-32-chars', privacyContact: contact, skipEnv: true });

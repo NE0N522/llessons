@@ -79,25 +79,22 @@
     if (field === 'text') checkRawTags(id, label, text, field);
   };
   const checkLesson = (item, lesson) => {
-    const id = item.id, label = `Урок ${item.number} «${item.title}»`, teacher = lesson.teacher || {};
+    const id = item.id, label = `Урок ${item.number} «${item.title}»`;
     if (!Array.isArray(item.topics) || item.topics.length < 3 || item.topics.length > 8) add(id, 'карточка должна показывать 3–8 тем или свойств');
     if (!Array.isArray(lesson.learn) || lesson.learn.length !== 3) add(id, 'learn должен содержать ровно 3 пункта');
     if (!Array.isArray(lesson.can) || lesson.can.length < 3 || lesson.can.length > 5) add(id, 'can должен содержать 3–5 действий');
-    const planMinutes = (teacher.plan || []).reduce((sum, part) => sum + Number(part.minutes || 0), 0);
-    if (!teacher.plan?.length || planMinutes !== 120) add(id, `план преподавателя должен занимать 120 минут (сейчас ${planMinutes})`);
-    if (teacher.review?.length !== 4) add(id, 'teacher.review должен содержать 4 вопроса с ответами');
-    if (teacher.tips?.length < 3 || teacher.tips?.length > 4) add(id, 'teacher.tips должен содержать 3–4 подсказки');
-    if (!teacher.answers || !/<pre><code>/.test(teacher.answers)) add(id, 'нет реального HTML/CSS ориентира в ответе преподавателя');
+    if (Object.hasOwn(lesson, 'teacher')) add(id, 'учительские ответы не должны находиться в публичном файле урока');
     if (item.type === 'lesson') {
       const steps = lesson.steps || [];
-      if (steps.length < 5 || steps.length > 9) add(id, 'steps должен содержать 5–9 шагов');
+      const expectedSteps = id === 29 ? steps.length >= 12 && steps.length <= 14 : id === 23 ? steps.length >= 3 && steps.length <= 9 : steps.length >= 5 && steps.length <= 9;
+      if (!expectedSteps) add(id, `неожиданное число шагов (${steps.length}) для структуры урока`);
       const seenIds = new Set(), seenRemember = new Set();
       steps.forEach((step, index) => {
         const where = `${label}, шаг ${index + 1} «${step.title}»`;
         if (!/^[a-z][a-z0-9-]*$/.test(step.id || '') || seenIds.has(step.id)) add(id, `${where}: step.id отсутствует, повторяется или не является slug`);
         seenIds.add(step.id);
         if (/^[a-z]+(?:-[a-z]+)*$/.test(step.title || '')) add(id, `${where}: заголовок состоит только из латиницы и дефисов`);
-        if (!step.text || !step.try?.html) add(id, `${where}: не хватает объяснения или HTML-примера`);
+        if (!step.text || !(step.try?.html || step.examples?.[0]?.html)) add(id, `${where}: не хватает объяснения или HTML-примера`);
         const wordCount = plainWords(step.text || '').length;
         if (id !== 23 && (wordCount < 80 || wordCount > 150)) add(id, `${where}: объяснение содержит ${wordCount} слов (ожидается 80–150)`);
         if ((step.text?.match(/<p\b/gi) || []).length < 2 || (step.text?.match(/<p\b/gi) || []).length > 4) add(id, `${where}: текст должен быть разбит на 2–4 абзаца`);
@@ -105,7 +102,9 @@
         if (!step.remember) add(id, `${where}: отсутствует правило для запоминания`);
         else { const key = normalize(step.remember); if (seenRemember.has(key)) add(id, `${where}: повторяется remember в этом уроке`); seenRemember.add(key); }
         if (!step.mistake?.bad || !step.mistake?.good || !step.mistake?.why) add(id, `${where}: нужна ошибка новичка, исправление и причина`);
-        if ((step.examples || []).length !== 2) add(id, `${where}: должно быть два переключаемых примера`);
+        const examples = step.examples || [];
+        if (id === 29 ? examples.length < 4 || examples.length > 6 : examples.length !== 2) add(id, `${where}: неверное количество переключаемых примеров`);
+        if (id === 29 && examples.some((example) => !example.title || !example.note || !example.html)) add(id, `${where}: каждый пример Flexbox должен иметь название, подпись и HTML`);
         const holder = document.createElement('template'); holder.innerHTML = step.text || '';
         [...holder.content.querySelectorAll('p')].forEach((paragraph) => {
           const phrase = paragraph.textContent || '', canonical = canonicalParagraph(phrase);
@@ -114,9 +113,17 @@
         });
         checkProse(id, where, step.text, 'text'); checkProse(id, where, step.remember, 'remember'); checkProse(id, where, step.mistake?.why, 'mistake.why');
       });
-      if (!Array.isArray(lesson.practice?.stages) || lesson.practice.stages.length !== 4) add(id, 'практика должна содержать 4 тематических этапа');
-      (lesson.practice?.stages || []).forEach((stage, index) => { if (!stage.task || !stage.check) add(id, `этап практики ${index + 1}: нет задания или контрольной точки`); });
-      if (!lesson.practice?.solution?.html || !lesson.practice?.solution?.css) add(id, 'у практики нет полного HTML/CSS ответа');
+      if (lesson.practice?.tasks) {
+        const tasks = lesson.practice.tasks;
+        if (tasks.length < 3 || tasks.length > 5) add(id, 'практика должна содержать 3–5 реальных заданий');
+        tasks.forEach((task, index) => {
+          if (!task.task || !task.starter?.html || !task.starter?.css || !task.solution?.html || !task.solution?.css || task.checklist?.length < 3) add(id, `задание ${index + 1}: нужны условие, стартовый HTML/CSS, чек-лист и свёрнутое решение`);
+        });
+      } else {
+        if (!Array.isArray(lesson.practice?.stages) || lesson.practice.stages.length !== 4) add(id, 'практика должна содержать 4 тематических этапа');
+        (lesson.practice?.stages || []).forEach((stage, index) => { if (!stage.task || !stage.check) add(id, `этап практики ${index + 1}: нет задания или контрольной точки`); });
+        if (!lesson.practice?.solution?.html || !lesson.practice?.solution?.css) add(id, 'у практики нет полного HTML/CSS ответа');
+      }
     } else {
       if (!lesson.stages?.length || !lesson.solution?.html || !lesson.solution?.css) add(id, 'практикуму нужен план этапов и полный образец HTML/CSS');
       (lesson.stages || []).forEach((stage, index) => {
@@ -132,7 +139,7 @@
     (lesson.practice?.stages || []).forEach((s) => { checkProse(id, label, s.task, 'practice.task'); checkProse(id, label, s.check, 'practice.check'); });
     (lesson.projects || []).forEach((p) => { [...(p.steps || []), ...(p.done || []), p.stretch].filter(Boolean).forEach((x) => checkProse(id, label, x, 'project')); });
     if (/(?:в архиве|из архива|архив курса|исходник курса|исходный код курса)/i.test(JSON.stringify({ steps: lesson.steps, practice: lesson.practice, projects: lesson.projects, stages: lesson.stages }))) add(id, 'ученический текст упоминает архив или исходный код курса');
-    const signatures = { review: teacher.review, tips: teacher.tips, practice: lesson.practice?.stages };
+    const signatures = { practice: lesson.practice?.stages };
     Object.entries(signatures).forEach(([kind, value]) => {
       if (!value?.length) return;
       const key = `${kind}:${JSON.stringify(value)}`;

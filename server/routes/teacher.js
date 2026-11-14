@@ -1,5 +1,7 @@
 const express = require('express');
 const crypto = require('node:crypto');
+const fs = require('node:fs/promises');
+const path = require('node:path');
 const { performance } = require('node:perf_hooks');
 const {
   requireRole,
@@ -23,7 +25,7 @@ const {
 const { createBackup, signature } = require('../backup');
 const { buildClassWorkbook, createStudentReport } = require('../reports');
 const { dateOnly, streakMetrics } = require('../lib/student-metrics');
-const ACTIVE_LESSONS = new Set([1, 3, 5, 7, 13, 14, 16, 17, 18, 19, 23]);
+const ACTIVE_LESSONS = new Set([1, 3, 5, 7, 13, 14, 16, 17, 18, 19, 23, 29]);
 const PASSWORD_ALPHABET = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789!@#$%';
 const CYRILLIC = {
   а: 'a',
@@ -209,6 +211,18 @@ async function createAssignment(db, teacher, classId, body, status = 'draft') {
 function createTeacherRouter(db) {
   const router = express.Router();
   router.use(requireRole('teacher'));
+  router.get('/lessons/:lessonId/guide', async (req, res) => {
+    const lessonId = asId(req.params.lessonId);
+    assert(ACTIVE_LESSONS.has(lessonId), 404, 'Урок не найден.');
+    try {
+      const guide = JSON.parse(await fs.readFile(path.join(__dirname, '..', 'lesson-guides', `lesson-${lessonId}.json`), 'utf8'));
+      res.setHeader('Cache-Control', 'no-store');
+      res.json(guide);
+    } catch (error) {
+      if (error.code === 'ENOENT') return res.status(404).json({ error: 'Материалы преподавателя для урока не найдены.' });
+      throw error;
+    }
+  });
   router.get('/classes', async (req, res) => {
     const rows = await db.prepare(`SELECT c.id,c.name,c.school_year,c.archived,c.created_at,
       (SELECT COUNT(*) FROM users u WHERE u.class_id=c.id AND u.role='student' AND u.active=1) AS student_count,

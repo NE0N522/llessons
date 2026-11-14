@@ -29,6 +29,7 @@ function safeName(value) {
 }
 
 async function main() {
+  const axeScript = await fs.readFile(require.resolve('axe-core'), 'utf8');
   await fs.mkdir(reportDir, { recursive: true });
   for (const entry of await fs.readdir(reportDir, { withFileTypes: true })) {
     if (entry.isFile() && entry.name.endsWith('.png')) await fs.unlink(path.join(reportDir, entry.name));
@@ -51,6 +52,8 @@ async function main() {
       for (const theme of themes) for (const width of widths) {
         const page = await context.newPage({ viewport: { width, height: 900 } });
         const pageErrors = [], warnings = [], failedRequests = [], externalRequests = [];
+        const auditAccessibility = url === '/' || /^\/lesson-view\.html\?lesson=(23|29)(?:#|&|$)/.test(url) || /^\/examples\/view\.html\?lesson=(23|29)(?:&|$)/.test(url);
+        if (auditAccessibility) await page.addInitScript({ content: `if (window === window.top) {\n${axeScript}\n}` });
         page.on('pageerror', error => pageErrors.push(error.message));
         page.on('console', message => {
           if (message.type() === 'error') pageErrors.push(message.text());
@@ -67,6 +70,15 @@ async function main() {
         if (expectedSelector) await page.locator(expectedSelector).first().waitFor({ state: 'visible', timeout: 10000 });
         else if (expectedText) await page.locator('main h1, main h2, main h3').filter({ hasText: expectedText }).first().waitFor({ state: 'visible', timeout: 10000 });
         if (expectedContact) await page.waitForFunction(value => document.querySelector('[data-teacher-contact]')?.textContent === value, contact, { timeout: 10000 });
+        let accessibility = null;
+        if (auditAccessibility) {
+          await page.waitForFunction(() => Boolean(window.axe));
+          accessibility = await page.evaluate(async () => {
+            const result = await window.axe.run(document, { runOnly: { type: 'tag', values: ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'] } });
+            return result.violations.map(item => ({ id: item.id, impact: item.impact, targets: item.nodes.map(node => node.target) }));
+          });
+          if (accessibility.length) failures.push(`${label} ${theme}/${width}: axe violations ${JSON.stringify(accessibility)}`);
+        }
         await page.waitForTimeout(80);
         const state = await page.evaluate(() => ({
           width: innerWidth,
@@ -76,7 +88,7 @@ async function main() {
           theme: document.documentElement.dataset.theme || document.documentElement.style.colorScheme || 'unset',
           footerPrivacy: Boolean(document.querySelector('.site-privacy-link'))
         }));
-        const result = { label, url, theme, viewport: width, ...state, pageErrors, warnings, failedRequests, externalRequests };
+        const result = { label, url, theme, viewport: width, ...state, accessibility, pageErrors, warnings, failedRequests, externalRequests };
         if (state.scrollWidth > state.width) failures.push(`${label} ${theme}/${width}: horizontal overflow ${state.scrollWidth} > ${state.width}`);
         if (pageErrors.length) failures.push(`${label} ${theme}/${width}: ${pageErrors.join(' | ')}`);
         if (warnings.length) failures.push(`${label} ${theme}/${width}: console warnings ${warnings.join(' | ')}`);
@@ -97,7 +109,7 @@ async function main() {
     const teacherId = (await db.query("INSERT INTO users(role,login,password_hash,full_name,is_owner,created_at) VALUES('teacher','stage7.teacher',$1,'Учитель выпуска',1,$2) RETURNING id", [teacherHash, stamp])).rows[0].id;
     const classId = (await db.query('INSERT INTO classes(teacher_id,name,school_year,created_at) VALUES($1,$2,$3,$4) RETURNING id', [teacherId, 'Демонстрационный класс', '2026–2027', stamp])).rows[0].id;
     const studentId = (await db.query("INSERT INTO users(role,login,password_hash,full_name,class_id,must_change_password,created_at) VALUES('student','stage7.student',$1,'Ученик выпуска',$2,0,$3) RETURNING id", [studentHash, classId, stamp])).rows[0].id;
-    const assignmentId = (await db.query("INSERT INTO assignments(class_id,title,description,status,task_type,checks_json,hints_json,created_at,updated_at) VALUES($1,'Проверочная карточка','Собери небольшую карточку.','published','build','[]','[\"Начни с контейнера страницы.\"]'::jsonb,$2,$2) RETURNING id", [classId, stamp])).rows[0].id;
+    const assignmentId = (await db.query("INSERT INTO assignments(class_id,title,description,status,task_type,checks_json,hints_json,starter_html,starter_css,created_at,updated_at) VALUES($1,'Проверочная карточка','Собери небольшую карточку.','published','build','[]','[\"Начни с контейнера страницы.\"]'::jsonb,'<main><h1>Начни здесь</h1></main>','main { padding: 1rem; }',$2,$2) RETURNING id", [classId, stamp])).rows[0].id;
     const teacherCookie = await login(base, 'stage7.teacher', 'Stage7Teacher#2026');
     const studentCookie = await login(base, 'stage7.student', 'Stage7Student#2026');
     const teacherContext = await browser.newContext();
@@ -155,6 +167,8 @@ async function main() {
 
       await tabsPage.setViewportSize({ width: 1280, height: 900 });
       await tabs.waitFor({ state: 'hidden' });
+      await codePane.waitFor({ state: 'visible' });
+      await resultPane.waitFor({ state: 'visible' });
       verifyTabState('1280 px показывает код и результат рядом, переключатель скрыт', !(await tabs.isVisible()) && await tabsPage.locator('[data-assignment-pane="code"]').last().isVisible() && await resultPane.isVisible());
       for (const width of [375, 768, 1280]) {
         await tabsPage.setViewportSize({ width, height: 900 });
@@ -162,6 +176,57 @@ async function main() {
         verifyTabState(`${width} px без горизонтального переполнения`, dimension.scrollWidth <= dimension.width);
       }
       await tabsPage.close();
+
+      const searchPage = await guest.newPage();
+      await searchPage.setViewportSize({ width: 375, height: 900 });
+      await searchPage.goto(`${base}/`, { waitUntil: 'load' });
+      await searchPage.keyboard.press('Control+k');
+      await searchPage.locator('[data-quick-search][open]').waitFor();
+      await searchPage.locator('[data-quick-search-input]').fill('Переносим элементы на новую строку');
+      const searchHit = searchPage.locator('[data-quick-search-results] a').filter({ hasText: 'Переносим элементы на новую строку' }).first();
+      await searchHit.waitFor();
+      verifyTabState('Ctrl+K ищет конкретные шаги курса', (await searchHit.getAttribute('href'))?.includes('lesson=29#spacing-wrap'));
+      await searchHit.click();
+      await searchPage.waitForURL(/lesson=29#spacing-wrap/);
+      verifyTabState('быстрый поиск открывает найденный шаг урока', await searchPage.locator('#spacing-wrap').isVisible());
+      await searchPage.close();
+
+      const flexPage = await guest.newPage();
+      await flexPage.setViewportSize({ width: 375, height: 900 });
+      await flexPage.goto(`${base}/lesson-view.html?lesson=29`, { waitUntil: 'load' });
+      await flexPage.locator('[data-step-navigation]').waitFor();
+      verifyTabState('Flexbox показывает 14 шагов по одному', await flexPage.locator('[data-step-panel]:visible').count() === 1 && await flexPage.locator('[data-step-panel]').count() === 14);
+      const playground = flexPage.locator('.playground').first();
+      await playground.scrollIntoViewIfNeeded();
+      const resultMode = playground.locator('[data-mobile-mode="result"]');
+      await resultMode.waitFor({ state: 'visible' });
+      await resultMode.click();
+      verifyTabState('375 px переключает код и результат отдельными вкладками', await playground.locator('.playground-result').isVisible() && await playground.locator('.playground-editor:visible').count() === 0);
+      await playground.locator('[data-mobile-mode="code"]').click();
+      await playground.locator('[data-editor-host="html"] .cm-editor').waitFor({ state: 'visible', timeout: 15000 });
+      await playground.locator('[data-tab="css"]').click();
+      verifyTabState('мобильный редактор переключается между HTML и CSS', await playground.locator('[data-panel="css"]').isVisible() && !(await playground.locator('[data-panel="html"]').isVisible()));
+      await playground.locator('[data-mobile-mode="result"]').click();
+      await flexPage.locator('[data-step-next]').click();
+      verifyTabState('переход к следующему шагу сохраняет отметку в оглавлении', await flexPage.locator('[data-step-link="axes"]').evaluate(link => link.classList.contains('is-complete')) && (await flexPage.locator('[data-step-counter]').textContent()).includes('2 из 14'));
+      const flexWidth = await flexPage.evaluate(() => ({ width: innerWidth, scrollWidth: document.documentElement.scrollWidth }));
+      verifyTabState('Flexbox без горизонтального переполнения на 375 px', flexWidth.scrollWidth <= flexWidth.width);
+      await flexPage.setViewportSize({ width: 1280, height: 900 });
+      const desktopPlayground = flexPage.locator('.v3-step:visible .playground').first();
+      verifyTabState('1280 px показывает редактор и результат рядом', await desktopPlayground.locator('.playground-editor:visible').count() === 1 && await desktopPlayground.locator('.playground-result').isVisible() && !(await desktopPlayground.locator('.playground-mobile-switcher').isVisible()));
+      await flexPage.close();
+
+      const offlineLesson = await studentContext.newPage();
+      await offlineLesson.setViewportSize({ width: 375, height: 900 });
+      await offlineLesson.goto(`${base}/lesson-view.html?lesson=29`, { waitUntil: 'load' });
+      await offlineLesson.waitForFunction(() => navigator.serviceWorker?.controller, null, { timeout: 15000 });
+      await offlineLesson.evaluate(() => navigator.serviceWorker.ready);
+      await offlineLesson.context().setOffline(true);
+      await offlineLesson.reload({ waitUntil: 'load' });
+      await offlineLesson.locator('[data-step-navigation]').waitFor({ timeout: 10000 });
+      verifyTabState('Flexbox загружается офлайн после открытия один раз', await offlineLesson.locator('main h1').textContent().then(text => text.includes('Flexbox')) && await offlineLesson.locator('[data-step-panel]:visible').count() === 1);
+      await offlineLesson.context().setOffline(false);
+      await offlineLesson.close();
     }
 
     const lessonFiles = (await fs.readdir(path.join(root, 'outputs', 'assets', 'lessons'))).filter(file => /^lesson-\d+\.js$/.test(file));
@@ -184,10 +249,13 @@ async function main() {
     }
     await teacherPage.close();
 
+    const accessibilityRuns = runs.filter(run => Array.isArray(run.accessibility));
     const result = {
       date: new Date().toISOString(),
       pages: [...new Set(runs.map(run => run.label))].length,
       checks: runs.length,
+      accessibility_audits: accessibilityRuns.length,
+      accessibility_violations: accessibilityRuns.reduce((sum, run) => sum + run.accessibility.length, 0),
       lesson_ids: lessonIds,
       variants: ['light/1280', 'light/375', 'dark/1280', 'dark/375'],
       interaction_checks: interactionChecks,
@@ -195,7 +263,7 @@ async function main() {
       runs
     };
     await fs.writeFile(path.join(root, 'report', 'stage-7', 'browser-qa.json'), `${JSON.stringify(result, null, 2)}\n`, 'utf8');
-    console.log(`Браузерная приёмка: ${result.pages} страниц, ${result.checks} сочетаний страницы/темы/ширины, ошибок ${failures.length}. Скриншоты: report/stage-7/browser/; данные: report/stage-7/browser-qa.json.`);
+    console.log(`Браузерная приёмка: ${result.pages} страниц, ${result.checks} сочетаний страницы/темы/ширины, ${result.accessibility_audits} axe-проверок, нарушений ${result.accessibility_violations}, ошибок ${failures.length}. Скриншоты: report/stage-7/browser/; данные: report/stage-7/browser-qa.json.`);
     if (failures.length) {
       for (const failure of failures.slice(0, 40)) console.error(`FAIL ${failure}`);
       process.exitCode = 1;

@@ -1,0 +1,64 @@
+{
+  "plan": [
+    {
+      "title": "Старт: Block, inline и inline-block",
+      "minutes": 10,
+      "steps": [
+        1
+      ]
+    },
+    {
+      "title": "Разбор шагов 1–4: Block, inline и inline-block · Карточки в строке · Поток и координаты · Контейнер relative",
+      "minutes": 40,
+      "steps": [
+        1,
+        2,
+        3,
+        4
+      ]
+    },
+    {
+      "title": "Разбор шагов 5–7: Absolute и четыре стороны · Fixed и sticky · z-index и контекст наложения",
+      "minutes": 35,
+      "steps": [
+        5,
+        6,
+        7
+      ]
+    },
+    {
+      "title": "Практика и самостоятельная сборка",
+      "minutes": 25,
+      "steps": []
+    },
+    {
+      "title": "Повторение и вопросы",
+      "minutes": 10,
+      "steps": []
+    }
+  ],
+  "review": [
+    {
+      "q": "Какое правило нужно вспомнить для шага «Block, inline и inline-block»?",
+      "a": "Block начинает новую строку, inline течёт в тексте, inline-block сохраняет строчное расположение и принимает размеры."
+    },
+    {
+      "q": "Какое правило нужно вспомнить для шага «Поток и координаты»?",
+      "a": "Без специальных правил блоки читаются в том же порядке, в каком записаны в HTML."
+    },
+    {
+      "q": "Какое правило нужно вспомнить для шага «Absolute и четыре стороны»?",
+      "a": "Absolute-позиция опирается на ближайший предок с position, отличный от static."
+    },
+    {
+      "q": "Какое правило нужно вспомнить для шага «z-index и контекст наложения»?",
+      "a": "Сначала найди контекст наложения предков, затем сравни z-index внутри него."
+    }
+  ],
+  "tips": [
+    "Начни с вопроса о теме «Block, inline и inline-block»: пусть ученик назовёт роль свойства своими словами, затем покажи пример.",
+    "После шага «Контейнер relative» предложи восстановить небольшой фрагмент без подсказки и объяснить каждую строку.",
+    "Заверши занятие карточкой события с меткой даты: сначала попроси спланировать структуру, затем сравните результат с образцом."
+  ],
+  "answers": "<p><strong>Образец для разбора:</strong> сравни с практикой урока. Ученик объясняет, какие части относятся к HTML, какие правила задают внешний вид и как метка связана с родительским блоком.</p><h4>Фрагмент HTML</h4><pre><code>&lt;!doctype html&gt;\n&lt;html lang=\"ru\"&gt;&lt;head&gt;&lt;meta charset=\"utf-8\"&gt;&lt;meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"&gt;&lt;title&gt;Position и клетки&lt;/title&gt;&lt;/head&gt;&lt;body&gt;\n  &lt;main class=\"page\"&gt;&lt;h1&gt;Проба абсолютных координат&lt;/h1&gt;&lt;p&gt;Четыре на четыре: упражнение для понимания position.&lt;/p&gt;&lt;div class=\"board\"&gt;\n      &lt;span class=\"light\" style=\"top:0%;left:0%\" aria-hidden=\"true\"&gt;&lt;/span&gt;\n      &lt;span class=\"dark\" style=\"top:0%;left:25%\" aria-hidden=\"true\"&gt;&lt;/span&gt;\n      &lt;span class=\"light\" style=\"top:0%;left:50%\" aria-hidden=\"true\"&gt;&lt;/span&gt;\n      &lt;span class=\"dark\" style=\"top:0%;left:75%\" aria-hidden=\"true\"&gt;&lt;/span&gt;\n      &lt;span class=\"dark\" style=\"top:25%;left:0%\" aria-hidden=\"true\"&gt;&lt;/span&gt;\n      &lt;span class=\"light\" style=\"top:25%;left:25%\" aria-hidden=\"true\"&gt;&lt;/span&gt;\n      &lt;span class=\"dark\" style=\"top:25%;left:50%\" aria-hidden=\"true\"&gt;&lt;/span&gt;\n      &lt;span class=\"light\" style=\"top:25%;left:75%\" aria-hidden=\"true\"&gt;&lt;/span&gt;\n      &lt;span class=\"light\" style=\"top:50%;left:0%\" aria-hidden=\"true\"&gt;&lt;/span&gt;\n      &lt;span class=\"dark\" style=\"top:50%;left:25%\" aria-hidden=\"true\"&gt;&lt;/span&gt;\n      &lt;span class=\"light\" style=\"top:50%;left:50%\" aria-hidden=\"true\"&gt;&lt;/span&gt;\n      &lt;span class=\"dark\" style=\"top:50%;left:75%\" aria-hidden=\"true\"&gt;&lt;/span&gt;\n      &lt;span class=\"dark\" style=\"top:75%;left:0%\" aria-hidden=\"true\"&gt;&lt;/span&gt;\n      &lt;span class=\"light\" style=\"top:75%;left:25%\" aria-hidden=\"true\"&gt;&lt;/span&gt;\n      &lt;span class=\"dark\" style=\"top:75%;left:50%\" aria-hidden=\"true\"&gt;&lt;/span&gt;</code></pre><h4>Фрагмент CSS</h4><pre><code>*{box-sizing:border-box}\nbody{margin:0;padding:24px;background:#f4f5f1;color:#2e3b31;font:16px/1.5 Arial,sans-serif}\n.page{max-width:520px;margin:auto}\n.board{position:relative;width:min(100%,320px);aspect-ratio:1;border:4px solid #52685a}\n.board span{position:absolute;width:25%;height:25%}\n.light{background:#f4ead7}.dark{background:#7c967f}</code></pre>"
+}

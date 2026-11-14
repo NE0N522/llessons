@@ -1,9 +1,12 @@
-const SHELL_CACHE='kod-course-offline-shell-v9';
+const SHELL_CACHE='kod-course-offline-shell-v12';
 const APP_SHELL=[
   '/lesson-view.html','/student/assignment.html',
   '/assets/course.js','/assets/app/theme.js','/assets/app/accounts/nav.js','/assets/app/editor-loader.js?v=editor-shortcuts-20261112',
-  '/assets/app/lesson-v3.css','/assets/app/theme-v3.css','/assets/app/accounts/accounts.css?v=account-ui-20261112',
-  '/assets/app/code-format.js','/assets/app/playground.js','/assets/app/progress.js','/assets/app/lesson-notes.js','/assets/app/lesson-view.js',
+  '/assets/app/lesson-v3.css','/assets/app/theme-v3.css','/assets/app/design-tokens.css?v=course-design-20261114-flex-pilot-a11y','/assets/app/accounts/accounts.css?v=account-ui-20261112',
+  '/assets/fonts/noto-sans-cyrillic-ext.woff2','/assets/fonts/noto-sans-cyrillic.woff2','/assets/fonts/noto-sans-latin.woff2',
+  '/assets/fonts/noto-sans-mono-cyrillic-ext.woff2','/assets/fonts/noto-sans-mono-cyrillic.woff2','/assets/fonts/noto-sans-mono-latin.woff2',
+  '/assets/app/code-format.js','/assets/app/playground.js','/assets/app/flex-lab.js','/assets/app/progress.js','/assets/app/lesson-notes.js','/assets/app/lesson-view.js',
+  '/assets/lessons/lesson-29.js',
   '/assets/app/accounts/ui-utils.js?v=account-ui-20261112','/assets/app/accounts/ui-strings.js?v=account-ui-20261112','/assets/app/accounts/common.js?v=account-ui-20261112','/assets/app/accounts/profile-settings.js?v=account-ui-20261112','/assets/app/accounts/assignment.js?v=account-ui-20261112','/assets/vendor/code-editor.js?v=account-ui-20261112'
 ];
 const APP_PAGES=new Set(['/lesson-view.html','/student/assignment.html']);

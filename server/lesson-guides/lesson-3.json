@@ -1,0 +1,64 @@
+{
+  "plan": [
+    {
+      "title": "Старт и цель: Тег подсказывает роль содержимого",
+      "minutes": 10,
+      "steps": [
+        1
+      ]
+    },
+    {
+      "title": "Разбор шагов 1–4: Тег подсказывает роль содержимого · Подпись к изображению и текстовое описание · Строки и ячейки · Заголовки, подпись и группы строк",
+      "minutes": 40,
+      "steps": [
+        1,
+        2,
+        3,
+        4
+      ]
+    },
+    {
+      "title": "Разбор шагов 5–7: Связь заголовка со столбцом · Как проверить семантическую страницу · Настройки head помогают браузеру и ссылкам",
+      "minutes": 35,
+      "steps": [
+        5,
+        6,
+        7
+      ]
+    },
+    {
+      "title": "Практика и самостоятельная сборка",
+      "minutes": 25,
+      "steps": []
+    },
+    {
+      "title": "Повторение и вопросы",
+      "minutes": 10,
+      "steps": []
+    }
+  ],
+  "review": [
+    {
+      "q": "Какое правило нужно вспомнить для шага «Тег подсказывает роль содержимого»?",
+      "a": "Смысловой тег выбирают по роли содержимого, а не по его внешнему виду."
+    },
+    {
+      "q": "Какое правило нужно вспомнить для шага «Строки и ячейки»?",
+      "a": "Строки таблицы состоят из ячеек th или td; подпись caption описывает набор данных."
+    },
+    {
+      "q": "Какое правило нужно вспомнить для шага «Связь заголовка со столбцом»?",
+      "a": "Укажи scope по направлению связи: col для столбца, row для строки."
+    },
+    {
+      "q": "Какое правило нужно вспомнить для шага «Настройки head помогают браузеру и ссылкам»?",
+      "a": "head хранит метаданные и подключения, а видимые элементы страницы размещаются в body."
+    }
+  ],
+  "tips": [
+    "Начни с вопроса о теме «Тег подсказывает роль содержимого»: пусть ученик назовёт роль элемента или свойства своими словами, затем покажи пример.",
+    "После шага «Заголовки, подпись и группы строк» предложи закрыть код и восстановить небольшой фрагмент по памяти, объясняя каждую строку.",
+    "Заверши занятиe практикой «Собери заметку о событии с автором, иллюстрацией и таблицей расписания. Проверь, что заголовки объясняют разделы и ячейки таблицы.»: сначала попроси спланировать структуру, затем сравните результат с образцом."
+  ],
+  "answers": "<p><strong>Образец для разбора:</strong> сравни с практикой урока. Ученик объясняет, какие части относятся к HTML, какие правила задают внешний вид и где элементы связываются между собой.</p><h4>Фрагмент HTML</h4><pre><code>&lt;!doctype html&gt;\n&lt;html lang=\"ru\"&gt;\n&lt;head&gt;\n  &lt;meta charset=\"utf-8\"&gt;\n  &lt;meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"&gt;\n  &lt;title&gt;Семантический HTML и head — практика&lt;/title&gt;\n&lt;/head&gt;\n&lt;body&gt;\n  &lt;main class=\"page\"&gt;\n    &lt;header class=\"hero\"&gt;&lt;p class=\"eyebrow\"&gt;УЧЕБНЫЙ ПРОЕКТ&lt;/p&gt;&lt;h1&gt;Небольшую страницу по теме «Семантический HTML и head»&lt;/h1&gt;&lt;p&gt;Небольшой макет, который можно улучшать по шагам.&lt;/p&gt;&lt;a class=\"action\" href=\"#details\"&gt;Посмотреть содержание&lt;/a&gt;&lt;/header&gt;\n    &lt;section class=\"cards\" id=\"details\"&gt;&lt;article class=\"card\"&gt;&lt;h2&gt;Основная часть&lt;/h2&gt;&lt;p&gt;Добавь полезное описание и подпись.&lt;/p&gt;&lt;/article&gt;&lt;article class=\"card\"&gt;&lt;h2&gt;Следующий шаг&lt;/h2&gt;&lt;p&gt;Проверь поведение при длинном тексте.&lt;/p&gt;&lt;/article&gt;&lt;/section&gt;\n  &lt;/main&gt;\n&lt;/body&gt;\n&lt;/html&gt;</code></pre><h4>Фрагмент CSS</h4><pre><code>*{box-sizing:border-box}\nbody{margin:0;padding:24px;background:#f2f5f2;color:#29372f;font:16px/1.6 Arial,sans-serif}\n.page{max-width:900px;margin:auto}\n.hero{padding:clamp(22px,5vw,48px);border-radius:22px;background:#e4efe7}\n.eyebrow{color:#52755d;font-size:.75rem;font-weight:700;letter-spacing:.12em}\nh1{max-width:18ch;font-size:clamp(2rem,6vw,3.6rem);line-height:1.1}\n.action{display:inline-block;padding:10px 14px;border-radius:8px;background:#326649;color:white;text-decoration:none}\n.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:14px;margin-top:18px}\n.card{padding:18px;border:1px solid #d7e0d9;border-radius:14px;background:white}\n@media(max-width:520px){body{padding:14px}}</code></pre>"
+}

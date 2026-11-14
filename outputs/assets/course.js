@@ -9,7 +9,8 @@
     [3, 1, 'Смысловая разметка и таблицы', 'Разделяй страницу на понятные смысловые части и оформляй данные в доступной таблице.', ['<header>/<nav>', '<main>/<section>', '<footer>', '<figure>', '<table>/<tr>', '<th>/<td>', 'scope']],
     [5, 2, 'CSS: селекторы, размеры и оформление', 'Подключай CSS и оформляй элементы с помощью селекторов, размеров, цвета, текста и фона.', ['<link rel="stylesheet">', '.class / tag', 'каскад', 'box-sizing', 'px / rem', 'цвет и рамка', 'font-family', 'background-image']],
     [7, 2, 'Display и position: размещение элементов', 'Пойми обычный поток страницы, виды отображения и то, как позиционировать элементы внутри блока.', ['display: block', 'inline / inline-block', 'normal flow', 'position: relative / absolute', 'fixed / sticky', 'top / left', 'z-index']],
-    [23, 2, 'Flexbox и основы CSS Grid', 'Распределяй элементы в гибкой строке и собери простую двумерную сетку карточек.', ['display: flex', 'flex-direction', 'align-items', 'gap / wrap', 'display: grid', 'fr / minmax()']],
+    [29, 2, 'Flexbox: гибкие строки и раскладки', 'Выравнивай элементы по двум осям, переноси их, управляй размером и собирай интерфейсные ряды.', ['display: flex', 'flex-direction', 'justify-content', 'align-items', 'flex-wrap', 'gap', 'flex-grow / shrink / basis']],
+    [23, 2, 'CSS Grid: первые двумерные сетки', 'Создавай строки и колонки, задавай их долями и собирай повторяемые сетки карточек.', ['display: grid', 'grid-template-columns', 'fr', 'repeat()', 'minmax()', 'gap']],
     [13, 2, 'Наведение и CSS-переходы', 'Оформи состояния при наведении и добавь короткие переходы и декоративные псевдоэлементы.', ['вложенные селекторы', ':hover', 'transition', 'transform', '::before / ::after', 'content']],
     [14, 2, 'БЭМ: имена классов и структура CSS', 'Давай блокам и их частям понятные имена и повторно используй стили на нескольких страницах.', ['Блок__Элемент--Модификатор', 'классы по роли', 'компонентные стили', 'общие правила', 'переиспользование']],
     [17, 2, 'Bootstrap: готовая сетка и компоненты', 'Подключай Bootstrap и распознавай его контейнеры, сетку, кнопки и компоненты в HTML.', ['CDN', 'container / row / col', 'breakpoints', 'btn', 'utility-классы', 'собственные стили']],
@@ -36,9 +37,20 @@
     27: { lesson: 14, hash: 'component-and-page-scope' },
     28: { lesson: 19, hash: 'portfolio-check' }
   };
+  const stepRedirects = {
+    23: {
+      axes: { lesson: 29, hash: 'axes' },
+      alignment: { lesson: 29, hash: 'alignment' },
+      'spacing-wrap': { lesson: 29, hash: 'spacing-wrap' },
+      'flex-values': { lesson: 29, hash: 'flex-values' },
+      cards: { lesson: 29, hash: 'cards' },
+      interface: { lesson: 29, hash: 'interface' }
+    }
+  };
   window.COURSE = {
     blocks,
-    lessons: lessons.map(([id, block, title, goal, topics], index) => ({ id, number: index + 1, block, type: [16, 18].includes(id) ? 'practicum' : id === 19 ? 'project' : 'lesson', title, goal, topics, minutes: ({ 16: 240, 18: 240, 19: 360 }[id] || 120) })),
-    redirects
+    lessons: lessons.map(([id, block, title, goal, topics], index) => ({ id, number: index + 1, block, type: [16, 18].includes(id) ? 'practicum' : id === 19 ? 'project' : 'lesson', title, goal, topics, minutes: ({ 16: 240, 18: 240, 19: 360, 29: 150, 23: 90 }[id] || 120) })),
+    redirects,
+    stepRedirects
   };
 })();
