@@ -154,6 +154,7 @@ test('Stage 6: analytics, Excel/PDF reports and end-of-year archive/rollover', {
     await db.query("UPDATE submissions SET status='accepted',score=6,graded_at=$1,updated_at=$1 WHERE assignment_id=$2 AND student_id=$3", [timestamp, assignment1, students[1]]);
     await page.setViewportSize({ width: 1280, height: 900 });
     await page.goto(`${base}/teacher/index.html?class=${classId}&view=analytics`);
+    await page.locator('[data-close-year]').evaluate(button => { button.closest('details')?.setAttribute('open', ''); });
     await page.locator('[data-close-year]').click();
     const dialog = page.locator('dialog[open]');
     await dialog.locator('[data-close-action]').waitFor();

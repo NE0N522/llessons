@@ -125,7 +125,7 @@ test('Stage 7: student assignment switches between condition, code and result re
     assert.equal(await tabs.isVisible(), true);
     assert.equal(await page.locator('[data-assignment-tab]:visible').count(), 2);
     assert.equal(await conditionTab.isVisible(), false);
-    assert.equal(await codeTab.getAttribute('aria-pressed'), 'true');
+    assert.equal(await codeTab.getAttribute('aria-selected'), 'true');
     assert.equal(await codePane.isVisible(), true);
     assert.equal(await resultPane.isVisible(), false);
     const mobileOverflow = await page.evaluate(() => document.documentElement.scrollWidth > innerWidth);
@@ -133,7 +133,7 @@ test('Stage 7: student assignment switches between condition, code and result re
 
     await resultTab.focus();
     await resultTab.press('Enter');
-    assert.equal(await resultTab.getAttribute('aria-pressed'), 'true');
+    assert.equal(await resultTab.getAttribute('aria-selected'), 'true');
     assert.equal(await resultPane.isVisible(), true);
     assert.equal(await codePane.isVisible(), false);
 
@@ -142,7 +142,7 @@ test('Stage 7: student assignment switches between condition, code and result re
     assert.equal(await conditionTab.isVisible(), true);
     assert.equal(await page.locator('[data-assignment-tab]:visible').count(), 3);
     await conditionTab.click();
-    assert.equal(await conditionTab.getAttribute('aria-pressed'), 'true');
+    assert.equal(await conditionTab.getAttribute('aria-selected'), 'true');
     assert.equal(await page.locator('.account-question-panel').isVisible(), true);
     assert.equal(await codePane.isVisible(), false);
     const tabletOverflow = await page.evaluate(() => document.documentElement.scrollWidth > innerWidth);

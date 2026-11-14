@@ -36,6 +36,16 @@ test('Stage 2: account UI has no native popups and uses layered theme tokens', (
   assert.doesNotMatch(stylesheet, /var\(--v3-/, 'account pages should not depend on course theme variables');
   const componentStyles = stylesheet.slice(stylesheet.indexOf('@layer account.base'));
   assert.match(componentStyles, /var\(--account-(?:surface|ink|line|accent)(?:-[\w-]+)?\)/, 'account components should use the standalone palette');
+  const redesign = fs.readFileSync(path.join(root, 'redesign.css'), 'utf8');
+  const buttons = fs.readFileSync(path.join(root, '..', 'components', 'button.css'), 'utf8');
+  assert.match(redesign, /--account-accent:\s*var\(--v3-blue\)/, 'account controls should match the shared course blue');
+  assert.match(buttons, /\.btn--primary/);
+  assert.match(buttons, /\.btn--sm[^}]*min-height:\s*32px/);
+  assert.doesNotMatch(buttons, /!important/);
+  const accountMarkup = ['../../../login.html', '../../../change-password.html', '../../../teacher/index.html', '../../../student/index.html', '../../../student/assignment.html', '../../../student/profile.html'].map(file => fs.readFileSync(path.join(root, file), 'utf8')).join('\n');
+  assert.doesNotMatch(accountMarkup, /<button\b(?![^>]*\bclass\s*=)[^>]*>/, 'account page buttons should use the shared component');
+  assert.doesNotMatch(accountMarkup, /account-(?:small-button|button-secondary|quiet-button|danger-button|stat-action)/, 'account pages should not retain legacy button classes');
+  assert.match(fs.readFileSync(path.join(root, '..', '..', '..', 'ui-kit.html'), 'utf8'), /data-button-matrix/, 'the UI kit should include the button state matrix');
   assert.equal(fs.existsSync(path.join(root, 'setup.css')), false, 'setup styles should be merged into accounts.css');
   assert.equal(isPublicPath('/ui-kit.html'), false, 'the component catalog must not enter the public static allowlist');
 });

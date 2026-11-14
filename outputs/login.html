@@ -5,15 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="">
   <title>Вход — Код по полочкам</title>
-  <script src="assets/app/theme.js?v=account-ui-20261112"></script>
-  <link rel="stylesheet" href="assets/app/accounts/accounts.css?v=account-ui-20261112">
-  <script src="assets/app/accounts/ui-utils.js?v=account-ui-20261112" defer></script>
-  <script src="assets/app/accounts/ui-strings.js?v=account-ui-20261112" defer></script>
-  <script src="assets/app/accounts/common.js?v=account-ui-20261112" defer></script>
-  <script src="assets/app/accounts/login.js?v=account-ui-20261112" defer></script>
-  <link rel="stylesheet" href="assets/app/privacy.css?v=account-ui-20261112">
+  <script src="assets/app/theme.js?v=account-ui-20261114-account-redesign-v2"></script>
+  <link rel="stylesheet" href="assets/app/accounts/accounts.css?v=account-ui-20261114-account-redesign-v2">
+  <script src="assets/app/accounts/ui-utils.js?v=account-ui-20261114-account-redesign-v2" defer></script>
+  <script src="assets/app/accounts/ui-strings.js?v=account-ui-20261114-account-redesign-v2" defer></script>
+  <script src="assets/app/accounts/common.js?v=account-ui-20261114-account-redesign-v2" defer></script>
+  <script src="assets/app/accounts/login.js?v=account-ui-20261114-account-redesign-v2" defer></script>
+  <link rel="stylesheet" href="assets/app/privacy.css?v=account-ui-20261114-account-redesign-v2">
   <link rel="stylesheet" href="assets/app/design-tokens.css?v=course-design-20261114-flex-pilot-a11y">
-</head>
+<link rel="stylesheet" href="assets/app/components/button.css?v=account-ui-20261114-account-redesign-v2"><link rel="stylesheet" href="assets/app/accounts/redesign.css?v=account-ui-20261114-account-redesign-v2"></head>
 <body class="account-body">
   <main class="account-login-wrap">
     <a class="account-brand" href="index.html"><span class="account-brand-mark" aria-hidden="true">&lt;/&gt;</span><span>код по полочкам</span></a>
@@ -24,14 +24,14 @@
       <p class="account-banner account-warning" data-server-message hidden>Для входа запусти сайт через сервер. При открытии файлов двойным кликом кабинет недоступен.</p>
       <form class="account-form" data-login-form>
         <label>Логин<input name="login" autocomplete="username" required maxlength="40" autofocus></label>
-        <label>Пароль<span class="account-password-field"><input name="password" type="password" autocomplete="current-password" required maxlength="200"><button type="button" data-password-toggle aria-label="Показать пароль">Показать</button></span></label>
+        <label>Пароль<span class="account-password-field"><input name="password" type="password" autocomplete="current-password" required maxlength="200"><button class="btn btn--sm btn--ghost" type="button" data-password-toggle aria-label="Показать пароль">Показать</button></span></label>
         <label class="account-check"><input name="remember" type="checkbox"><span>Запомнить меня на этом устройстве</span></label>
-        <button class="account-button account-submit" type="submit">Войти <span aria-hidden="true">→</span></button>
+        <button class="btn btn--primary account-submit" type="submit">Войти</button>
         <p class="account-message" data-login-message role="status" aria-live="polite"></p>
       </form>
       <p class="account-help">Забыли пароль? Обратитесь к учителю.</p>
     </section>
-    <a class="account-back-link" href="index.html">← Вернуться к открытому курсу</a>
+    <a class="account-back-link" href="index.html"><svg class="account-icon" aria-hidden="true"><use href="#account-icon-arrow-left"></use></svg>Вернуться к открытому курсу</a>
   </main>
 <footer class="site-privacy-footer"><a class="site-privacy-link" href="privacy.html">Конфиденциальность</a></footer></body>
 </html>

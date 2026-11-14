@@ -8,6 +8,6 @@
   form.addEventListener('submit',async event=>{
     event.preventDefault();A.setMessage(message,'');submit.disabled=true;submit.textContent='Проверяю…';
     try{const result=await A.api('/api/auth/login',{method:'POST',body:JSON.stringify({login:form.elements.login.value,password:form.elements.password.value,remember:form.elements.remember.checked})});location.replace(A.redirectFor(result.user));}
-    catch(error){A.setMessage(message,error.message);submit.disabled=false;submit.innerHTML='Войти <span aria-hidden="true">→</span>';}
+    catch(error){A.setMessage(message,error.message);submit.disabled=false;submit.innerHTML=`Войти ${A.icon('arrow-right')}`;}
   });
 })();

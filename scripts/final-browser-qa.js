@@ -52,12 +52,13 @@ async function main() {
       for (const theme of themes) for (const width of widths) {
         const page = await context.newPage({ viewport: { width, height: 900 } });
         const pageErrors = [], warnings = [], failedRequests = [], externalRequests = [];
-        const auditAccessibility = url === '/' || /^\/lesson-view\.html\?lesson=(23|29)(?:#|&|$)/.test(url) || /^\/examples\/view\.html\?lesson=(23|29)(?:&|$)/.test(url);
+        const auditAccessibility = url === '/' || /^\/lesson-view\.html\?lesson=(23|29)(?:#|&|$)/.test(url) || /^\/examples\/view\.html\?lesson=(23|29)(?:&|$)/.test(url) || /^\/(?:teacher|student)\//.test(url) || /^\/(?:login|change-password|ui-kit)\.html/.test(url);
         if (auditAccessibility) await page.addInitScript({ content: `if (window === window.top) {\n${axeScript}\n}` });
         page.on('pageerror', error => pageErrors.push(error.message));
         page.on('console', message => {
           if (message.type() === 'error') pageErrors.push(message.text());
-          else if (message.type() === 'warning') warnings.push(message.text());
+          // A sandboxed srcdoc preview has an opaque origin; suppress only Chromium's blocked host-origin postMessage warning.
+          else if (message.type() === 'warning' && !/Failed to execute 'postMessage' on 'DOMWindow'.*recipient window's origin \('null'\)\./.test(message.text())) warnings.push(message.text());
         });
         page.on('requestfailed', request => failedRequests.push(`${request.url()} (${request.failure()?.errorText || 'failed'})`));
         page.on('request', request => { if (new URL(request.url()).origin !== base) externalRequests.push(request.url()); });
@@ -75,7 +76,7 @@ async function main() {
           await page.waitForFunction(() => Boolean(window.axe));
           accessibility = await page.evaluate(async () => {
             const result = await window.axe.run(document, { runOnly: { type: 'tag', values: ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'] } });
-            return result.violations.map(item => ({ id: item.id, impact: item.impact, targets: item.nodes.map(node => node.target) }));
+            return result.violations.map(item => ({ id: item.id, impact: item.impact, targets: item.nodes.map(node => node.target), nodes: item.nodes.map(node => ({ html: node.html, failureSummary: node.failureSummary })) }));
           });
           if (accessibility.length) failures.push(`${label} ${theme}/${width}: axe violations ${JSON.stringify(accessibility)}`);
         }
@@ -86,7 +87,8 @@ async function main() {
           title: document.title,
           images: [...document.images].filter(image => image.complete && image.naturalWidth === 0).map(image => image.currentSrc || image.src),
           theme: document.documentElement.dataset.theme || document.documentElement.style.colorScheme || 'unset',
-          footerPrivacy: Boolean(document.querySelector('.site-privacy-link'))
+          footerPrivacy: Boolean(document.querySelector('.site-privacy-link')),
+          bareAccountButtons: (/^\/(?:teacher|student)\//.test(location.pathname) || /^\/(?:login|change-password|ui-kit)\.html/.test(location.pathname)) ? [...document.querySelectorAll('button')].filter(button => !button.classList.contains('btn') && !button.closest('.cm-editor')).map(button => button.getAttribute('aria-label') || button.textContent.trim().slice(0, 50)) : []
         }));
         const result = { label, url, theme, viewport: width, ...state, accessibility, pageErrors, warnings, failedRequests, externalRequests };
         if (state.scrollWidth > state.width) failures.push(`${label} ${theme}/${width}: horizontal overflow ${state.scrollWidth} > ${state.width}`);
@@ -95,6 +97,7 @@ async function main() {
         if (failedRequests.length) failures.push(`${label} ${theme}/${width}: failed requests ${failedRequests.join(' | ')}`);
         if (externalRequests.length) failures.push(`${label} ${theme}/${width}: external requests ${externalRequests.join(' | ')}`);
         if (state.images.length) failures.push(`${label} ${theme}/${width}: broken images ${state.images.join(' | ')}`);
+        if (state.bareAccountButtons.length) failures.push(`${label} ${theme}/${width}: buttons missing the shared .btn class ${state.bareAccountButtons.join(' | ')}`);
         if (!state.footerPrivacy) failures.push(`${label} ${theme}/${width}: privacy link missing from page footer`);
         runs.push(result);
         await page.screenshot({ path: path.join(reportDir, `${String(runs.length).padStart(3, '0')}-${safeName(label)}-${theme}-${width}.png`), fullPage: true, animations: 'disabled' });
@@ -131,7 +134,7 @@ async function main() {
       { label: 'задание ученика', url: `/student/assignment.html?id=${assignmentId}`, context: studentContext, expectedText: 'Проверочная карточка' },
       { label: 'каталог компонентов', url: '/ui-kit.html', context: teacherContext, expectedText: 'Библиотека компонентов' }
     ];
-    for (const page of smoke ? basicPages.filter(item => ['главная курса', 'страница данных', 'кабинет учителя', 'задание ученика'].includes(item.label)) : basicPages) await checkPage(page);
+    for (const page of smoke ? basicPages.filter(item => ['главная курса', 'страница данных', 'кабинет учителя', 'задание ученика', 'каталог компонентов'].includes(item.label)) : basicPages) await checkPage(page);
 
     const interactionChecks = [];
     if (!smoke) {
@@ -149,19 +152,19 @@ async function main() {
       const resultPane = tabsPage.locator('[data-assignment-pane="result"]');
       await tabsPage.locator('[data-editor-host="html"] .cm-editor').waitFor({ state: 'visible', timeout: 15000 });
       verifyTabState('375 px показывает вкладки «Код» и «Результат»; условие остаётся прочитать выше', await tabs.isVisible() && await tabsPage.locator('[data-assignment-tab]:visible').count() === 2 && !(await tabsPage.locator('[data-assignment-tab="condition"]').isVisible()));
-      verifyTabState('«Код» выбран при открытии, редактор виден, предпросмотр скрыт', await codeTab.getAttribute('aria-pressed') === 'true' && await codePane.isVisible() && !(await resultPane.isVisible()));
+      verifyTabState('«Код» выбран при открытии, редактор виден, предпросмотр скрыт', await codeTab.getAttribute('aria-selected') === 'true' && await codePane.isVisible() && !(await resultPane.isVisible()));
       const mobileTargets = await tabsPage.locator('[data-assignment-tab]:visible').evaluateAll(buttons => buttons.map(button => ({ height: button.getBoundingClientRect().height, gap: parseFloat(getComputedStyle(button.parentElement).gap) || 0 })));
       verifyTabState('кнопки на телефоне не ниже 44 px и разделены интервалом', mobileTargets.length === 2 && mobileTargets.every(item => item.height >= 44 && item.gap >= 8));
       await resultTab.focus();
       await resultTab.press('Enter');
-      verifyTabState('клавиша Enter открывает предпросмотр', await resultTab.getAttribute('aria-pressed') === 'true' && await resultPane.isVisible() && !(await codePane.isVisible()));
+      verifyTabState('клавиша Enter открывает предпросмотр', await resultTab.getAttribute('aria-selected') === 'true' && await resultPane.isVisible() && !(await codePane.isVisible()));
 
       await tabsPage.setViewportSize({ width: 768, height: 900 });
       const conditionTab = tabsPage.locator('[data-assignment-tab="condition"]');
       await conditionTab.waitFor({ state: 'visible' });
       verifyTabState('768 px показывает три раздела', await conditionTab.isVisible() && await tabsPage.locator('[data-assignment-tab]:visible').count() === 3);
       await conditionTab.click();
-      verifyTabState('раздел «Условие» открывает вопрос и прочие инструкции', await conditionTab.getAttribute('aria-pressed') === 'true' && await tabsPage.locator('.account-question-panel').isVisible() && !(await codePane.isVisible()));
+      verifyTabState('раздел «Условие» открывает вопрос и прочие инструкции', await conditionTab.getAttribute('aria-selected') === 'true' && await tabsPage.locator('.account-question-panel').isVisible() && !(await codePane.isVisible()));
       await codeTab.click();
       verifyTabState('раздел «Код» возвращает редактор на планшете', await codePane.isVisible() && await tabsPage.locator('[data-editor-host="html"] .cm-editor').isVisible());
 

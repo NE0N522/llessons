@@ -106,7 +106,7 @@ test('Stage 4: teacher workflow, roster imports and QR cards work across desktop
     await teacher.screenshot({ path: 'report/stage-4/teacher-overview-desktop-light.png', fullPage: true });
     await teacher.locator('.account-workspace-sidebar [data-tab="students"]').click();
     await teacher.waitForURL(url => url.searchParams.get('view') === 'students');
-    await teacher.locator('select[data-student-filter]').selectOption('overdue');
+    await teacher.locator('[data-student-filter="overdue"]').click();
     assert.match(await teacher.locator('[data-tab-panel]').innerText(), /1 просрочено/);
     await teacher.locator('[data-student-search]').fill('Ученик этапа');
     await teacher.locator('[data-student-search]').fill('');
@@ -163,7 +163,7 @@ test('Stage 4: teacher workflow, roster imports and QR cards work across desktop
 
     await teacher.setViewportSize({ width: 375, height: 812 });
     await teacher.locator('.account-teacher-mobile-tabs [data-tab="students"]').click();
-    await teacher.locator('select[data-student-filter]').selectOption('all');
+    await teacher.locator('[data-student-filter="all"]').click();
     assert.equal(await teacher.locator('.account-teacher-mobile-tabs button').count(), 7, 'all class sections, including analytics, are available in mobile navigation');
     assert.equal(await teacher.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true, 'teacher workspace should not overflow horizontally on mobile');
     await teacher.locator('[data-theme-toggle]').click();
